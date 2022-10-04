@@ -6,6 +6,10 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+const familyRoutes = require("./routes/family");
+
+server.use("/api/family", familyRoutes);
+
 server.get("/", (req, res) => {
   res
     .status(200)
