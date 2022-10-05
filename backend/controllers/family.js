@@ -31,10 +31,10 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
-  const id = req.params.id;
+  const familyID = req.params.id;
   const submittedFamily = req.body.data;
   try {
-    const family = await Family.edit(id, submittedFamily);
+    const family = await Family.edit(familyID, submittedFamily);
     res.status(200).json(success("OK", { data: family }, res.statusCode));
   } catch (err) {
     res.status(500).json(error(err, res.statusCode));

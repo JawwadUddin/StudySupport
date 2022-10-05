@@ -31,4 +31,27 @@ exec portal.UpdateFamily
 exec portal.SelectFamilyByID 
 @FamilyID = 1
 
-select * from family
+declare @ID INT;
+exec portal.InsertStudent
+@FamilyID = 2,
+@FullName = 'STUDENT 2',
+@DOB = '12/27/2007',
+@SchoolYear = 10,
+@School = 'LEA',
+@MedicalInfo = 'N/A',
+@Notes = '',
+@StudentID = @ID OUTPUT
+
+exec portal.UpdateStudent
+@StudentID = 2,
+@FamilyID = 1,
+@FullName = 'STUDENT 2 updated',
+@DOB = '1/27/2007',
+@SchoolYear = 10,
+@School = 'LEA',
+@MedicalInfo = 'N/A',
+@Notes = 'this is an update'
+
+exec portal.SelectAllStudents
+
+exec portal.SelectStudentByID @StudentID = 1

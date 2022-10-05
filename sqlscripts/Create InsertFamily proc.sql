@@ -13,7 +13,7 @@ CREATE PROCEDURE [portal].[InsertFamily]
 	@FamilyID INT OUTPUT
 AS
 
-DECLARE @InsertedFamilyID table (ID INT);
+DECLARE @InsertedFamilyID TABLE (ID INT);
 DECLARE @RelationID AS INT = (SELECT relation_id from relation WHERE relation_to_child = @ecRelation);
 
 INSERT INTO family (full_name, address, city, post_code, mobile, email, ec_full_name, ec_relation_id, ec_mobile, notes)

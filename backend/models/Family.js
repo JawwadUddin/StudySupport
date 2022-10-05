@@ -4,7 +4,7 @@ const { dbConnect } = require("../db");
 class Family {
   constructor(data) {
     this.id = data.family_id;
-    this.full_name = data.full_name;
+    this.fullName = data.full_name;
     this.address = data.address;
     this.city = data.city;
     this.postCode = data.post_code;
@@ -21,11 +21,9 @@ class Family {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
-        const familyData = await pool
-          .request()
-          .query("select * from dbo.family");
-        const family = familyData.recordset.map((d) => new Family(d));
-        resolve(family);
+        const familyData = await pool.request().execute("SelectAllFamilies");
+        const families = familyData.recordset.map((d) => new Family(d));
+        resolve(families);
       } catch (err) {
         reject(err);
       }
@@ -39,7 +37,7 @@ class Family {
         const familyData = await pool
           .request()
           .input("FamilyID", sql.Int, id)
-          .execute("portal.SelectFamilyByID");
+          .execute("SelectFamilyByID");
         const family = familyData.recordset.map((d) => new Family(d))[0];
         resolve(family);
       } catch (err) {
@@ -62,11 +60,11 @@ class Family {
           .input("Email", sql.VarChar, family.email)
           .input("ecFullName", sql.VarChar, family.ecFullName)
           .input("ecRelation", sql.VarChar, family.ecRelation)
-          .input("ecAddress", sql.VarChar, family.ecAddess)
+          .input("ecAddress", sql.VarChar, family.ecAddress)
           .input("ecMobile", sql.VarChar, family.ecMobile)
           .input("Notes", sql.VarChar, family.notes)
           .output("FamilyID", sql.Int)
-          .execute("portal.InsertFamily");
+          .execute("InsertFamily");
         const newFamily = familyData.output.FamilyID;
         resolve({ newFamilyID: newFamily });
       } catch (err) {
@@ -90,10 +88,10 @@ class Family {
           .input("Email", sql.VarChar, family.email)
           .input("ecFullName", sql.VarChar, family.ecFullName)
           .input("ecRelation", sql.VarChar, family.ecRelation)
-          .input("ecAddress", sql.VarChar, family.ecAddess)
+          .input("ecAddress", sql.VarChar, family.ecAddress)
           .input("ecMobile", sql.VarChar, family.ecMobile)
           .input("Notes", sql.VarChar, family.notes)
-          .execute("portal.UpdateFamily");
+          .execute("UpdateFamily");
         resolve("Family successfully updated");
       } catch (err) {
         reject("Error updating family: " + err.message);

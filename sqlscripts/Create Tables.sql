@@ -61,3 +61,16 @@ CREATE TABLE students (
 	notes VARCHAR(100)
 )
 
+create table testDate (
+	DOB date
+)
+
+
+insert into testDate 
+values (CAST('03/25/2018' AS DATE))
+--note: date inserts into sql must be of the form 'mm/dd/yyyy'
+insert into testDate
+values ('12/19/2020')
+
+--to return a date in the form: 'dd/MM/yyyy' use format
+select FORMAT(DOB, 'dd/MM/yyyy') as dob from testDate
