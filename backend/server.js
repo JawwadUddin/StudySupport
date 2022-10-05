@@ -7,8 +7,10 @@ server.use(cors());
 server.use(express.json());
 
 const familyRoutes = require("./routes/family");
+const studentRoutes = require("./routes/student");
 
 server.use("/api/family", familyRoutes);
+server.use("/api/student", studentRoutes);
 
 server.get("/", (req, res) => {
   res
