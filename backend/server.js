@@ -8,9 +8,13 @@ server.use(express.json());
 
 const familyRoutes = require("./routes/family");
 const studentRoutes = require("./routes/student");
+const relationRoutes = require("./routes/relation");
+const schoolRoutes = require("./routes/school");
 
 server.use("/api/family", familyRoutes);
 server.use("/api/student", studentRoutes);
+server.use("/api/relation", relationRoutes);
+server.use("/api/school", schoolRoutes);
 
 server.get("/", (req, res) => {
   res
