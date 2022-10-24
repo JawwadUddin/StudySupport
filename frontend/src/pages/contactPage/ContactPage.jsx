@@ -1,17 +1,47 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./contactPage.scss";
+import Table from "../../components/table/Table";
+import Button from "@mui/material/Button";
+import { getData } from "../../helpers/apiFunctions";
 
 const ContactPage = () => {
+  const [contacts, setContacts] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
-    async function getData() {
-      const url = "http://localhost:5000/api/family";
-      const response = await (await fetch(url)).json();
-      const data = response.results;
-      console.log(data);
+    try {
+      async function fetchData() {
+        const serverResponse = await getData(
+          "http://localhost:5000/api/family"
+        );
+        if (serverResponse.message === "OK") {
+          setContacts(serverResponse.results.data);
+        }
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error);
     }
-    getData();
   }, []);
 
-  return <div>ContactPage</div>;
+  return (
+    <div className="contactPageContainer">
+      <h2 className="title">Contacts</h2>
+      <div className="listContainer">
+        <div className="listHeader">
+          <div className="listTitle">All Contacts</div>
+          <Button
+            onClick={() => navigate("/contacts/new")}
+            variant="contained"
+            className="createBtn"
+          >
+            Create New Contact
+          </Button>
+        </div>
+        <Table data={contacts} type="contact" />
+      </div>
+    </div>
+  );
 };
 
 export default ContactPage;
