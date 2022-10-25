@@ -47,6 +47,21 @@ class Family {
     });
   }
 
+  static findByIDAndDelete(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const studentData = await pool
+          .request()
+          .input("FamilyID", sql.Int, id)
+          .execute("DeleteFamilyByID");
+        resolve("Family successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   static findStudents(id) {
     return new Promise(async (resolve, reject) => {
       try {

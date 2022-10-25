@@ -20,6 +20,16 @@ async function show(req, res) {
   }
 }
 
+async function remove(req, res) {
+  const familyID = req.params.id;
+  try {
+    const family = await Family.findByIDAndDelete(familyID);
+    res.status(204).json(success("OK", { data: family }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 async function showStudents(req, res) {
   const familyID = req.params.id;
   try {
@@ -51,4 +61,4 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, showStudents, create, update };
+module.exports = { index, show, showStudents, create, update, remove };
