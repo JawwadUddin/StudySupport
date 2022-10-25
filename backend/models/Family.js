@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const { dbConnect } = require("../db");
+const Student = require("./Student");
 
 class Family {
   constructor(data) {
@@ -39,6 +40,22 @@ class Family {
           .input("FamilyID", sql.Int, id)
           .execute("SelectFamilyByID");
         const family = familyData.recordset.map((d) => new Family(d))[0];
+        resolve(family);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static findStudents(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const familyData = await pool
+          .request()
+          .input("FamilyID", sql.Int, id)
+          .execute("SelectStudentsOfFamily");
+        const family = familyData.recordset.map((d) => new Student(d));
         resolve(family);
       } catch (err) {
         reject(err);

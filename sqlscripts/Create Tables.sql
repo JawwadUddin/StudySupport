@@ -42,6 +42,8 @@ values
 	('Mo family', 'Leyton', '992')
 
 --look up table for school
+
+--DROPPED DUE TO DB STRUCTURE CHANGES
 CREATE TABLE school (
 	school_id int IDENTITY(1,1) PRIMARY KEY,
 	school_name VARCHAR(50)
@@ -55,7 +57,7 @@ CREATE TABLE students (
 	full_name VARCHAR(30),
 	DOB DATE,
 	school_year INT,
-	school_id INT,
+	school_name VARCHAR(50),
 	CONSTRAINT FK_students_school FOREIGN KEY (school_id) REFERENCES school(school_id),
 	medical_info VARCHAR(100),
 	notes VARCHAR(100)

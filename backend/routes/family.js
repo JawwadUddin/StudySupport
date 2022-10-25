@@ -4,6 +4,7 @@ const familyController = require("../controllers/family");
 
 router.get("/", familyController.index);
 router.get("/:id", familyController.show);
+router.get("/:id/students", familyController.showStudents);
 router.post("/", familyController.create);
 router.post("/:id", familyController.update);
 

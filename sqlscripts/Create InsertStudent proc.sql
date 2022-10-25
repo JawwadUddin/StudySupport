@@ -10,12 +10,11 @@ CREATE PROCEDURE [portal].[InsertStudent]
 AS
 
 DECLARE @InsertedStudentID AS TABLE (ID INT);
-DECLARE @SchoolID AS INT = (SELECT school_id from dbo.school WHERE school_name = @School);
 
-INSERT INTO dbo.students (family_id, full_name, DOB, school_year, school_id, medical_info, notes)
+INSERT INTO dbo.students (family_id, full_name, DOB, school_year, school_name, medical_info, notes)
 OUTPUT INSERTED.student_id
 INTO @InsertedStudentID
-VALUES (@FamilyID, @FullName, @DOB, @SchoolYear, @SchoolID, @MedicalInfo, @Notes)
+VALUES (@FamilyID, @FullName, @DOB, @SchoolYear, @School, @MedicalInfo, @Notes)
 
 DECLARE @NewStudentID AS INT = (SELECT TOP 1 ID FROM @InsertedStudentID);
 

@@ -9,14 +9,12 @@ CREATE PROCEDURE [portal].[UpdateStudent]
 	@Notes VARCHAR(100)
 AS
 
-DECLARE @SchoolID AS INT = (SELECT school_id from dbo.school WHERE school_name = @School);
-
 UPDATE dbo.students
 SET family_id = @FamilyID,
 	full_name = @FullName,
 	DOB = @DOB,
 	school_year = @SchoolYear,
-	school_id = @SchoolID,
+	school_name = @School,
 	medical_info = @MedicalInfo,
 	notes = @Notes
 WHERE student_id = @StudentID

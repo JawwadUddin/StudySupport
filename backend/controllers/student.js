@@ -20,6 +20,16 @@ async function show(req, res) {
   }
 }
 
+async function remove(req, res) {
+  const studentID = req.params.id;
+  try {
+    const student = await Student.findByIDAndDelete(studentID);
+    res.status(204).json(success("OK", { data: student }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 async function create(req, res) {
   const submittedStudent = req.body.data;
   try {
@@ -41,4 +51,4 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, create, update };
+module.exports = { index, show, create, update, remove };

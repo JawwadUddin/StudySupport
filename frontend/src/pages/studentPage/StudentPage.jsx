@@ -12,7 +12,7 @@ const StudentPage = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          "http://localhost:5000/api/student"
+          `${process.env.REACT_APP_API_URL}/api/student`
         );
         if (serverResponse.message === "OK") {
           setStudents(serverResponse.results.data);
