@@ -42,6 +42,20 @@ class Student {
       }
     });
   }
+  static findByIDAndDelete(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const studentData = await pool
+          .request()
+          .input("StudentID", sql.Int, id)
+          .execute("DeleteStudentByID");
+        resolve("Student successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
   static create(student) {
     return new Promise(async (resolve, reject) => {
@@ -54,7 +68,7 @@ class Student {
           .input("DOB", sql.VarChar, student.DOB)
           .input("SchoolYear", sql.Int, student.schoolYear)
           .input("School", sql.VarChar, student.school)
-          .input("MedicalInfo", sql.VarChar, student.MedicalInfo)
+          .input("MedicalInfo", sql.VarChar, student.medicalInfo)
           .input("Notes", sql.VarChar, student.notes)
           .output("StudentID", sql.Int)
           .execute("InsertStudent");
