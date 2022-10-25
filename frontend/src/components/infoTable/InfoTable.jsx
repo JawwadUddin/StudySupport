@@ -29,6 +29,9 @@ const InfoTable = ({ data, type }) => {
         { rowLabel: "Medical Info", value: data.medicalInfo },
         { rowLabel: "Notes", value: data.notes },
       ];
+      break;
+    default:
+      console.log("Unknown type passed to InfoTable");
   }
   return (
     <Table>

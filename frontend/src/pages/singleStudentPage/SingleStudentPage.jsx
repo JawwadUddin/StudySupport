@@ -23,7 +23,7 @@ const SingleStudentPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [studentID]);
 
   return (
     <div className="singleStudentPageContainer">

@@ -42,7 +42,7 @@ const SingleContactPage = () => {
     };
     fetchContactData();
     fetchStudentData();
-  }, []);
+  }, [contactID]);
 
   return (
     <div className="singleContactPageContainer">

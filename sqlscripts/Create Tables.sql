@@ -53,12 +53,11 @@ CREATE TABLE students (
 	student_id INT IDENTITY(1,1),
 	family_id INT,
 	PRIMARY KEY(student_id),
-	CONSTRAINT FK_students_family FOREIGN KEY (family_id) REFERENCES family(family_id),
+	CONSTRAINT FK_students_family FOREIGN KEY (family_id) REFERENCES family(family_id) ON DELETE CASCADE,
 	full_name VARCHAR(30),
 	DOB DATE,
 	school_year INT,
 	school_name VARCHAR(50),
-	CONSTRAINT FK_students_school FOREIGN KEY (school_id) REFERENCES school(school_id),
 	medical_info VARCHAR(100),
 	notes VARCHAR(100)
 )

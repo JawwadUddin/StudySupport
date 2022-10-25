@@ -42,6 +42,7 @@ class Student {
       }
     });
   }
+
   static findByIDAndDelete(id) {
     return new Promise(async (resolve, reject) => {
       try {
