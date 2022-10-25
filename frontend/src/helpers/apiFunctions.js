@@ -50,3 +50,15 @@ export const updateData = async (apiEndpoint, data) => {
     .then((response) => response.json())
     .catch((error) => console.log(error));
 };
+
+export const deleteData = async (apiEndpoint) => {
+  console.log("Deleting data...");
+
+  const options = {
+    method: "DELETE",
+  };
+
+  return fetch(apiEndpoint, options)
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
+};
