@@ -20,6 +20,16 @@ async function show(req, res) {
   }
 }
 
+async function showStudents(req, res) {
+  const familyID = req.params.id;
+  try {
+    const students = await Family.findStudents(familyID);
+    res.status(200).json(success("OK", { data: students }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 async function create(req, res) {
   const submittedFamily = req.body.data;
   try {
@@ -41,4 +51,4 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, create, update };
+module.exports = { index, show, showStudents, create, update };
