@@ -31,7 +31,7 @@ const ContactForm = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          "http://localhost:5000/api/relation"
+          `${process.env.REACT_APP_API_URL}/api/relation`
         );
         if (serverResponse.message === "OK") {
           setRelationDropdown(serverResponse.results.data);
@@ -64,11 +64,12 @@ const ContactForm = () => {
     try {
       async function submitData() {
         const serverResponse = await saveData(
-          "http://localhost:5000/api/family",
+          `${process.env.REACT_APP_API_URL}/api/family`,
           dataToSubmit
         );
         if (serverResponse.message === "OK") {
-          navigate("/contacts", { replace: true });
+          const { newFamilyID } = serverResponse.results.data;
+          navigate(`/contacts/${newFamilyID}`, { replace: true });
         }
       }
       submitData();
@@ -81,7 +82,7 @@ const ContactForm = () => {
     <div className="contactForm">
       <h3>Contact Lead Information</h3>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TextField
             required
             id="fullName"
@@ -92,7 +93,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TextField
             required
             id="mobile"
@@ -103,7 +104,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TextField
             required
             id="email"
@@ -114,7 +115,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
             required
             id="address"
@@ -125,7 +126,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={2}>
           <TextField
             required
             id="postCode"
@@ -139,7 +140,7 @@ const ContactForm = () => {
       </Grid>
       <h3>Emergency Contact Information</h3>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TextField
             required
             id="fullNameEC"
@@ -150,8 +151,19 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12}>
-          <FormControl sx={{ minWidth: 120 }}>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            required
+            id="mobileEC"
+            name="ecMobile"
+            label="Mobile Number"
+            fullWidth
+            variant="outlined"
+            onChange={addData}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="demo-simple-select-label">Relation</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -172,17 +184,6 @@ const ContactForm = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="mobileEC"
-            name="ecMobile"
-            label="Mobile Number"
-            fullWidth
-            variant="outlined"
-            onChange={addData}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
             id="addressEC"
             name="ecAddress"
             label="Address"
@@ -191,7 +192,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={2}>
           <TextField
             required
             id="postCodeEC"
