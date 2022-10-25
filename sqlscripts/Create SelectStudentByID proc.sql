@@ -10,6 +10,5 @@ SELECT
 	school_name,
 	medical_info,
 	notes
-FROM dbo.students s 
-LEFT JOIN dbo.school sc on s.school_id = sc.school_id
+FROM dbo.students s
 WHERE s.student_id = @StudentID
