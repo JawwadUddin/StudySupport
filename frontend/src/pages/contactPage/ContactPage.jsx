@@ -12,7 +12,7 @@ const ContactPage = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          "http://localhost:5000/api/family"
+          `${process.env.REACT_APP_API_URL}/api/family`
         );
         if (serverResponse.message === "OK") {
           setContacts(serverResponse.results.data);
