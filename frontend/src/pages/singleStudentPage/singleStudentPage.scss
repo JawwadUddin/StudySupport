@@ -20,12 +20,18 @@
         color: gray;
       }
     }
-    .createBtn {
-      background-color: rgb(51, 179, 179);
-
-      &:hover {
-        background-color: rgba(51, 179, 179, 0.842);
-      }
+    .viewBtn {
+      margin-left: auto;
     }
+    .editBtn {
+      margin-left: 20px;
+    }
+    // .createBtn {
+    //   background-color: rgb(51, 179, 179);
+
+    //   &:hover {
+    //     background-color: rgba(51, 179, 179, 0.842);
+    //   }
+    // }
   }
 }
