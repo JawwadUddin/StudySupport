@@ -4,6 +4,6 @@ const relationController = require("../controllers/relation");
 
 router.get("/", relationController.index);
 router.post("/", relationController.create);
-router.post("/:id", relationController.update);
+router.patch("/:id", relationController.update);
 
 module.exports = router;

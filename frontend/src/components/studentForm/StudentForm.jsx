@@ -1,7 +1,7 @@
 import "./studentForm.scss";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData, saveData } from "../../helpers/apiFunctions";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getData, saveData, updateData } from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,23 +9,23 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import dayjs from "dayjs";
 
 const StudentForm = ({ idFamily }) => {
   const navigate = useNavigate();
-  const [familyID, setFamilyID] = useState(idFamily);
-  const [formError, setFormError] = useState(true);
-  const [date, setDate] = useState("");
+  const location = useLocation();
+  const studentInfo = location.state ? location.state.studentInfo : null;
+  const studentID = location.state ? location.state.studentID : null;
+
+  const [familyID, setFamilyID] = useState(
+    idFamily || (studentInfo ? studentInfo.familyID : "")
+  );
   const [schoolYear, setSchoolYear] = useState("");
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     fullName: "",
     familyID: familyID,
     DOB: "",
-    schoolYear: 0,
+    schoolYear: "",
     school: "",
     medicalInfo: "",
     notes: "",
@@ -39,11 +39,24 @@ const StudentForm = ({ idFamily }) => {
         );
         if (serverResponse.message === "OK") {
           setFamilyDropdown(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
         }
       }
       fetchData();
     } catch (error) {
       console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (studentInfo) {
+      let dateArray = studentInfo.DOB.split("/");
+      let formattedDOB = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
+      setDataToSubmit({
+        ...studentInfo,
+        DOB: formattedDOB,
+      });
     }
   }, []);
 
@@ -66,20 +79,6 @@ const StudentForm = ({ idFamily }) => {
     setDataToSubmit((prev) => updateData);
   };
 
-  const handleDateChange = (newValue) => {
-    setDate(newValue);
-    if (newValue.$d == "Invalid Date") {
-      setFormError(true);
-      return;
-    }
-    setFormError(false);
-    const updateData = {
-      ...dataToSubmit,
-      DOB: `${newValue.$M + 1}/${newValue.$D}/${newValue.$y}`,
-    };
-    setDataToSubmit((prev) => updateData);
-  };
-
   const addData = (e) => {
     const updatedData = {
       ...dataToSubmit,
@@ -95,18 +94,38 @@ const StudentForm = ({ idFamily }) => {
           `${process.env.REACT_APP_API_URL}/api/student`,
           dataToSubmit
         );
-        console.log(serverResponse);
         if (serverResponse.message === "OK") {
           const { newStudentID } = serverResponse.results.data;
           navigate(`/students/${newStudentID}`, { replace: true });
+        } else {
+          throw Error(serverResponse.message);
         }
       }
-      formError ? console.log("Form Error") : submitData();
-      console.log(dataToSubmit);
+      submitData();
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleEdit = () => {
+    try {
+      async function editData() {
+        const serverResponse = await updateData(
+          `${process.env.REACT_APP_API_URL}/api/student/${studentID}`,
+          dataToSubmit
+        );
+        if (serverResponse.message === "OK") {
+          navigate(-1);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      editData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="studentForm">
       <h3>Student Information</h3>
@@ -120,27 +139,32 @@ const StudentForm = ({ idFamily }) => {
             label="Full Name"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.fullName}
             onChange={addData}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DesktopDatePicker
-              label="Date of Birth"
-              inputFormat="DD/MM/YYYY"
-              value={date}
-              onChange={handleDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+          <TextField
+            id="date"
+            label="Birthday"
+            type="date"
+            name="DOB"
+            value={dataToSubmit.DOB}
+            onChange={addData}
+            sx={{ width: 220 }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         </Grid>
-
         <Grid item xs={12}>
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="demo-simple-select-label">Family</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="relation"
+              multiline
               value={familyID}
               onChange={(e) => handleChange(e, "family")}
             >
@@ -162,6 +186,8 @@ const StudentForm = ({ idFamily }) => {
             label="School Name"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.school}
             onChange={addData}
           />
         </Grid>
@@ -171,19 +197,20 @@ const StudentForm = ({ idFamily }) => {
             <Select
               labelId="demo-simple-select-label"
               id="schoolYear"
-              value={schoolYear}
+              multiline
+              value={dataToSubmit.schoolYear}
               onChange={(e) => handleChange(e, "schoolYear")}
             >
-              <MenuItem value={7}>4</MenuItem>
-              <MenuItem value={7}>5</MenuItem>
-              <MenuItem value={7}>6</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
               <MenuItem value={7}>7</MenuItem>
               <MenuItem value={8}>8</MenuItem>
               <MenuItem value={9}>9</MenuItem>
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={11}>11</MenuItem>
               <MenuItem value={12}>12</MenuItem>
-              <MenuItem value={12}>13</MenuItem>
+              <MenuItem value={13}>13</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -198,6 +225,8 @@ const StudentForm = ({ idFamily }) => {
             label="Notes"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.notes}
             onChange={addData}
           />
         </Grid>
@@ -211,18 +240,39 @@ const StudentForm = ({ idFamily }) => {
             label="Medical Information"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.medicalInfo}
             onChange={addData}
           />
         </Grid>
       </Grid>
       <div className="formEnd">
         <Button
-          onClick={handleSubmit}
-          variant="contained"
-          className="submitBtn"
+          onClick={() => navigate(-1)}
+          variant="outlined"
+          color="warning"
+          className="cancelBtn"
         >
-          Add Student
+          Cancel
         </Button>
+        {studentInfo ? (
+          <Button
+            onClick={handleEdit}
+            variant="contained"
+            color="secondary"
+            className="editBtn"
+          >
+            Edit Student
+          </Button>
+        ) : (
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            className="submitBtn"
+          >
+            Add Student
+          </Button>
+        )}
       </div>
     </div>
   );
