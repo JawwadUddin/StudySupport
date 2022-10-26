@@ -8,7 +8,7 @@ class Student {
     this.fullName = data.full_name;
     this.DOB = data.DOB;
     this.schoolYear = data.school_year;
-    this.schoolName = data.school_name;
+    this.school = data.school_name;
     this.mobile = data.mobile;
     this.medicalInfo = data.medical_info;
     this.notes = data.notes;
