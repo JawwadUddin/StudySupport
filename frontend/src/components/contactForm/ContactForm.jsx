@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getData, saveData } from "../../helpers/apiFunctions";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getData, saveData, updateData } from "../../helpers/apiFunctions";
 import "./contactForm.scss";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -12,13 +12,17 @@ import Button from "@mui/material/Button";
 
 const ContactForm = () => {
   const navigate = useNavigate();
-  const [relation, setRelation] = useState("");
+  const location = useLocation();
+  const contactInfo = location.state ? location.state.contactInfo : null;
+  const familyID = location.state ? location.state.familyID : null;
+
+  // const [relation, setRelation] = useState("");
   const [relationDropdown, setRelationDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     fullName: "",
     address: "",
     postCode: "",
-    mobile: 0,
+    mobile: null,
     email: "",
     ecFullName: "",
     ecRelation: "",
@@ -35,6 +39,8 @@ const ContactForm = () => {
         );
         if (serverResponse.message === "OK") {
           setRelationDropdown(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
         }
       }
       fetchData();
@@ -43,14 +49,20 @@ const ContactForm = () => {
     }
   }, []);
 
-  const handleChange = (e) => {
-    setRelation(e.target.value);
-    const updateData = {
-      ...dataToSubmit,
-      ecRelation: e.target.value,
-    };
-    setDataToSubmit((prev) => updateData);
-  };
+  useEffect(() => {
+    if (contactInfo) {
+      setDataToSubmit({ ...contactInfo });
+    }
+  }, []);
+
+  // const handleChange = (e) => {
+  //   setRelation(e.target.value);
+  //   const updateData = {
+  //     ...dataToSubmit,
+  //     ecRelation: e.target.value,
+  //   };
+  //   setDataToSubmit((prev) => updateData);
+  // };
 
   const addData = (e) => {
     const updatedData = {
@@ -70,9 +82,30 @@ const ContactForm = () => {
         if (serverResponse.message === "OK") {
           const { newFamilyID } = serverResponse.results.data;
           navigate(`/contacts/${newFamilyID}`, { replace: true });
+        } else {
+          throw Error(serverResponse.message);
         }
       }
       submitData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = () => {
+    try {
+      async function editData() {
+        const serverResponse = await updateData(
+          `${process.env.REACT_APP_API_URL}/api/family/${familyID}`,
+          dataToSubmit
+        );
+        if (serverResponse.message === "OK") {
+          navigate(-1);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      editData();
     } catch (error) {
       console.log(error);
     }
@@ -90,6 +123,8 @@ const ContactForm = () => {
             label="Full Name"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.fullName}
             onChange={addData}
           />
         </Grid>
@@ -101,6 +136,8 @@ const ContactForm = () => {
             label="Mobile Number"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.mobile}
             onChange={addData}
           />
         </Grid>
@@ -112,6 +149,8 @@ const ContactForm = () => {
             label="Email Address"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.email}
             onChange={addData}
           />
         </Grid>
@@ -123,6 +162,8 @@ const ContactForm = () => {
             label="Address"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.address}
             onChange={addData}
           />
         </Grid>
@@ -134,6 +175,8 @@ const ContactForm = () => {
             label="Post Code"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.postCode}
             onChange={addData}
           />
         </Grid>
@@ -148,6 +191,8 @@ const ContactForm = () => {
             label="Full Name"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.ecFullName}
             onChange={addData}
           />
         </Grid>
@@ -159,6 +204,8 @@ const ContactForm = () => {
             label="Mobile Number"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.ecMobile}
             onChange={addData}
           />
         </Grid>
@@ -168,8 +215,9 @@ const ContactForm = () => {
             <Select
               labelId="demo-simple-select-label"
               id="relation"
-              value={relation}
-              onChange={handleChange}
+              name="ecRelation"
+              value={dataToSubmit.ecRelation}
+              onChange={addData}
             >
               {relationDropdown.map((item) => {
                 return (
@@ -189,10 +237,12 @@ const ContactForm = () => {
             label="Address"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.ecAddress}
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
+        {/* <Grid item xs={12} sm={2}>
           <TextField
             required
             id="postCodeEC"
@@ -200,9 +250,11 @@ const ContactForm = () => {
             label="Post Code"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.ecPostCode}
             onChange={addData}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <h3>Notes</h3>
       <Grid container spacing={3}>
@@ -213,18 +265,39 @@ const ContactForm = () => {
             label="Notes"
             fullWidth
             variant="outlined"
+            multiline
+            value={dataToSubmit.notes}
             onChange={addData}
           />
         </Grid>
       </Grid>
       <div className="formEnd">
         <Button
-          onClick={handleSubmit}
-          variant="contained"
-          className="submitBtn"
+          onClick={() => navigate(-1)}
+          variant="outlined"
+          color="warning"
+          className="cancelBtn"
         >
-          Add Contact
+          Cancel
         </Button>
+        {contactInfo ? (
+          <Button
+            onClick={handleEdit}
+            variant="contained"
+            color="secondary"
+            className="editBtn"
+          >
+            Edit Contact
+          </Button>
+        ) : (
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            className="submitBtn"
+          >
+            Add Contact
+          </Button>
+        )}
       </div>
     </div>
   );
