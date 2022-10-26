@@ -16,10 +16,10 @@ AS
 DECLARE @InsertedFamilyID TABLE (ID INT);
 DECLARE @RelationID AS INT = (SELECT relation_id from relation WHERE relation_to_child = @ecRelation);
 
-INSERT INTO family (full_name, address, city, post_code, mobile, email, ec_full_name, ec_relation_id, ec_mobile, notes)
+INSERT INTO family (full_name, address, city, post_code, mobile, email, ec_full_name, ec_relation_id, ec_address, ec_mobile, notes)
 OUTPUT INSERTED.family_id
 INTO @InsertedFamilyID
-VALUES (@FullName, @Address, @City, @PostCode, @Mobile, @Email, @ecFullName, @RelationID, @ecMobile, @Notes)
+VALUES (@FullName, @Address, @City, @PostCode, @Mobile, @Email, @ecFullName, @RelationID, @ecAddress, @ecMobile, @Notes)
 
 DECLARE @NewFamilyID INT = (SELECT TOP 1 ID FROM @InsertedFamilyID);
 
