@@ -22,11 +22,13 @@ function App() {
           <Route path="/contacts">
             <Route path="" element={<ContactPage />} />
             <Route path=":contactID" element={<SingleContactPage />} />
+            <Route path=":contactID/edit" element={<NewContactPage />} />
             <Route path="new" element={<NewContactPage />} />
           </Route>
           <Route path="/students">
             <Route path="" element={<StudentPage />} />
             <Route path=":studentID" element={<SingleStudentPage />} />
+            <Route path=":studentID/edit" element={<NewStudentPage />} />
             <Route path="new" element={<NewStudentPage />} />
           </Route>
           <Route path="/tests" element={<TestPage />} />
