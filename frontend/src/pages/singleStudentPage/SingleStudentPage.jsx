@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useParams } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import "./singleStudentPage.scss";
@@ -8,6 +10,8 @@ import InfoTable from "../../components/infoTable/InfoTable";
 
 const SingleStudentPage = () => {
   let { studentID } = useParams();
+  const navigate = useNavigate();
+
   const [student, setStudent] = useState({});
   useEffect(() => {
     try {
@@ -33,7 +37,16 @@ const SingleStudentPage = () => {
           <div className="listContainer">
             <div className="listHeader">
               <div className="listTitle">Student Information</div>
-              <Button variant="outlined" color="secondary" className="editBtn">
+              <Button
+                onClick={() =>
+                  navigate(`/students/${studentID}/edit`, {
+                    state: { studentInfo: student, studentID: studentID },
+                  })
+                }
+                variant="outlined"
+                color="secondary"
+                className="editBtn"
+              >
                 Edit Student
               </Button>
             </div>

@@ -16,6 +16,7 @@ const InfoTable = ({ data, type }) => {
         { rowLabel: "Email", value: data.email },
         { rowLabel: "Emergency Contact Name", value: data.ecFullName },
         { rowLabel: "Emergency Contact Number", value: data.ecMobile },
+        { rowLabel: "Emergency Contact Address", value: data.ecAddress },
         { rowLabel: "Emergency Contact Relation", value: data.ecRelation },
         { rowLabel: "Notes", value: data.notes },
       ];
@@ -25,7 +26,7 @@ const InfoTable = ({ data, type }) => {
         { rowLabel: "Full Name", value: data.fullName },
         { rowLabel: "DOB", value: data.DOB },
         { rowLabel: "School Year", value: data.schoolYear },
-        { rowLabel: "School Name", value: data.schoolName },
+        { rowLabel: "School Name", value: data.school },
         { rowLabel: "Medical Info", value: data.medicalInfo },
         { rowLabel: "Notes", value: data.notes },
       ];

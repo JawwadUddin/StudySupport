@@ -23,6 +23,8 @@ const SingleContactPage = () => {
         );
         if (serverResponse.message === "OK") {
           setContact(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
         }
       } catch (error) {
         console.log(error);
@@ -35,6 +37,8 @@ const SingleContactPage = () => {
         );
         if (serverResponse.message === "OK") {
           setStudents(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
         }
       } catch (error) {
         console.log(error);
@@ -52,7 +56,16 @@ const SingleContactPage = () => {
           <div className="listContainer">
             <div className="listHeader">
               <div className="listTitle">Contact Information</div>
-              <Button variant="outlined" color="secondary" className="editBtn">
+              <Button
+                onClick={() =>
+                  navigate(`/contacts/${contactID}/edit`, {
+                    state: { contactInfo: contact, familyID: contactID },
+                  })
+                }
+                variant="outlined"
+                color="secondary"
+                className="editBtn"
+              >
                 Edit Contact
               </Button>
             </div>
