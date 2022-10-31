@@ -11,6 +11,10 @@ on:
         - 'frontend/*'
         - 'sqlscripts/*'
   workflow_dispatch:
+  
+defaults:
+  run:
+    working-directory: backend
 
 jobs:
   build:
@@ -27,7 +31,6 @@ jobs:
       - name: npm install
         run: |
           npm install
-          working-directory: backend
 
 
       - name: Upload artifact for deployment job
