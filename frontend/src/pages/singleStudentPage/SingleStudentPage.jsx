@@ -38,6 +38,13 @@ const SingleStudentPage = () => {
             <div className="listHeader">
               <div className="listTitle">Student Information</div>
               <Button
+                onClick={() => navigate(`/contacts/${student.familyID}`)}
+                variant="outlined"
+                className="viewBtn"
+              >
+                View Contact
+              </Button>
+              <Button
                 onClick={() =>
                   navigate(`/students/${studentID}/edit`, {
                     state: { studentInfo: student, studentID: studentID },

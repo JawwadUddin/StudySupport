@@ -178,6 +178,11 @@ const StudentForm = ({ idFamily }) => {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12}>
+          <Button onClick={() => navigate("/contacts/new")} variant="outlined">
+            Create Family
+          </Button>
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -201,6 +206,7 @@ const StudentForm = ({ idFamily }) => {
               value={dataToSubmit.schoolYear}
               onChange={(e) => handleChange(e, "schoolYear")}
             >
+              <MenuItem value={3}>3</MenuItem>
               <MenuItem value={4}>4</MenuItem>
               <MenuItem value={5}>5</MenuItem>
               <MenuItem value={6}>6</MenuItem>
