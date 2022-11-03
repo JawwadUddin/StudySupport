@@ -35,12 +35,6 @@ CREATE TABLE family (
 	CONSTRAINT FK_family_relation FOREIGN KEY (ec_relation_id) REFERENCES relation(relation_id),
 )
 
-insert into family(full_name, city, mobile)
-values 
-	('Jawwad family', 'London', '123'),
-	('Maher family', 'Greater', '493'),
-	('Mo family', 'Leyton', '992')
-
 --look up table for school
 
 --DROPPED DUE TO DB STRUCTURE CHANGES
@@ -75,3 +69,101 @@ values ('12/19/2020')
 
 --to return a date in the form: 'dd/MM/yyyy' use format
 select FORMAT(DOB, 'dd/MM/yyyy') as dob from testDate
+
+
+
+-- ALL TABLES FOR TESTS RELATED STUFF
+
+CREATE TABLE level (
+	level_id INT IDENTITY(1,1) PRIMARY KEY,
+	level_name VARCHAR(20)
+)
+
+INSERT INTO level
+VALUES 
+	('KS2'),
+	('KS3'),
+	('GCSE HIGHER'),
+	('GCSE FOUNDATION'),
+	('A-LEVEL')
+
+CREATE TABLE subject (
+	subject_id INT IDENTITY(1,1) PRIMARY KEY,
+	subject_name VARCHAR(20)
+)
+
+INSERT INTO subject
+VALUES 
+	('MATH'),
+	('SCIENCE'),
+	('ENGLISH')
+
+CREATE TABLE syllabus (
+	syllabus_id INT IDENTITY(1,1),
+	level_id INT,
+	subject_id INT,
+	PRIMARY KEY(syllabus_id),
+	CONSTRAINT FK_syllabus_level FOREIGN KEY (level_id) REFERENCES level(level_id) ON DELETE CASCADE,
+	CONSTRAINT FK_syllabus_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE
+)
+
+--create a maths syllabus (GCSE MATHS HIGHER, GCSE MATHS FOUNDATION)
+INSERT INTO syllabus (level_id, subject_id)
+VALUES 
+	(3,1),
+	(4,1)
+
+CREATE TABLE tests (
+	test_id INT IDENTITY(1,1),
+	test_name VARCHAR(50),
+	syllabus_id INT,
+	PRIMARY KEY(test_id),
+	CONSTRAINT FK_tests_syllabus FOREIGN KEY (syllabus_id) REFERENCES syllabus(syllabus_id) ON DELETE CASCADE
+)
+
+CREATE TABLE topics (
+	topic_id INT IDENTITY(1,1),
+	topic_name VARCHAR(50),
+	subject_id INT,
+	PRIMARY KEY(topic_id),
+	CONSTRAINT FK_topics_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE
+)
+
+-- insert all maths topics: first import the excel sheets into tables called tempHigher and tempFoundation, then use the following to add all the distinct topic names into topics for the math subject via a temp table
+select distinct topic into #temp from tempHigher
+UNION
+select distinct topic from tempFoundation
+
+alter table #temp add subject_id int
+
+update #temp
+set subject_id = (select subject_id from subject where subject_name='Math')
+
+INSERT INTO topics 
+select * from #temp
+
+
+--continue creating the rest of the tables
+
+CREATE TABLE questions (
+	question_id INT IDENTITY(1,1),
+	test_id INT,
+	topic_id INT, 
+	difficulty VARCHAR(10),
+	marks INT,
+	PRIMARY KEY(question_id),
+	CONSTRAINT FK_questions_tests FOREIGN KEY (test_id) REFERENCES tests(test_id),
+	CONSTRAINT FK_questions_topics FOREIGN KEY (topic_id) REFERENCES topics(topic_id)
+)
+
+CREATE TABLE scores (
+	score_id INT IDENTITY(1,1),
+	student_id INT,
+	question_id INT,
+	marks_received INT,
+	test_date DATE,
+	PRIMARY KEY(score_id),
+	CONSTRAINT FK_scores_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+	CONSTRAINT FK_scores_questions FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE
+)
+
