@@ -12,7 +12,7 @@ const SingleStudentPage = () => {
   let { studentID } = useParams();
   const navigate = useNavigate();
 
-  const [student, setStudent] = useState({});
+  const [student, setStudent] = useState();
   useEffect(() => {
     try {
       async function fetchData() {
@@ -31,36 +31,42 @@ const SingleStudentPage = () => {
 
   return (
     <div className="singleStudentPageContainer">
-      <h2 className="title">{student.fullName}</h2>
-      <Grid container>
-        <Grid item xs={12} md={8}>
-          <div className="listContainer">
-            <div className="listHeader">
-              <div className="listTitle">Student Information</div>
-              <Button
-                onClick={() => navigate(`/contacts/${student.familyID}`)}
-                variant="outlined"
-                className="viewBtn"
-              >
-                View Contact
-              </Button>
-              <Button
-                onClick={() =>
-                  navigate(`/students/${studentID}/edit`, {
-                    state: { studentInfo: student, studentID: studentID },
-                  })
-                }
-                variant="outlined"
-                color="secondary"
-                className="editBtn"
-              >
-                Edit Student
-              </Button>
-            </div>
-            <InfoTable data={student} type="student" />
-          </div>
-        </Grid>
-      </Grid>
+      {student ? (
+        <>
+          <h2 className="title">{student.fullName}</h2>
+          <Grid container>
+            <Grid item xs={12} md={8}>
+              <div className="listContainer">
+                <div className="listHeader">
+                  <div className="listTitle">Student Information</div>
+                  <Button
+                    onClick={() => navigate(`/contacts/${student.familyID}`)}
+                    variant="outlined"
+                    className="viewBtn"
+                  >
+                    View Contact
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate(`/students/${studentID}/edit`, {
+                        state: { studentInfo: student, studentID: studentID },
+                      })
+                    }
+                    variant="outlined"
+                    color="secondary"
+                    className="editBtn"
+                  >
+                    Edit Student
+                  </Button>
+                </div>
+                <InfoTable data={student} type="student" />
+              </div>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <h2 className="title">Student Not Found</h2>
+      )}
     </div>
   );
 };
