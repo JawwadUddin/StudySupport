@@ -27,5 +27,13 @@
         background-color: rgba(51, 179, 179, 0.842);
       }
     }
+
+    .studentList {
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgb(219, 242, 242);
+      }
+    }
   }
 }
