@@ -1,4 +1,4 @@
-import "./sidebar.scss";
+import "./sidebar.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";

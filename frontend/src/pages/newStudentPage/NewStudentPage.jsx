@@ -1,4 +1,4 @@
-import "./newStudentPage.scss";
+import "./newStudentPage.css";
 import StudentForm from "../../components/studentForm/StudentForm";
 import { useLocation } from "react-router-dom";
 

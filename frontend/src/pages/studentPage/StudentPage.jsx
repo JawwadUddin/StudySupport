@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./studentPage.scss";
+import "./studentPage.css";
 import Table from "../../components/table/Table";
 import { getData, deleteData } from "../../helpers/apiFunctions";
 import Button from "@mui/material/Button";

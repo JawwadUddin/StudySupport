@@ -1,4 +1,4 @@
-import "./newContactPage.scss";
+import "./newContactPage.css";
 import ContactForm from "../../components/contactForm/ContactForm";
 
 const NewContactPage = () => {

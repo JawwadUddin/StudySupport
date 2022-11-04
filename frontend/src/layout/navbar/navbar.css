@@ -1,0 +1,70 @@
+.navbar {
+  height: 50px;
+  border-bottom: solid 1px rgb(198, 197, 197);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: gray;
+  background-color: rgb(219, 242, 242);
+}
+.navbar .wrapper {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+  width: 100%;
+}
+.navbar .wrapper .search {
+  display: flex;
+  align-items: center;
+  border: solid 1px lightgray;
+  padding: 3px;
+  cursor: pointer;
+}
+.navbar .wrapper .search input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+.navbar .wrapper .search input::-moz-placeholder {
+  font-size: 12px;
+}
+.navbar .wrapper .search input:-ms-input-placeholder {
+  font-size: 12px;
+}
+.navbar .wrapper .search input::placeholder {
+  font-size: 12px;
+}
+.navbar .wrapper .items {
+  display: flex;
+}
+.navbar .wrapper .items .item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.navbar .wrapper .items .item .icon {
+  font-size: 20px;
+}
+.navbar .wrapper .items .item .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.navbar .wrapper .items .item .counter {
+  background-color: red;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  color: white;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}/*# sourceMappingURL=navbar.css.map */

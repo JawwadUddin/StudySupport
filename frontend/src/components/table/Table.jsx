@@ -1,4 +1,4 @@
-import "./table.scss";
+import "./table.css";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
