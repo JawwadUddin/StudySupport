@@ -1,4 +1,4 @@
-import "./studentForm.scss";
+import "./studentForm.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getData, saveData, updateData } from "../../helpers/apiFunctions";

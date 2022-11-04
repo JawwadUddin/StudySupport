@@ -1,0 +1,56 @@
+.sidebar {
+  flex: 1;
+  border-right: solid 1px rgb(198, 197, 197);
+  min-height: 100vh;
+  background-color: rgb(219, 242, 242);
+}
+.sidebar .top {
+  height: 50px;
+  border-bottom: solid 1px rgb(198, 197, 197);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sidebar .top .logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgb(37, 150, 190);
+}
+.sidebar .center li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.sidebar .center li:hover {
+  background-color: rgb(131, 208, 208);
+}
+.sidebar .center li .icon {
+  font-size: 18px;
+  color: rgb(37, 150, 190);
+}
+.sidebar .center li span {
+  font-size: 14px;
+  font-weight: 600;
+  color: grey;
+  margin-left: 10px;
+}
+.sidebar .bottom {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+.sidebar .bottom .colorOption {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: solid 1px rgb(37, 150, 190);
+  cursor: pointer;
+  margin: 5px;
+}
+.sidebar .bottom .colorOption:nth-child(1) {
+  background-color: white;
+}
+.sidebar .bottom .colorOption:nth-child(2) {
+  background-color: black;
+}/*# sourceMappingURL=sidebar.css.map */

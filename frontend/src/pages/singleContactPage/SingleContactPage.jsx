@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./singleContactPage.scss";
+import "./singleContactPage.css";
 import { useParams } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import InfoTable from "../../components/infoTable/InfoTable";

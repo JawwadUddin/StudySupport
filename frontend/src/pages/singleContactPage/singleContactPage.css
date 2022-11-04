@@ -1,0 +1,31 @@
+.singleContactPageContainer .title {
+  margin: 20px;
+  color: rgb(51, 179, 179);
+}
+.singleContactPageContainer .listContainer {
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 20px;
+  margin: 20px;
+}
+.singleContactPageContainer .listContainer .listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.singleContactPageContainer .listContainer .listHeader .listTitle {
+  font-weight: 500;
+  color: gray;
+}
+.singleContactPageContainer .listContainer .createBtn {
+  background-color: rgb(51, 179, 179);
+}
+.singleContactPageContainer .listContainer .createBtn:hover {
+  background-color: rgba(51, 179, 179, 0.842);
+}
+.singleContactPageContainer .listContainer .studentList {
+  cursor: pointer;
+}
+.singleContactPageContainer .listContainer .studentList:hover {
+  background-color: rgb(219, 242, 242);
+}/*# sourceMappingURL=singleContactPage.css.map */

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
-import "./singleStudentPage.scss";
+import "./singleStudentPage.css";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import InfoTable from "../../components/infoTable/InfoTable";
