@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import "./singleStudentPage.css";
 import Button from "@mui/material/Button";

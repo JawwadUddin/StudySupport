@@ -63,7 +63,7 @@ const ContactPage = () => {
       return;
     }
     async function removeData() {
-      const serverResponse = await deleteData(
+      await deleteData(
         `${process.env.REACT_APP_API_URL}/api/family/${deleteID}`
       );
       setRefresh(true);

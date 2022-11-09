@@ -15,11 +15,11 @@
 }
 .singleStudentPageContainer .listContainer .listHeader .listTitle {
   font-weight: 500;
-  color: gray;
+  color: #9c27b0;
 }
 .singleStudentPageContainer .listContainer .viewBtn {
   margin-left: auto;
 }
 .singleStudentPageContainer .listContainer .editBtn {
   margin-left: 20px;
-}/*# sourceMappingURL=singleStudentPage.css.map */
+} /*# sourceMappingURL=singleStudentPage.css.map */

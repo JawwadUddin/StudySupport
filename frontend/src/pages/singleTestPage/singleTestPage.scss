@@ -1,4 +1,4 @@
-.singleStudentPageContainer {
+.singleTestPageContainer {
   .title {
     margin: 20px;
     color: rgb(51, 179, 179);
@@ -7,7 +7,6 @@
     box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
     padding: 20px;
     margin: 20px;
-    // display: inline-block;
 
     .listHeader {
       display: flex;
@@ -19,12 +18,6 @@
         font-weight: 500;
         color: #9c27b0;
       }
-    }
-    .viewBtn {
-      margin-left: auto;
-    }
-    .editBtn {
-      margin-left: 20px;
     }
   }
 }

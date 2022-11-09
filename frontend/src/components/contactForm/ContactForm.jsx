@@ -15,8 +15,6 @@ const ContactForm = () => {
   const location = useLocation();
   const contactInfo = location.state ? location.state.contactInfo : null;
   const familyID = location.state ? location.state.familyID : null;
-
-  // const [relation, setRelation] = useState("");
   const [relationDropdown, setRelationDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     fullName: "",
@@ -53,16 +51,7 @@ const ContactForm = () => {
     if (contactInfo) {
       setDataToSubmit({ ...contactInfo });
     }
-  }, []);
-
-  // const handleChange = (e) => {
-  //   setRelation(e.target.value);
-  //   const updateData = {
-  //     ...dataToSubmit,
-  //     ecRelation: e.target.value,
-  //   };
-  //   setDataToSubmit((prev) => updateData);
-  // };
+  }, [contactInfo]);
 
   const addData = (e) => {
     const updatedData = {

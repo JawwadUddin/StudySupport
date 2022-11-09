@@ -10,6 +10,8 @@ import StudentPage from "./pages/studentPage/StudentPage";
 import TestPage from "./pages/testPage/TestPage";
 import SingleStudentPage from "./pages/singleStudentPage/SingleStudentPage";
 import SingleContactPage from "./pages/singleContactPage/SingleContactPage";
+import SingleTestPage from "./pages/singleTestPage/SingleTestPage";
+import NewTestPage from "./pages/newTestPage/NewTestPage";
 
 function App() {
   return (
@@ -31,7 +33,11 @@ function App() {
             <Route path=":studentID/edit" element={<NewStudentPage />} />
             <Route path="new" element={<NewStudentPage />} />
           </Route>
-          <Route path="/tests" element={<TestPage />} />
+          <Route path="/tests">
+            <Route path="" element={<TestPage />} />
+            <Route path=":testID" element={<SingleTestPage />} />
+            <Route path="new" element={<NewTestPage />} />
+          </Route>
         </Routes>
       </div>
     </div>
