@@ -15,11 +15,11 @@
 }
 .contactPageContainer .listContainer .listHeader .listTitle {
   font-weight: 500;
-  color: gray;
+  color: #9c27b0;
 }
 .contactPageContainer .listContainer .listHeader .createBtn {
   background-color: rgb(51, 179, 179);
 }
 .contactPageContainer .listContainer .listHeader .createBtn:hover {
   background-color: rgba(51, 179, 179, 0.842);
-}/*# sourceMappingURL=contactPage.css.map */
+} /*# sourceMappingURL=contactPage.css.map */
