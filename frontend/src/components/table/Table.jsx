@@ -112,6 +112,9 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
           },
         },
       ];
+      break;
+    default:
+      console.log("Type given does not match a case");
   }
 
   const handleView = (e) => {

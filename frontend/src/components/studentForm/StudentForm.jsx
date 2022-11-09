@@ -19,7 +19,6 @@ const StudentForm = ({ idFamily }) => {
   const [familyID, setFamilyID] = useState(
     idFamily || (studentInfo ? studentInfo.familyID : "")
   );
-  const [schoolYear, setSchoolYear] = useState("");
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     fullName: "",
@@ -58,7 +57,7 @@ const StudentForm = ({ idFamily }) => {
         DOB: formattedDOB,
       });
     }
-  }, []);
+  }, [studentInfo]);
 
   const handleChange = (e, type) => {
     let updateData;
@@ -70,7 +69,6 @@ const StudentForm = ({ idFamily }) => {
       };
     }
     if (type === "schoolYear") {
-      setSchoolYear(e.target.value);
       updateData = {
         ...dataToSubmit,
         schoolYear: e.target.value,
