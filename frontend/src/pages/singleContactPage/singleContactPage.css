@@ -15,7 +15,7 @@
 }
 .singleContactPageContainer .listContainer .listHeader .listTitle {
   font-weight: 500;
-  color: gray;
+  color: #9c27b0;
 }
 .singleContactPageContainer .listContainer .createBtn {
   background-color: rgb(51, 179, 179);
@@ -28,4 +28,4 @@
 }
 .singleContactPageContainer .listContainer .studentList:hover {
   background-color: rgb(219, 242, 242);
-}/*# sourceMappingURL=singleContactPage.css.map */
+} /*# sourceMappingURL=singleContactPage.css.map */
