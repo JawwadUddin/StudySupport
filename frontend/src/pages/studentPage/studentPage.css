@@ -15,11 +15,11 @@
 }
 .studentPageContainer .listHeader .listTitle {
   font-weight: 500;
-  color: gray;
+  color: #9c27b0;
 }
 .studentPageContainer .listHeader .createBtn {
   background-color: rgb(51, 179, 179);
 }
 .studentPageContainer .listHeader .createBtn:hover {
   background-color: rgba(51, 179, 179, 0.842);
-}/*# sourceMappingURL=studentPage.css.map */
+} /*# sourceMappingURL=studentPage.css.map */
