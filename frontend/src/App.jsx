@@ -12,6 +12,8 @@ import SingleStudentPage from "./pages/singleStudentPage/SingleStudentPage";
 import SingleContactPage from "./pages/singleContactPage/SingleContactPage";
 import SingleTestPage from "./pages/singleTestPage/SingleTestPage";
 import NewTestPage from "./pages/newTestPage/NewTestPage";
+import ScorePage from "./pages/scorePage/ScorePage";
+import NewScorePage from "./pages/newScorePage/NewScorePage";
 
 function App() {
   return (
@@ -32,6 +34,12 @@ function App() {
             <Route path=":studentID" element={<SingleStudentPage />} />
             <Route path=":studentID/edit" element={<NewStudentPage />} />
             <Route path="new" element={<NewStudentPage />} />
+            <Route path=":studentID/:testName" element={<ScorePage />} />
+            <Route
+              path=":studentID/:testName/edit"
+              element={<NewScorePage />}
+            />
+            <Route path=":studentID/newTest" element={<NewScorePage />} />
           </Route>
           <Route path="/tests">
             <Route path="" element={<TestPage />} />
