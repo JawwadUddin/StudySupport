@@ -1,0 +1,6 @@
+.studentTestList {
+  cursor: pointer;
+}
+.studentTestList:hover {
+  background-color: rgb(219, 242, 242);
+}/*# sourceMappingURL=studentTest.css.map */
