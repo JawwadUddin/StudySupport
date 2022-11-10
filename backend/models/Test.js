@@ -12,6 +12,7 @@ class Test {
     this.topicName = data.topic_name;
     this.difficulty = data.difficulty;
     this.marks = data.marks;
+    this.marksReceived = data.marks_received;
   }
 
   static get all() {

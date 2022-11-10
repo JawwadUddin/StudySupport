@@ -4,6 +4,7 @@ const { dbConnect } = require("../db");
 class Score {
   constructor(data) {
     this.id = data.score_id;
+    this.questionID = data.question_id;
     this.topicName = data.topic_name;
     this.difficulty = data.difficulty;
     this.marksReceived = data.marks_received;
