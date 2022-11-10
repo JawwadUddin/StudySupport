@@ -112,7 +112,6 @@ const ContactForm = () => {
             label="Full Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.fullName}
             onChange={addData}
           />
@@ -125,9 +124,9 @@ const ContactForm = () => {
             label="Mobile Number"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.mobile}
             onChange={addData}
+            inputProps={{ type: "number" }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -138,9 +137,9 @@ const ContactForm = () => {
             label="Email Address"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.email}
             onChange={addData}
+            inputProps={{ type: "email" }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -151,7 +150,6 @@ const ContactForm = () => {
             label="Address"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.address}
             onChange={addData}
           />
@@ -164,7 +162,6 @@ const ContactForm = () => {
             label="Post Code"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.postCode}
             onChange={addData}
           />
@@ -180,7 +177,6 @@ const ContactForm = () => {
             label="Full Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecFullName}
             onChange={addData}
           />
@@ -193,9 +189,9 @@ const ContactForm = () => {
             label="Mobile Number"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecMobile}
             onChange={addData}
+            inputProps={{ type: "number" }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -226,7 +222,6 @@ const ContactForm = () => {
             label="Address"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecAddress}
             onChange={addData}
           />
