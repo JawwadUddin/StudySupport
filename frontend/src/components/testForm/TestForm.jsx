@@ -121,7 +121,6 @@ const TestForm = ({ syllabusID }) => {
             label="Test Name"
             fullWidth
             variant="standard"
-            multiline
             value={dataToSubmit.testName}
             onChange={addData}
           />
@@ -179,10 +178,9 @@ const TestForm = ({ syllabusID }) => {
                     id="difficulty"
                     name="difficulty"
                     // label="Difficulty"
-                    type="number"
+                    inputProps={{ type: "number", min: "0" }}
                     fullWidth
                     variant="standard"
-                    multiline
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value)}
                   />
@@ -196,7 +194,7 @@ const TestForm = ({ syllabusID }) => {
                     // label="Marks"
                     fullWidth
                     variant="standard"
-                    multiline
+                    inputProps={{ type: "number", min: "0" }}
                     value={marks}
                     onChange={(e) => setMarks(e.target.value)}
                   />
