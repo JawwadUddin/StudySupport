@@ -137,7 +137,6 @@ const StudentForm = ({ idFamily }) => {
             label="Full Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.fullName}
             onChange={addData}
           />
@@ -189,7 +188,6 @@ const StudentForm = ({ idFamily }) => {
             label="School Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.school}
             onChange={addData}
           />
@@ -200,7 +198,6 @@ const StudentForm = ({ idFamily }) => {
             <Select
               labelId="demo-simple-select-label"
               id="schoolYear"
-              multiline
               value={dataToSubmit.schoolYear}
               onChange={(e) => handleChange(e, "schoolYear")}
             >
