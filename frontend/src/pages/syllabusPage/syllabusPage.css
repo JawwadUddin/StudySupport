@@ -1,0 +1,14 @@
+.syllabusPageContainer .title {
+  margin: 20px;
+  color: rgb(51, 179, 179);
+}
+.syllabusPageContainer .listContainer {
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 20px;
+  margin: 20px;
+}
+.syllabusPageContainer .listContainer .listTitle {
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #9c27b0;
+}/*# sourceMappingURL=syllabusPage.css.map */
