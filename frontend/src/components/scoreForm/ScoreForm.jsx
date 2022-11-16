@@ -22,12 +22,13 @@ const ScoreForm = () => {
   const [syllabusDropdown, setSyllabusDropdown] = useState([]);
   const [syllabusID, setSyllabusID] = useState("");
   const [testDropdown, setTestDropdown] = useState([]);
-  const [testID, setTestID] = useState("");
   const [questions, setQuestions] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     studentID: studentID,
+    testID: "",
     testDate: "",
     scores: [],
+    comment: "",
   });
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const ScoreForm = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/test`
+          `${process.env.REACT_APP_API_URL}/api/syllabus/${syllabusID}/tests`
         );
         if (serverResponse.message === "OK") {
           setTestDropdown(serverResponse.results.data);
@@ -60,17 +61,18 @@ const ScoreForm = () => {
           throw Error(serverResponse.message);
         }
       }
+      if (syllabusID === "") return;
       fetchData();
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [syllabusID]);
 
   useEffect(() => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/test/${testID}`
+          `${process.env.REACT_APP_API_URL}/api/test/${dataToSubmit.testID}`
         );
         if (serverResponse.message === "OK") {
           setQuestions(serverResponse.results.data);
@@ -90,13 +92,13 @@ const ScoreForm = () => {
           throw Error(serverResponse.message);
         }
       }
-      if (testID !== "") {
+      if (dataToSubmit.testID !== "") {
         fetchData();
       }
     } catch (error) {
       console.log(error);
     }
-  }, [testID]);
+  }, [dataToSubmit.testID]);
 
   const updateScore = (e, questionID) => {
     const updatedScoreArray = dataToSubmit.scores.map((score) => {
@@ -168,19 +170,17 @@ const ScoreForm = () => {
             <Select
               labelId="demo-simple-select-label"
               id="test"
-              name="test"
-              value={testID}
-              onChange={({ target }) => setTestID(target.value)}
+              name="testID"
+              value={dataToSubmit.testID}
+              onChange={addData}
             >
-              {testDropdown
-                .filter((item) => item.syllabusID === syllabusID)
-                .map((item) => {
-                  return (
-                    <MenuItem key={item.id} value={item.id}>
-                      {item.testName}
-                    </MenuItem>
-                  );
-                })}
+              {testDropdown.map((item) => {
+                return (
+                  <MenuItem key={item.testID} value={item.testID}>
+                    {item.testName}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
@@ -199,35 +199,57 @@ const ScoreForm = () => {
           />
         </Grid>
         {questions.length !== 0 && (
-          <Grid item xs={12}>
-            <Table>
-              <TableHead>
-                <TableCell sx={{ fontWeight: "bold" }}>Q</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Topic Name</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Difficulty</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Score</TableCell>
-              </TableHead>
-              <TableBody>
-                {questions.map((question, index) => {
-                  return (
-                    <TableRow>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{question.topicName}</TableCell>
-                      <TableCell>{question.difficulty}</TableCell>
-                      <TableCell>
-                        <input
-                          className="scoreInput"
-                          type="number"
-                          onChange={(e) => updateScore(e, question.questionID)}
-                        ></input>{" "}
-                        {" / " + question.marks}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </Grid>
+          <>
+            <Grid item xs={12}>
+              <Table>
+                <TableHead>
+                  <TableCell sx={{ fontWeight: "bold" }}>Q</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Topic Name</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Difficulty</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Score</TableCell>
+                </TableHead>
+                <TableBody>
+                  {questions.map((question, index) => {
+                    return (
+                      <TableRow>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{question.topicName}</TableCell>
+                        <TableCell>{question.difficulty}</TableCell>
+                        <TableCell>
+                          <input
+                            className="scoreInput"
+                            type="number"
+                            value={
+                              dataToSubmit.scores.find(
+                                (score) =>
+                                  score.question_id === question.questionID
+                              ).marks_received
+                            }
+                            onChange={(e) =>
+                              updateScore(e, question.questionID)
+                            }
+                          ></input>{" "}
+                          {" / " + question.marks}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="comment"
+                label="Test Comment"
+                name="comment"
+                value={dataToSubmit.comment}
+                onChange={addData}
+                fullWidth
+                rows={3}
+                multiline
+              />
+            </Grid>
+          </>
         )}
       </Grid>
       {questions.length !== 0 && (
