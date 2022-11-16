@@ -50,7 +50,7 @@ const SingleTestPage = () => {
               <TableBody>
                 {test.map((question, index) => {
                   return (
-                    <TableRow>
+                    <TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{question.topicName}</TableCell>
                       <TableCell>{question.difficulty}</TableCell>
