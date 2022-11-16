@@ -26,9 +26,9 @@ const Sidebar = () => {
             <PersonOutlineOutlinedIcon className="icon" />
             <span>Students</span>
           </li>
-          <li onClick={() => navigate("tests")}>
+          <li onClick={() => navigate("syllabus")}>
             <QuizIcon className="icon" />
-            <span>Tests</span>
+            <span>Syllabuses</span>
           </li>
         </ul>
       </div>
