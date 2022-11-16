@@ -8,12 +8,14 @@ import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
+import { status } from "../../helpers/status";
 
 const ScorePage = () => {
   let { studentID, testName } = useParams();
   const location = useLocation();
   const testID = location.state ? location.state.testID : null;
   const [scores, setScores] = useState([]);
+  const [testComment, setTestComment] = useState({});
 
   useEffect(() => {
     try {
@@ -22,7 +24,8 @@ const ScorePage = () => {
           `${process.env.REACT_APP_API_URL}/api/score/${studentID}/${testID}`
         );
         if (serverResponse.message === "OK") {
-          setScores(serverResponse.results.data);
+          setScores(serverResponse.results.data.scores);
+          setTestComment(serverResponse.results.data.testComment);
         } else {
           throw Error(serverResponse.message);
         }
@@ -63,7 +66,10 @@ const ScorePage = () => {
             <TableBody>
               {scores.map((score, index) => {
                 return (
-                  <TableRow>
+                  <TableRow
+                    key={index}
+                    className={status(score.marksReceived, score.marks)}
+                  >
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{score.topicName}</TableCell>
                     <TableCell>{score.difficulty}</TableCell>
@@ -73,6 +79,12 @@ const ScorePage = () => {
               })}
             </TableBody>
           </Table>
+          <div className="listHeader" style={{ marginTop: "50px" }}>
+            <div className="listTitle">Test Comment</div>
+          </div>
+          <div className="comment">
+            {testComment && <p>{testComment.comment}</p>}
+          </div>
         </div>
       ) : (
         <h2 className="title">Scores not found</h2>
