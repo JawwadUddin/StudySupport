@@ -22,13 +22,13 @@ CREATE TABLE family (
 	family_id INT IDENTITY(1,1),
 	full_name VARCHAR(30),
 	address VARCHAR(35),
-	city VARCHAR(25),
 	post_code VARCHAR(8),
 	mobile VARCHAR(11),
 	email VARCHAR(40),
 	ec_full_name VARCHAR(30),
 	ec_relation_id INT,
 	ec_address VARCHAR(50),
+	ec_post_code VARCHAR(8),
 	ec_mobile VARCHAR(11),
 	notes VARCHAR(100),
 	PRIMARY KEY(family_id),
@@ -167,3 +167,12 @@ CREATE TABLE scores (
 	CONSTRAINT FK_scores_questions FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE
 )
 
+CREATE TABLE testComments (
+	test_comment_id INT IDENTITY(1,1),
+	test_id INT,
+	student_id INT,
+	comments VARCHAR(MAX),
+	PRIMARY KEY(test_comment_id),
+	CONSTRAINT FK_testComments_tests FOREIGN KEY (test_id) REFERENCES tests(test_id) ON DELETE CASCADE,
+	CONSTRAINT FK_testComments_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+)
