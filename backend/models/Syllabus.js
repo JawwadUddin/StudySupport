@@ -7,6 +7,8 @@ class Syllabus {
     this.syllabusName = data.syllabus_name;
     this.topicID = data.topic_id;
     this.topicName = data.topic_name;
+    this.testID = data.test_id;
+    this.testName = data.test_name;
   }
 
   static get all() {
@@ -24,7 +26,7 @@ class Syllabus {
     });
   }
 
-  static findByID(id) {
+  static findTopicsByID(id) {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
@@ -34,6 +36,22 @@ class Syllabus {
           .execute("SelectTopicsBySyllabus");
         const topics = topicData.recordset.map((d) => new Syllabus(d));
         resolve(topics);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static findTestsByID(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const testData = await pool
+          .request()
+          .input("SyllabusID", sql.Int, id)
+          .execute("SelectTestsBySyllabus");
+        const tests = testData.recordset.map((d) => new Syllabus(d));
+        resolve(tests);
       } catch (err) {
         reject(err);
       }
