@@ -3,7 +3,9 @@ import "./studentTest.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
-import { ListItemText } from "@mui/material";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import { status } from "../../helpers/status";
 
 const StudentTest = ({ studentID }) => {
   const navigate = useNavigate();
@@ -32,15 +34,17 @@ const StudentTest = ({ studentID }) => {
       {testsCompleted.length !== 0 ? (
         testsCompleted.map((test) => {
           return (
-            <ListItemText
-              sx={{ mb: 2, p: 1 }}
-              primary={test.testName}
-              secondary={test.marksReceived + " / " + test.marks}
+            <ListItem
               onClick={() =>
                 navigate(`${test.testName}`, { state: { testID: test.id } })
               }
               className="studentTestList"
-            />
+            >
+              <ListItemText primary={test.testName} />
+              <h3 className={status(test.marksReceived, test.marks)}>
+                {test.marksReceived + " / " + test.marks}
+              </h3>
+            </ListItem>
           );
         })
       ) : (
