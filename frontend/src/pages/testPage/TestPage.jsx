@@ -1,36 +1,32 @@
 import "./testPage.css";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField";
 
 const TestPage = () => {
-  const [syllabuses, setSyllabuses] = useState([]);
   const [tests, setTests] = useState([]);
   const navigate = useNavigate();
+  const { syllabusID } = useParams();
+  const location = useLocation();
+  const syllabusName = location.state ? location.state.syllabusName : null;
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     try {
       async function fetchData() {
-        const serverResponseSyllabus = await getData(
-          `${process.env.REACT_APP_API_URL}/api/syllabus`
+        const serverResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/syllabus/${syllabusID}/tests`
         );
-        const serverResponseTest = await getData(
-          `${process.env.REACT_APP_API_URL}/api/test`
-        );
-        if (serverResponseSyllabus.message === "OK") {
-          setSyllabuses(serverResponseSyllabus.results.data);
+        if (serverResponse.message === "OK") {
+          setTests(serverResponse.results.data);
         } else {
-          throw Error(serverResponseSyllabus.message);
-        }
-        if (serverResponseTest.message === "OK") {
-          setTests(serverResponseTest.results.data);
-        } else {
-          throw Error(serverResponseTest.message);
+          throw Error(serverResponse.message);
         }
       }
       fetchData();
@@ -43,54 +39,71 @@ const TestPage = () => {
     <div className="testPageContainer">
       <h2 className="title">Tests</h2>
       <Grid container>
-        {syllabuses.map((syllabus) => {
-          return (
-            <Grid item md={12} lg={6}>
-              <div className="listContainer">
-                <div className="syllabusHeader">
-                  <div className="syllabusTitle">{syllabus.syllabusName}</div>
-                  <Button
-                    onClick={() =>
-                      navigate(`/tests/new`, {
-                        state: { syllabus: syllabus },
-                      })
-                    }
-                    variant="contained"
-                    className="createBtn"
-                  >
-                    Create New Test
-                  </Button>
-                </div>
-                {tests
-                  .filter((test) => test.syllabusID === syllabus.id)
-                  .map((test) => {
-                    return (
-                      <Table>
-                        <TableRow>
-                          <TableCell sx={{ fontWeight: "bold" }}>
-                            {test.testName}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Button
-                              onClick={() =>
-                                navigate(`/tests/${test.id}`, {
-                                  state: { testName: test.testName },
-                                })
-                              }
-                              variant="outlined"
-                              className="createBtn"
-                            >
-                              View
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      </Table>
-                    );
-                  })}
-              </div>
-            </Grid>
-          );
-        })}
+        <Grid item xs={12}>
+          <div className="listContainer">
+            <div className="syllabusHeader">
+              <div className="syllabusTitle">{syllabusName}</div>
+              <Button
+                onClick={() =>
+                  navigate(`new`, {
+                    state: {
+                      syllabus: {
+                        syllabusID,
+                        syllabusName,
+                      },
+                    },
+                  })
+                }
+                variant="contained"
+                className="createBtn"
+              >
+                Create New Test
+              </Button>
+            </div>
+            <div className="search">
+              <TextField
+                className="text"
+                id="standard-basic"
+                size="small"
+                variant="outlined"
+                label="Query"
+                value={query}
+                onChange={({ target: { value } }) =>
+                  setQuery(value.toLowerCase())
+                }
+              />
+            </div>
+            {(query
+              ? tests.filter((test) =>
+                  test.testName.toLowerCase().includes(query)
+                )
+              : tests
+            ).map((test, index) => {
+              return (
+                <Table key={index}>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: "bold" }}>
+                      {test.testName}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Button
+                        onClick={() =>
+                          navigate(`${test.testID}`, {
+                            state: { testName: test.testName },
+                          })
+                        }
+                        variant="outlined"
+                        className="createBtn"
+                      >
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                </Table>
+              );
+            })}
+          </div>
+        </Grid>
       </Grid>
     </div>
   );

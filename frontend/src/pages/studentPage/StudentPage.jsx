@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const StudentPage = () => {
   const [students, setStudents] = useState([]);
@@ -14,6 +16,8 @@ const StudentPage = () => {
   const [open, setOpen] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
   const [deleteText, setDeleteText] = useState("");
+  const [query, setQuery] = useState("");
+  const [columnToQuery, setColumnToQuery] = useState("fullName");
 
   const navigate = useNavigate();
 
@@ -86,8 +90,40 @@ const StudentPage = () => {
             Create New Student
           </Button>
         </div>
+        <div className="search">
+          <TextField
+            className="text"
+            id="standard-basic"
+            sx={{ mr: 2 }}
+            size="small"
+            variant="outlined"
+            label="Query"
+            value={query}
+            onChange={({ target: { value } }) => setQuery(value.toLowerCase())}
+          />
+          <Select
+            id="select-search"
+            value={columnToQuery}
+            size="small"
+            label="Search column"
+            onChange={({ target: { value } }) => setColumnToQuery(value)}
+          >
+            <MenuItem value="fullName">Full Name</MenuItem>
+            <MenuItem value="schoolYear">Year</MenuItem>
+            <MenuItem value="DOB">DOB</MenuItem>
+          </Select>
+        </div>
         <Table
-          data={students}
+          data={
+            query
+              ? students.filter((student) =>
+                  student[columnToQuery]
+                    .toString()
+                    .toLowerCase()
+                    .includes(query)
+                )
+              : students
+          }
           type="student"
           setDeleteID={setDeleteID}
           openModal={handleOpen}

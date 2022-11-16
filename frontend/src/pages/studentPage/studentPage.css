@@ -22,4 +22,8 @@
 }
 .studentPageContainer .listHeader .createBtn:hover {
   background-color: rgba(51, 179, 179, 0.842);
+}
+.studentPageContainer .search {
+  display: flex;
+  margin-bottom: 20px;
 }/*# sourceMappingURL=studentPage.css.map */
