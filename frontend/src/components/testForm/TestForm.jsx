@@ -13,7 +13,7 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 
 const TestForm = ({ syllabusID }) => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const TestForm = ({ syllabusID }) => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/syllabus/${syllabusID}`
+          `${process.env.REACT_APP_API_URL}/api/syllabus/${syllabusID}/topics`
         );
         if (serverResponse.message === "OK") {
           setTopics(serverResponse.results.data);
@@ -94,7 +94,7 @@ const TestForm = ({ syllabusID }) => {
         );
         if (serverResponse.message === "OK") {
           const { newTestID } = serverResponse.results.data;
-          navigate(`/tests/${newTestID}`, {
+          navigate(`/syllabus/${syllabusID}/tests/${newTestID}`, {
             replace: true,
             state: { testName: dataToSubmit.testName },
           });
@@ -177,7 +177,6 @@ const TestForm = ({ syllabusID }) => {
                     size="small"
                     id="difficulty"
                     name="difficulty"
-                    // label="Difficulty"
                     inputProps={{ type: "number", min: "0" }}
                     fullWidth
                     variant="standard"
@@ -191,7 +190,6 @@ const TestForm = ({ syllabusID }) => {
                     size="small"
                     id="marks"
                     name="marks"
-                    // label="Marks"
                     fullWidth
                     variant="standard"
                     inputProps={{ type: "number", min: "0" }}
