@@ -49,6 +49,10 @@ function App() {
               path=":syllabusID/tests/:testID"
               element={<SingleTestPage />}
             />
+            <Route
+              path=":syllabusID/tests/:testID/edit"
+              element={<NewTestPage />}
+            />
             <Route path=":syllabusID/tests/new" element={<NewTestPage />} />
           </Route>
         </Routes>
