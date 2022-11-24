@@ -44,6 +44,21 @@ class Test {
     });
   }
 
+  static findByIDAndDelete(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const testData = await pool
+          .request()
+          .input("TestID", sql.Int, id)
+          .execute("DeleteTestByID");
+        resolve("Test successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   static studentTestsCompleted(studentID) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -87,6 +102,7 @@ class Test {
           .request()
           .input("TestID", sql.Int, id)
           .input("TestName", sql.VarChar, test.testName)
+          .input("JsonQuestions", sql.VarChar, JSON.stringify(test.questions))
           .execute("UpdateTest");
         resolve("Test successfully updated");
       } catch (err) {
