@@ -45,15 +45,31 @@ class Score {
     });
   }
 
-  static edit(score) {
+  // static edit(score) {
+  //   return new Promise(async (resolve, reject) => {
+  //     try {
+  //       const pool = await dbConnect();
+  //       const scoreData = await pool
+  //         .request()
+  //         .input("StudentID", sql.Int, score.studentID)
+  //         .input("JsonScores", sql.VarChar, JSON.stringify(score.scores))
+  //         .execute("UpdateStudentScores");
+  //       resolve("Test successfully updated");
+  //     } catch (err) {
+  //       reject("Error updating student: " + err.message);
+  //     }
+  //   });
+  // }
+
+  static edit(id, score) {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
         const scoreData = await pool
           .request()
-          .input("StudentID", sql.Int, score.studentID)
-          .input("JsonScores", sql.VarChar, JSON.stringify(score.scores))
-          .execute("UpdateStudentScores");
+          .input("ScoreID", sql.Int, id)
+          .input("MarksReceived", sql.Int, score.marksReceived)
+          .execute("UpdateScore");
         resolve("Test successfully updated");
       } catch (err) {
         reject("Error updating student: " + err.message);

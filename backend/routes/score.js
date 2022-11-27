@@ -4,6 +4,6 @@ const scoreController = require("../controllers/score");
 
 router.get("/:studentID/:testID", scoreController.show);
 router.post("/", scoreController.create);
-router.patch("/", scoreController.update);
+router.patch("/:id", scoreController.update);
 
 module.exports = router;

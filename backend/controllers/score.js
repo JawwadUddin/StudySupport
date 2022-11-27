@@ -28,9 +28,10 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
-  const submittedScores = req.body.data;
+  const scoreID = req.params.id;
+  const submittedScore = req.body.data;
   try {
-    const score = await Score.edit(submittedScores);
+    const score = await Score.edit(scoreID, submittedScore);
     res.status(200).json(success("OK", { data: score }, res.statusCode));
   } catch (err) {
     res.status(500).json(error(err, res.statusCode));
