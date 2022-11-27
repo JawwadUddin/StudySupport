@@ -20,5 +20,16 @@
         color: #9c27b0;
       }
     }
+
+    .scoreInput {
+      width: 30px;
+      height: 30px;
+      padding: 2px;
+      border-radius: 5px;
+      text-align: center;
+      border: solid 1px #9c27b0;
+      outline: none;
+      background-color: transparent;
+    }
   }
 }
