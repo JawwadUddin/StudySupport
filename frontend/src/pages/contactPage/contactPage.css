@@ -22,4 +22,8 @@
 }
 .contactPageContainer .listContainer .listHeader .createBtn:hover {
   background-color: rgba(51, 179, 179, 0.842);
-} /*# sourceMappingURL=contactPage.css.map */
+}
+.contactPageContainer .listContainer .search {
+  display: flex;
+  margin-bottom: 20px;
+}/*# sourceMappingURL=contactPage.css.map */

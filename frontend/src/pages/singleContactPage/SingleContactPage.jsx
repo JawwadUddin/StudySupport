@@ -92,9 +92,10 @@ const SingleContactPage = () => {
                 </div>
                 <List>
                   {students.length !== 0 ? (
-                    students.map((student) => {
+                    students.map((student, index) => {
                       return (
                         <ListItemText
+                          key={index}
                           sx={{ mb: 2, p: 1 }}
                           primary={student.fullName}
                           secondary={"Year " + student.schoolYear}

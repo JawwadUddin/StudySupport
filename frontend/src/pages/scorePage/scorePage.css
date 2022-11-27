@@ -1,0 +1,29 @@
+.scorePageContainer .title {
+  margin: 20px;
+  color: rgb(51, 179, 179);
+}
+.scorePageContainer .listContainer {
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 20px;
+  margin: 20px;
+}
+.scorePageContainer .listContainer .listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.scorePageContainer .listContainer .listHeader .listTitle {
+  font-weight: 500;
+  color: #9c27b0;
+}
+.scorePageContainer .listContainer .scoreInput {
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  border-radius: 5px;
+  text-align: center;
+  border: solid 1px #9c27b0;
+  outline: none;
+  background-color: transparent;
+}/*# sourceMappingURL=scorePage.css.map */

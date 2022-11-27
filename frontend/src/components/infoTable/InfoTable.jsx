@@ -10,7 +10,7 @@ const InfoTable = ({ data, type }) => {
         { rowLabel: "Full Name", value: data.fullName },
         {
           rowLabel: "Address",
-          value: data.address + ", " + data.city + ", " + data.postCode,
+          value: data.address + ", " + data.postCode,
         },
         { rowLabel: "Contact Number", value: data.mobile },
         { rowLabel: "Email", value: data.email },

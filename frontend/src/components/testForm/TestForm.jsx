@@ -1,8 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./testForm.css";
-import { getData, saveData } from "../../helpers/apiFunctions";
+import {
+  getData,
+  saveData,
+  updateData,
+  deleteData,
+} from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
@@ -13,10 +18,22 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import Button from "@mui/material/Button";
 
 const TestForm = ({ syllabusID }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const testInfo = location.state ? location.state.syllabus.testInfo : null;
+  const testName = location.state ? location.state.syllabus.testName : null;
+  const { testID } = useParams();
+  const [editMode, setEditMode] = useState(false);
+  const [currentlyEditing, setCurrentlyEditing] = useState(false);
+  const [editSelectedTopic, setEditSelectedTopic] = useState(null);
+  const [editDifficulty, setEditDifficulty] = useState("");
+  const [editMarks, setEditMarks] = useState("");
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [topics, setTopics] = useState([]);
   const [difficulty, setDifficulty] = useState("");
@@ -31,7 +48,7 @@ const TestForm = ({ syllabusID }) => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/syllabus/${syllabusID}`
+          `${process.env.REACT_APP_API_URL}/api/syllabus/${syllabusID}/topics`
         );
         if (serverResponse.message === "OK") {
           setTopics(serverResponse.results.data);
@@ -45,6 +62,18 @@ const TestForm = ({ syllabusID }) => {
     }
   }, [syllabusID]);
 
+  useEffect(() => {
+    if (testInfo) {
+      let updatedData = {
+        testName: testName,
+        syllabusID: syllabusID,
+        questions: [...testInfo],
+      };
+      setDataToSubmit({ ...updatedData });
+      setEditMode(true);
+    }
+  }, [testInfo]);
+
   const addData = (e) => {
     const updatedData = {
       ...dataToSubmit,
@@ -56,7 +85,7 @@ const TestForm = ({ syllabusID }) => {
   const addQuestion = (e) => {
     if (selectedTopic === null || difficulty === "" || marks === "") return;
     const newQuestion = {
-      topic_id: selectedTopic.topicID,
+      topicID: selectedTopic.topicID,
       topicName: selectedTopic.topicName,
       difficulty: difficulty,
       marks: marks,
@@ -70,6 +99,29 @@ const TestForm = ({ syllabusID }) => {
     setDifficulty("");
     setMarks("");
     setDataToSubmit((prev) => updatedData);
+    if (editMode) {
+      try {
+        async function submitQuestion() {
+          const serverResponse = await saveData(
+            `${process.env.REACT_APP_API_URL}/api/question`,
+            {
+              testID: testID,
+              topicID: selectedTopic.topicID,
+              difficulty: difficulty,
+              marks: marks,
+            }
+          );
+          if (serverResponse.message === "OK") {
+            return;
+          } else {
+            throw Error(serverResponse.message);
+          }
+        }
+        submitQuestion();
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const removeQuestion = (question) => {
@@ -81,7 +133,17 @@ const TestForm = ({ syllabusID }) => {
       questions: newQuestionArray,
     };
     setDataToSubmit((prev) => updatedData);
+    if (editMode) {
+      handleDelete(question.questionID);
+    }
   };
+
+  async function handleDelete(questionID) {
+    await deleteData(
+      `${process.env.REACT_APP_API_URL}/api/question/${questionID}`,
+      dataToSubmit
+    );
+  }
 
   const handleSubmit = () => {
     try {
@@ -94,7 +156,7 @@ const TestForm = ({ syllabusID }) => {
         );
         if (serverResponse.message === "OK") {
           const { newTestID } = serverResponse.results.data;
-          navigate(`/tests/${newTestID}`, {
+          navigate(`/syllabus/${syllabusID}/tests/${newTestID}`, {
             replace: true,
             state: { testName: dataToSubmit.testName },
           });
@@ -106,6 +168,92 @@ const TestForm = ({ syllabusID }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const editQuestion = (question) => {
+    try {
+      async function editData() {
+        if (
+          editSelectedTopic === null ||
+          editDifficulty === "" ||
+          editMarks === ""
+        )
+          return;
+        const serverResponse = await updateData(
+          `${process.env.REACT_APP_API_URL}/api/question/${question.questionID}`,
+          {
+            topicID: editSelectedTopic.topicID,
+            difficulty: editDifficulty,
+            marks: editMarks,
+          }
+        );
+        if (serverResponse.message === "OK") {
+          setCurrentlyEditing(false);
+          const updatedQuestionArray = dataToSubmit.questions.map((item) => {
+            if (item.questionID !== question.questionID) {
+              return item;
+            } else {
+              return {
+                ...question,
+                topicID: editSelectedTopic.topicID,
+                topicName: editSelectedTopic.topicName,
+                difficulty: editDifficulty,
+                marks: editMarks,
+                edit: false,
+              };
+            }
+          });
+          const updatedData = {
+            ...dataToSubmit,
+            questions: updatedQuestionArray,
+          };
+          setDataToSubmit((prev) => updatedData);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      editData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editQuestionMode = (question) => {
+    setCurrentlyEditing(true);
+    setEditSelectedTopic({
+      topicID: question.topicID,
+      topicName: question.topicName,
+    });
+    setEditDifficulty(question.difficulty);
+    setEditMarks(question.marks);
+    const updatedQuestionArray = dataToSubmit.questions.map((item) => {
+      if (item.questionID !== question.questionID) {
+        return item;
+      } else {
+        return { ...question, edit: true };
+      }
+    });
+    const updatedData = {
+      ...dataToSubmit,
+      questions: updatedQuestionArray,
+    };
+    setDataToSubmit((prev) => updatedData);
+  };
+
+  const cancelEdit = (question) => {
+    const updatedQuestionArray = dataToSubmit.questions.map((item) => {
+      if (item.questionID !== question.questionID) {
+        return item;
+      } else {
+        return { ...question, edit: false };
+      }
+    });
+    const updatedData = {
+      ...dataToSubmit,
+      questions: updatedQuestionArray,
+    };
+    setDataToSubmit((prev) => updatedData);
+    setCurrentlyEditing(false);
   };
 
   return (
@@ -121,7 +269,6 @@ const TestForm = ({ syllabusID }) => {
             label="Test Name"
             fullWidth
             variant="standard"
-            multiline
             value={dataToSubmit.testName}
             onChange={addData}
           />
@@ -140,18 +287,94 @@ const TestForm = ({ syllabusID }) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{question.topicName}</TableCell>
-                    <TableCell>{question.difficulty}</TableCell>
-                    <TableCell>{question.marks}</TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        onClick={() => removeQuestion(question)}
-                        aria-label="delete"
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
+                    {question.edit ? (
+                      <>
+                        <TableCell>
+                          <Autocomplete
+                            size="small"
+                            disablePortal
+                            id="combo-box-demo"
+                            options={topics}
+                            value={editSelectedTopic}
+                            onChange={(e, value) => setEditSelectedTopic(value)}
+                            sx={{ width: 300 }}
+                            getOptionLabel={(option) => option.topicName}
+                            renderInput={(params) => (
+                              <TextField {...params} label="Topic" />
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            required
+                            size="small"
+                            id="difficulty"
+                            name="difficulty"
+                            inputProps={{ type: "number", min: "0" }}
+                            fullWidth
+                            variant="standard"
+                            value={editDifficulty}
+                            onChange={(e) => setEditDifficulty(e.target.value)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <TextField
+                            required
+                            size="small"
+                            id="marks"
+                            name="marks"
+                            fullWidth
+                            variant="standard"
+                            inputProps={{ type: "number", min: "0" }}
+                            value={editMarks}
+                            onChange={(e) => setEditMarks(e.target.value)}
+                          />
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell>{question.topicName}</TableCell>
+                        <TableCell>{question.difficulty}</TableCell>
+                        <TableCell>{question.marks}</TableCell>
+                      </>
+                    )}
+                    {question.edit ? (
+                      <TableCell align="right">
+                        <IconButton
+                          onClick={() => cancelEdit(question)}
+                          aria-label="cancel-edit"
+                          color="error"
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => editQuestion(question)}
+                          aria-label="confirm-edit"
+                          color="success"
+                        >
+                          <CheckIcon />
+                        </IconButton>
+                      </TableCell>
+                    ) : (
+                      <TableCell align="right">
+                        <IconButton
+                          onClick={() =>
+                            !currentlyEditing && editQuestionMode(question)
+                          }
+                          aria-label="edit"
+                          color="secondary"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => removeQuestion(question)}
+                          aria-label="delete"
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}
@@ -178,11 +401,9 @@ const TestForm = ({ syllabusID }) => {
                     size="small"
                     id="difficulty"
                     name="difficulty"
-                    // label="Difficulty"
-                    type="number"
+                    inputProps={{ type: "number", min: "0" }}
                     fullWidth
                     variant="standard"
-                    multiline
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value)}
                   />
@@ -193,10 +414,9 @@ const TestForm = ({ syllabusID }) => {
                     size="small"
                     id="marks"
                     name="marks"
-                    // label="Marks"
                     fullWidth
                     variant="standard"
-                    multiline
+                    inputProps={{ type: "number", min: "0" }}
                     value={marks}
                     onChange={(e) => setMarks(e.target.value)}
                   />
@@ -212,13 +432,34 @@ const TestForm = ({ syllabusID }) => {
         </Grid>
       </Grid>
       <div className="formEnd">
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          className="submitBtn"
-        >
-          Add Test
-        </Button>
+        {testInfo ? (
+          <Button
+            onClick={() => navigate(-1)}
+            variant="outlined"
+            color="warning"
+            className="editBtn"
+          >
+            Return
+          </Button>
+        ) : (
+          <>
+            <Button
+              onClick={() => navigate(-1)}
+              variant="outlined"
+              color="warning"
+              className="cancelBtn"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              className="submitBtn"
+            >
+              Add Test
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

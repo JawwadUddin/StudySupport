@@ -3,6 +3,7 @@ const router = express.Router();
 const syllabusController = require("../controllers/syllabus");
 
 router.get("/", syllabusController.index);
-router.get("/:id", syllabusController.show);
+router.get("/:id/topics", syllabusController.showTopics);
+router.get("/:id/tests", syllabusController.showTests);
 
 module.exports = router;

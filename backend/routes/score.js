@@ -3,7 +3,7 @@ const router = express.Router();
 const scoreController = require("../controllers/score");
 
 router.get("/:studentID/:testID", scoreController.show);
-router.get("/", scoreController.show);
-router.patch("/", scoreController.update);
+router.post("/", scoreController.create);
+router.patch("/:id", scoreController.update);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getData, saveData, updateData } from "../../helpers/apiFunctions";
+import { validateInputs } from "../../helpers/validateInput";
 import "./contactForm.css";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -20,14 +21,16 @@ const ContactForm = () => {
     fullName: "",
     address: "",
     postCode: "",
-    mobile: null,
+    mobile: "",
     email: "",
     ecFullName: "",
     ecRelation: "",
     ecAddress: "",
+    ecPostCode: "",
     ecMobile: "",
     notes: "",
   });
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     try {
@@ -54,6 +57,7 @@ const ContactForm = () => {
   }, [contactInfo]);
 
   const addData = (e) => {
+    setFormErrors({});
     const updatedData = {
       ...dataToSubmit,
       [e.target.name]: e.target.value,
@@ -64,6 +68,9 @@ const ContactForm = () => {
   const handleSubmit = () => {
     try {
       async function submitData() {
+        let errorCount;
+        errorCount = validateForm(dataToSubmit);
+        if (errorCount !== 0) return;
         const serverResponse = await saveData(
           `${process.env.REACT_APP_API_URL}/api/family`,
           dataToSubmit
@@ -81,8 +88,82 @@ const ContactForm = () => {
     }
   };
 
+  function cleanErrorObject(obj) {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === null) {
+        delete obj[key];
+      }
+    });
+  }
+  const validateForm = (inputData) => {
+    const _errors = {};
+    _errors.fullName = validateInputs({
+      data: inputData.fullName,
+      type: "alpha",
+      minLength: 2,
+      maxLength: 20,
+      required: true,
+    });
+    _errors.mobile = validateInputs({
+      data: inputData.mobile,
+      type: "int",
+      length: 11,
+      required: true,
+    });
+    _errors.email = validateInputs({
+      data: inputData.email,
+      type: "email",
+      required: false,
+    });
+    _errors.address = validateInputs({
+      data: inputData.address,
+      type: "alphaNumeric",
+      minLength: 5,
+      required: true,
+    });
+    _errors.postCode = validateInputs({
+      data: inputData.postCode,
+      type: "postcode",
+      required: true,
+    });
+    _errors.ecFullName = validateInputs({
+      data: inputData.ecFullName,
+      type: "alpha",
+      minLength: 2,
+      maxLength: 20,
+      required: true,
+    });
+    _errors.ecMobile = validateInputs({
+      data: inputData.ecMobile,
+      type: "int",
+      length: 11,
+      required: true,
+    });
+    _errors.ecRelation = validateInputs({
+      data: inputData.ecRelation,
+      required: true,
+    });
+    _errors.ecAddress = validateInputs({
+      data: inputData.ecAddress,
+      type: "alphaNumeric",
+      required: false,
+    });
+    _errors.ecPostCode = validateInputs({
+      data: inputData.ecPostCode,
+      type: "postcode",
+      required: false,
+    });
+    cleanErrorObject(_errors);
+    setFormErrors(_errors);
+    let errorCount = Object.keys(_errors).length;
+    return errorCount;
+  };
+
   const handleEdit = () => {
     try {
+      let errorCount;
+      errorCount = validateForm(dataToSubmit);
+      if (errorCount !== 0) return;
       async function editData() {
         const serverResponse = await updateData(
           `${process.env.REACT_APP_API_URL}/api/family/${familyID}`,
@@ -107,12 +188,13 @@ const ContactForm = () => {
         <Grid item xs={12} sm={4}>
           <TextField
             required
+            error={!!formErrors.fullName}
+            helperText={formErrors.fullName}
             id="fullName"
             name="fullName"
             label="Full Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.fullName}
             onChange={addData}
           />
@@ -120,38 +202,42 @@ const ContactForm = () => {
         <Grid item xs={12} sm={4}>
           <TextField
             required
+            error={!!formErrors.mobile}
+            helperText={formErrors.mobile}
             id="mobile"
             name="mobile"
             label="Mobile Number"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.mobile}
             onChange={addData}
+            inputProps={{ type: "number" }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            required
+            error={!!formErrors.email}
+            helperText={formErrors.email}
             id="email"
             name="email"
             label="Email Address"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.email}
             onChange={addData}
+            inputProps={{ type: "email" }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
+            error={!!formErrors.address}
+            helperText={formErrors.address}
             id="address"
             name="address"
             label="Address"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.address}
             onChange={addData}
           />
@@ -159,12 +245,13 @@ const ContactForm = () => {
         <Grid item xs={12} sm={2}>
           <TextField
             required
+            error={!!formErrors.postCode}
+            helperText={formErrors.postCode}
             id="postCode"
             name="postCode"
             label="Post Code"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.postCode}
             onChange={addData}
           />
@@ -175,12 +262,13 @@ const ContactForm = () => {
         <Grid item xs={12} sm={4}>
           <TextField
             required
+            error={!!formErrors.ecFullName}
+            helperText={formErrors.ecFullName}
             id="fullNameEC"
             name="ecFullName"
             label="Full Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecFullName}
             onChange={addData}
           />
@@ -188,14 +276,16 @@ const ContactForm = () => {
         <Grid item xs={12} sm={4}>
           <TextField
             required
+            error={!!formErrors.ecMobile}
+            helperText={formErrors.ecMobile}
             id="mobileEC"
             name="ecMobile"
             label="Mobile Number"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecMobile}
             onChange={addData}
+            inputProps={{ type: "number" }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -205,6 +295,7 @@ const ContactForm = () => {
               labelId="demo-simple-select-label"
               id="relation"
               name="ecRelation"
+              error={!!formErrors.ecRelation}
               value={dataToSubmit.ecRelation}
               onChange={addData}
             >
@@ -220,30 +311,28 @@ const ContactForm = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             id="addressEC"
             name="ecAddress"
             label="Address"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecAddress}
             onChange={addData}
           />
         </Grid>
-        {/* <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={2}>
           <TextField
-            required
-            id="postCodeEC"
+            error={!!formErrors.ecPostCode}
+            helperText={formErrors.ecPostCode}
+            id="ecPostCode"
             name="ecPostCode"
             label="Post Code"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.ecPostCode}
             onChange={addData}
           />
-        </Grid> */}
+        </Grid>
       </Grid>
       <h3>Notes</h3>
       <Grid container spacing={3}>

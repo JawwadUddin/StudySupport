@@ -52,4 +52,14 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, create, update, studentCompleted };
+async function remove(req, res) {
+  const testID = req.params.id;
+  try {
+    const test = await Test.findByIDAndDelete(testID);
+    res.status(204).json(success("OK", { data: test }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
+module.exports = { index, show, create, update, studentCompleted, remove };

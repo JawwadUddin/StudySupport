@@ -7,13 +7,13 @@ class Family {
     this.id = data.family_id;
     this.fullName = data.full_name;
     this.address = data.address;
-    this.city = data.city;
     this.postCode = data.post_code;
     this.mobile = data.mobile;
     this.email = data.email;
     this.ecFullName = data.ec_full_name;
     this.ecRelation = data.relation_to_child;
     this.ecAddress = data.ec_address;
+    this.ecPostCode = data.ec_post_code;
     this.ecMobile = data.ec_mobile;
     this.notes = data.notes;
   }
@@ -86,13 +86,13 @@ class Family {
           .request()
           .input("FullName", sql.VarChar, family.fullName)
           .input("Address", sql.VarChar, family.address)
-          .input("City", sql.VarChar, family.city)
           .input("PostCode", sql.VarChar, family.postCode)
           .input("Mobile", sql.VarChar, family.mobile)
           .input("Email", sql.VarChar, family.email)
           .input("ecFullName", sql.VarChar, family.ecFullName)
           .input("ecRelation", sql.VarChar, family.ecRelation)
           .input("ecAddress", sql.VarChar, family.ecAddress)
+          .input("ecPostCode", sql.VarChar, family.ecPostCode)
           .input("ecMobile", sql.VarChar, family.ecMobile)
           .input("Notes", sql.VarChar, family.notes)
           .output("FamilyID", sql.Int)
@@ -114,13 +114,13 @@ class Family {
           .input("FamilyID", sql.Int, id)
           .input("FullName", sql.VarChar, family.fullName)
           .input("Address", sql.VarChar, family.address)
-          .input("City", sql.VarChar, family.city)
           .input("PostCode", sql.VarChar, family.postCode)
           .input("Mobile", sql.VarChar, family.mobile)
           .input("Email", sql.VarChar, family.email)
           .input("ecFullName", sql.VarChar, family.ecFullName)
           .input("ecRelation", sql.VarChar, family.ecRelation)
           .input("ecAddress", sql.VarChar, family.ecAddress)
+          .input("ecPostCode", sql.VarChar, family.ecPostCode)
           .input("ecMobile", sql.VarChar, family.ecMobile)
           .input("Notes", sql.VarChar, family.notes)
           .execute("UpdateFamily");

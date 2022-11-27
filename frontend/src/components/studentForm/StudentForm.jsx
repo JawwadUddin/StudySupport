@@ -2,6 +2,7 @@ import "./studentForm.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getData, saveData, updateData } from "../../helpers/apiFunctions";
+import { validateInputs } from "../../helpers/validateInput";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
@@ -29,6 +30,7 @@ const StudentForm = ({ idFamily }) => {
     medicalInfo: "",
     notes: "",
   });
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     try {
@@ -60,6 +62,7 @@ const StudentForm = ({ idFamily }) => {
   }, [studentInfo]);
 
   const handleChange = (e, type) => {
+    setFormErrors({});
     let updateData;
     if (type === "family") {
       setFamilyID(e.target.value);
@@ -78,6 +81,7 @@ const StudentForm = ({ idFamily }) => {
   };
 
   const addData = (e) => {
+    setFormErrors({});
     const updatedData = {
       ...dataToSubmit,
       [e.target.name]: e.target.value,
@@ -87,6 +91,9 @@ const StudentForm = ({ idFamily }) => {
 
   const handleSubmit = () => {
     try {
+      let errorCount;
+      errorCount = validateForm(dataToSubmit);
+      if (errorCount !== 0) return;
       async function submitData() {
         const serverResponse = await saveData(
           `${process.env.REACT_APP_API_URL}/api/student`,
@@ -100,6 +107,7 @@ const StudentForm = ({ idFamily }) => {
         }
       }
       submitData();
+      console.log("submitting");
     } catch (error) {
       console.log(error);
     }
@@ -107,6 +115,9 @@ const StudentForm = ({ idFamily }) => {
 
   const handleEdit = () => {
     try {
+      let errorCount;
+      errorCount = validateForm(dataToSubmit);
+      if (errorCount !== 0) return;
       async function editData() {
         const serverResponse = await updateData(
           `${process.env.REACT_APP_API_URL}/api/student/${studentID}`,
@@ -123,6 +134,44 @@ const StudentForm = ({ idFamily }) => {
       console.log(error);
     }
   };
+  function cleanErrorObject(obj) {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === null) {
+        delete obj[key];
+      }
+    });
+  }
+  const validateForm = (inputData) => {
+    const _errors = {};
+    _errors.fullName = validateInputs({
+      data: inputData.fullName,
+      type: "alpha",
+      minLength: 2,
+      maxLength: 20,
+      required: true,
+    });
+    _errors.familyID = validateInputs({
+      data: inputData.familyID,
+      required: true,
+    });
+    _errors.DOB = validateInputs({
+      data: inputData.DOB,
+      required: true,
+    });
+    _errors.school = validateInputs({
+      data: inputData.school,
+      type: "alpha",
+      required: false,
+    });
+    _errors.schoolYear = validateInputs({
+      data: inputData.schoolYear,
+      required: true,
+    });
+    cleanErrorObject(_errors);
+    setFormErrors(_errors);
+    let errorCount = Object.keys(_errors).length;
+    return errorCount;
+  };
 
   return (
     <div className="studentForm">
@@ -132,18 +181,22 @@ const StudentForm = ({ idFamily }) => {
         <Grid item xs={12} sm={8} md={5}>
           <TextField
             required
+            error={!!formErrors.fullName}
+            helperText={formErrors.fullName}
             id="fullName"
             name="fullName"
             label="Full Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.fullName}
             onChange={addData}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
+            error={!!formErrors.DOB}
+            helperText={formErrors.DOB}
+            required
             id="date"
             label="Birthday"
             type="date"
@@ -162,6 +215,7 @@ const StudentForm = ({ idFamily }) => {
             <Select
               labelId="demo-simple-select-label"
               id="relation"
+              error={!!formErrors.familyID}
               multiline
               value={familyID}
               onChange={(e) => handleChange(e, "family")}
@@ -183,13 +237,13 @@ const StudentForm = ({ idFamily }) => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
+            error={!!formErrors.school}
+            helperText={formErrors.school}
             id="school"
             name="school"
             label="School Name"
             fullWidth
             variant="outlined"
-            multiline
             value={dataToSubmit.school}
             onChange={addData}
           />
@@ -198,9 +252,9 @@ const StudentForm = ({ idFamily }) => {
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="demo-simple-select-label">School Year</InputLabel>
             <Select
+              error={!!formErrors.schoolYear}
               labelId="demo-simple-select-label"
               id="schoolYear"
-              multiline
               value={dataToSubmit.schoolYear}
               onChange={(e) => handleChange(e, "schoolYear")}
             >

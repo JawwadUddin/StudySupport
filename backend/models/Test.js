@@ -12,6 +12,7 @@ class Test {
     this.topicName = data.topic_name;
     this.difficulty = data.difficulty;
     this.marks = data.marks;
+    this.marksReceived = data.marks_received;
   }
 
   static get all() {
@@ -37,6 +38,21 @@ class Test {
           .execute("SelectQuestionsForTest");
         const test = testData.recordset.map((d) => new Test(d));
         resolve(test);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static findByIDAndDelete(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const testData = await pool
+          .request()
+          .input("TestID", sql.Int, id)
+          .execute("DeleteTestByID");
+        resolve("Test successfully deleted");
       } catch (err) {
         reject(err);
       }
@@ -86,6 +102,7 @@ class Test {
           .request()
           .input("TestID", sql.Int, id)
           .input("TestName", sql.VarChar, test.testName)
+          .input("JsonQuestions", sql.VarChar, JSON.stringify(test.questions))
           .execute("UpdateTest");
         resolve("Test successfully updated");
       } catch (err) {

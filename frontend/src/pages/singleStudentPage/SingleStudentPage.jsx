@@ -5,6 +5,7 @@ import "./singleStudentPage.css";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import InfoTable from "../../components/infoTable/InfoTable";
+import StudentTest from "../../components/studentTest/StudentTest";
 
 const SingleStudentPage = () => {
   let { studentID } = useParams();
@@ -33,7 +34,7 @@ const SingleStudentPage = () => {
         <>
           <h2 className="title">{student.fullName}</h2>
           <Grid container>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={8} lg={6}>
               <div className="listContainer">
                 <div className="listHeader">
                   <div className="listTitle">Student Information</div>
@@ -58,6 +59,21 @@ const SingleStudentPage = () => {
                   </Button>
                 </div>
                 <InfoTable data={student} type="student" />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={8} lg={6}>
+              <div className="listContainer">
+                <div className="listHeader">
+                  <div className="listTitle">Test Information</div>
+                  <Button
+                    onClick={() => navigate(`newTest`)}
+                    variant="outlined"
+                    className="viewBtn"
+                  >
+                    Add New Test
+                  </Button>
+                </div>
+                <StudentTest studentID={studentID} />
               </div>
             </Grid>
           </Grid>

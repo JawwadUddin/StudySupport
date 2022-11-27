@@ -36,4 +36,45 @@ SELECT @NewTestID AS test_id,
 			select * from questions
 			exec portal.SelectQuestionsForTest @TestID=4
 
+DECLARE @TestID INT = 1
+DECLARE @JsonQuestions VARCHAR(MAX);
+SET @JsonQuestions = '[{"question_id":1, "topic_id":11, "difficulty":"7", "marks": 4}, 
+				{"question_id":2, "topic_id":3, "difficulty":"2", "marks": 3},
+				{"question_id":3, "topic_id":7, "difficulty":"3", "marks": 4},
+				{"question_id":4, "topic_id":12, "difficulty":"7", "marks": 5},
+				{"question_id":5, "topic_id":23, "difficulty":"8", "marks": 6}
+              ]';
 
+/*UPDATE*/
+UPDATE questions
+SET topic_id = temp.topic_id,
+difficulty = temp.difficulty,
+marks = temp.marks from questions q
+INNER JOIN
+(SELECT question_id, topic_id, difficulty, marks 
+FROM OPENJSON(@JsonQuestions)
+WITH (
+	question_id INT '$.question_id',
+	topic_id INT '$.topic_id',
+	difficulty VARCHAR(10) '$.difficulty',
+    marks int '$.marks'
+)) as temp ON q.question_id = temp.question_id
+
+/*INSERT*/
+INSERT INTO dbo.questions (test_id, topic_id, difficulty, marks)
+SELECT @TestID as test_id, 
+	temp.topic_id,
+	temp.difficulty,
+	temp.marks
+	FROM
+(SELECT * 
+	FROM OPENJSON(@JsonQuestions)
+    WITH (  
+		question_id INT '$.question_id',
+		topic_id int '$.topic_id',
+        difficulty VARCHAR(10) '$.difficulty',
+        marks int '$.marks'
+		)) as temp
+WHERE temp.question_id IS NULL 
+
+select * from questions where test_id=1

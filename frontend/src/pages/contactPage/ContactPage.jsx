@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const ContactPage = () => {
   const [contacts, setContacts] = useState([]);
@@ -14,6 +16,8 @@ const ContactPage = () => {
   const [open, setOpen] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
   const [deleteText, setDeleteText] = useState("");
+  const [query, setQuery] = useState("");
+  const [columnToQuery, setColumnToQuery] = useState("fullName");
 
   const navigate = useNavigate();
 
@@ -86,8 +90,37 @@ const ContactPage = () => {
             Create New Contact
           </Button>
         </div>
+        <div className="search">
+          <TextField
+            className="text"
+            id="standard-basic"
+            sx={{ mr: 2 }}
+            size="small"
+            variant="outlined"
+            label="Query"
+            value={query}
+            onChange={({ target: { value } }) => setQuery(value.toLowerCase())}
+          />
+          <Select
+            id="select-search"
+            value={columnToQuery}
+            size="small"
+            label="Search column"
+            onChange={({ target: { value } }) => setColumnToQuery(value)}
+          >
+            <MenuItem value="fullName">Full Name</MenuItem>
+            <MenuItem value="address">Address</MenuItem>
+            <MenuItem value="mobile">Contact Number</MenuItem>
+          </Select>
+        </div>
         <Table
-          data={contacts}
+          data={
+            query
+              ? contacts.filter((contact) =>
+                  contact[columnToQuery].toLowerCase().includes(query)
+                )
+              : contacts
+          }
           type="contact"
           setDeleteID={setDeleteID}
           openModal={handleOpen}
@@ -102,7 +135,6 @@ const ContactPage = () => {
             <div className="deleteModal">
               <h3 className="title">To confirm delete, type 'delete' below:</h3>
               <TextField
-                className="text"
                 id="standard-basic"
                 variant="standard"
                 sx={{ mb: 2, mt: 2 }}
