@@ -37,7 +37,16 @@ const SyllabusPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <div className="listContainer">
-            <div className="listTitle">All Syllabuses</div>
+            <div className="listHeader">
+              <div className="listTitle">All Syllabuses</div>
+              <Button
+                onClick={() => navigate("new")}
+                variant="contained"
+                className="createBtn"
+              >
+                Create New Syllabus
+              </Button>
+            </div>
             {syllabuses.map((syllabus, index) => {
               return (
                 <Table key={index}>
@@ -48,6 +57,18 @@ const SyllabusPage = () => {
                     <TableCell align="right">
                       <Button
                         onClick={() =>
+                          navigate(`${syllabus.id}/topics`, {
+                            state: { syllabusName: syllabus.syllabusName },
+                          })
+                        }
+                        variant="outlined"
+                        className="createBtn"
+                        style={{ marginRight: "20px" }}
+                      >
+                        Topics
+                      </Button>
+                      <Button
+                        onClick={() =>
                           navigate(`${syllabus.id}/tests`, {
                             state: { syllabusName: syllabus.syllabusName },
                           })
@@ -55,7 +76,7 @@ const SyllabusPage = () => {
                         variant="outlined"
                         className="createBtn"
                       >
-                        View
+                        Tests
                       </Button>
                     </TableCell>
                   </TableRow>
