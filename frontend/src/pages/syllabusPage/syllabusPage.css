@@ -7,8 +7,19 @@
   padding: 20px;
   margin: 20px;
 }
-.syllabusPageContainer .listContainer .listTitle {
-  font-weight: 500;
+.syllabusPageContainer .listContainer .listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
+}
+.syllabusPageContainer .listContainer .listHeader .listTitle {
+  font-weight: 500;
   color: #9c27b0;
+}
+.syllabusPageContainer .listContainer .listHeader .createBtn {
+  background-color: rgb(51, 179, 179);
+}
+.syllabusPageContainer .listContainer .listHeader .createBtn:hover {
+  background-color: rgba(51, 179, 179, 0.842);
 }/*# sourceMappingURL=syllabusPage.css.map */

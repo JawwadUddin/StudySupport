@@ -74,6 +74,7 @@ select FORMAT(DOB, 'dd/MM/yyyy') as dob from testDate
 
 -- ALL TABLES FOR TESTS RELATED STUFF
 
+--Dropped level table - no longer being used
 CREATE TABLE level (
 	level_id INT IDENTITY(1,1) PRIMARY KEY,
 	level_name VARCHAR(20)
@@ -87,6 +88,7 @@ VALUES
 	('GCSE FOUNDATION'),
 	('A-LEVEL')
 
+--Dropped subject table - no longer being used
 CREATE TABLE subject (
 	subject_id INT IDENTITY(1,1) PRIMARY KEY,
 	subject_name VARCHAR(20)
@@ -98,16 +100,18 @@ VALUES
 	('SCIENCE'),
 	('ENGLISH')
 
+
 CREATE TABLE syllabus (
 	syllabus_id INT IDENTITY(1,1),
-	level_id INT,
-	subject_id INT,
+	syllabus_name VARCHAR(50)
+	--level_id INT,
+	--subject_id INT,
 	PRIMARY KEY(syllabus_id),
-	CONSTRAINT FK_syllabus_level FOREIGN KEY (level_id) REFERENCES level(level_id) ON DELETE CASCADE,
-	CONSTRAINT FK_syllabus_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE
+	--CONSTRAINT FK_syllabus_level FOREIGN KEY (level_id) REFERENCES level(level_id) ON DELETE CASCADE,
+	--CONSTRAINT FK_syllabus_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE
 )
 
---create a maths syllabus (GCSE MATHS HIGHER, GCSE MATHS FOUNDATION)
+--create a maths syllabus (GCSE MATHS HIGHER, GCSE MATHS FOUNDATION) - no longer used
 INSERT INTO syllabus (level_id, subject_id)
 VALUES 
 	(3,1),
@@ -124,9 +128,9 @@ CREATE TABLE tests (
 CREATE TABLE topics (
 	topic_id INT IDENTITY(1,1),
 	topic_name VARCHAR(50),
-	subject_id INT,
+	syllabus_id INT,
 	PRIMARY KEY(topic_id),
-	CONSTRAINT FK_topics_subject FOREIGN KEY (subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE
+	CONSTRAINT FK_topics_syllabus FOREIGN KEY (syllabus_id) REFERENCES syllabus(syllabus_id) ON DELETE CASCADE
 )
 
 -- insert all maths topics: first import the excel sheets into tables called tempHigher and tempFoundation, then use the following to add all the distinct topic names into topics for the math subject via a temp table

@@ -30,4 +30,14 @@ async function showTests(req, res) {
   }
 }
 
-module.exports = { index, showTopics, showTests };
+async function create(req, res) {
+  const submittedSyllabus = req.body.data;
+  try {
+    const syllabus = await Syllabus.create(submittedSyllabus);
+    res.status(201).json(success("OK", { data: syllabus }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
+module.exports = { index, showTopics, showTests, create };

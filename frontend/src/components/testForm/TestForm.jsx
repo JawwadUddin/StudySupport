@@ -357,15 +357,17 @@ const TestForm = ({ syllabusID }) => {
                       </TableCell>
                     ) : (
                       <TableCell align="right">
-                        <IconButton
-                          onClick={() =>
-                            !currentlyEditing && editQuestionMode(question)
-                          }
-                          aria-label="edit"
-                          color="secondary"
-                        >
-                          <EditIcon />
-                        </IconButton>
+                        {editMode && (
+                          <IconButton
+                            onClick={() =>
+                              !currentlyEditing && editQuestionMode(question)
+                            }
+                            aria-label="edit"
+                            color="secondary"
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        )}
                         <IconButton
                           onClick={() => removeQuestion(question)}
                           aria-label="delete"

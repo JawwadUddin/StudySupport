@@ -57,6 +57,24 @@ class Syllabus {
       }
     });
   }
+
+  static create(syllabus) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const syllabusData = await pool
+          .request()
+          .input("SyllabusName", sql.VarChar, syllabus.syllabusName)
+          .input("JsonTopics", sql.VarChar, JSON.stringify(syllabus.topics))
+          .output("SyllabusID", sql.Int)
+          .execute("InsertSyllabus");
+        const newSyllabus = syllabusData.output.SyllabusID;
+        resolve({ newSyllabusID: newSyllabus });
+      } catch (err) {
+        reject("Error creating Test: " + err.message);
+      }
+    });
+  }
 }
 
 module.exports = Syllabus;
