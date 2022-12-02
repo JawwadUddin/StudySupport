@@ -6,6 +6,10 @@ router.get("/", testController.index);
 router.get("/:id", testController.show);
 router.delete("/:id", testController.remove);
 router.get("/completed/:id", testController.studentCompleted);
+router.get(
+  "/completedForSyllabus/:syllabusID/:studentID",
+  testController.studentCompletedForSyllabus
+);
 router.post("/", testController.create);
 router.patch("/:id", testController.update);
 
