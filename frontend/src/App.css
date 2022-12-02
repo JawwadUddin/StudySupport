@@ -21,22 +21,22 @@ input[type="number"] {
   padding: 10px;
   border-radius: 5px;
 }
-.status.fail {
+.fail {
   color: red;
   background-color: rgba(255, 0, 0, 0.2);
 }
 
-.status.average {
+.average {
   color: darkorange;
   background-color: rgba(255, 140, 0, 0.2);
 }
 
-.status.good {
+.good {
   color: yellowgreen;
   background-color: rgba(153, 205, 50, 0.2);
 }
 
-.status.excellent {
+.excellent {
   color: darkgreen;
   background-color: rgba(0, 100, 0, 0.2);
 }

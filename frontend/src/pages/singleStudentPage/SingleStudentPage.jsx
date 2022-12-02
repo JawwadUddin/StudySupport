@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import InfoTable from "../../components/infoTable/InfoTable";
 import StudentTest from "../../components/studentTest/StudentTest";
+import ScoreHistoryTable from "../../components/scoreHistoryTable/ScoreHistoryTable";
 
 const SingleStudentPage = () => {
   let { studentID } = useParams();
@@ -74,6 +75,14 @@ const SingleStudentPage = () => {
                   </Button>
                 </div>
                 <StudentTest studentID={studentID} />
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <div className="listContainer">
+                <div className="listHeader">
+                  <div className="listTitle">Score History</div>
+                </div>
+                <ScoreHistoryTable studentID={studentID} />
               </div>
             </Grid>
           </Grid>

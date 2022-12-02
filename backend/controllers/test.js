@@ -31,6 +31,20 @@ async function studentCompleted(req, res) {
   }
 }
 
+async function studentCompletedForSyllabus(req, res) {
+  const studentID = req.params.studentID;
+  const syllabusID = req.params.syllabusID;
+  try {
+    const test = await Test.studentTestsCompletedForSyllabus(
+      studentID,
+      syllabusID
+    );
+    res.status(200).json(success("OK", { data: test }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 async function create(req, res) {
   const submittedTest = req.body.data;
   try {
@@ -62,4 +76,12 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { index, show, create, update, studentCompleted, remove };
+module.exports = {
+  index,
+  show,
+  create,
+  update,
+  studentCompleted,
+  studentCompletedForSyllabus,
+  remove,
+};

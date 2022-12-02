@@ -74,6 +74,22 @@ class Test {
       }
     });
   }
+  static studentTestsCompletedForSyllabus(studentID, syllabusID) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const testData = await pool
+          .request()
+          .input("StudentID", sql.Int, studentID)
+          .input("SyllabusID", sql.Int, syllabusID)
+          .execute("SelectStudentTestsCompletedBySyllabusID");
+        const test = testData.recordset.map((d) => new Test(d));
+        resolve(test);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
   static create(test) {
     return new Promise(async (resolve, reject) => {

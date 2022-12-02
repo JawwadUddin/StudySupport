@@ -16,6 +16,18 @@ async function show(req, res) {
   }
 }
 
+async function showSyllabusScore(req, res) {
+  const studentID = req.params.studentID;
+  const syllabusID = req.params.syllabusID;
+
+  try {
+    const scores = await Score.studentSyllabusScore(studentID, syllabusID);
+    res.status(200).json(success("OK", { data: scores }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
 async function create(req, res) {
   const data = req.body.data;
   try {
@@ -38,4 +50,4 @@ async function update(req, res) {
   }
 }
 
-module.exports = { show, create, update };
+module.exports = { show, showSyllabusScore, create, update };
