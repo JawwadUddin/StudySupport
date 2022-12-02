@@ -41,7 +41,9 @@ const StudentTest = ({ studentID }) => {
               className="studentTestList"
             >
               <ListItemText primary={test.testName} />
-              <h3 className={status(test.marksReceived, test.marks)}>
+              <h3
+                className={status(test.marksReceived, test.marks) + " status"}
+              >
                 {test.marksReceived + " / " + test.marks}
               </h3>
             </ListItem>
