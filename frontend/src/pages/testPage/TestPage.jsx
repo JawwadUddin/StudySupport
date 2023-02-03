@@ -129,14 +129,18 @@ const TestPage = () => {
                 <Table key={index}>
                   <TableRow>
                     <TableCell sx={{ fontWeight: "bold" }}>
-                      {test.testName}
+                      {test.testName} ({test.mock ? "Mock" : "Exam"})
                     </TableCell>
                     <TableCell align="right">
                       <Button
                         style={{ marginRight: "20px" }}
                         onClick={() =>
                           navigate(`${test.testID}`, {
-                            state: { testName: test.testName, syllabusName },
+                            state: {
+                              testName: test.testName,
+                              syllabusName,
+                              mock: test.mock,
+                            },
                           })
                         }
                         variant="outlined"

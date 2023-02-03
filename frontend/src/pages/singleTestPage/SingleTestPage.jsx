@@ -15,7 +15,9 @@ const SingleTestPage = () => {
   const navigate = useNavigate();
   const { syllabusID } = useParams();
   const location = useLocation();
-  const { testName, syllabusName } = location.state ? location.state : null;
+  const { testName, syllabusName, mock } = location.state
+    ? location.state
+    : null;
   const [test, setTest] = useState([]);
 
   useEffect(() => {
@@ -49,6 +51,7 @@ const SingleTestPage = () => {
                       syllabus: {
                         syllabusID,
                         syllabusName,
+                        mock,
                         testInfo: test,
                         testName,
                       },
