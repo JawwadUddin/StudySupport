@@ -22,12 +22,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 
 const TestForm = ({ syllabusID }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const testInfo = location.state ? location.state.syllabus.testInfo : null;
   const testName = location.state ? location.state.syllabus.testName : null;
+  const mock = location.state ? location.state.syllabus.mock : null;
   const { testID } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
@@ -40,6 +45,7 @@ const TestForm = ({ syllabusID }) => {
   const [marks, setMarks] = useState("");
   const [dataToSubmit, setDataToSubmit] = useState({
     testName: "",
+    type: "",
     syllabusID: syllabusID,
     questions: [],
   });
@@ -66,6 +72,7 @@ const TestForm = ({ syllabusID }) => {
     if (testInfo) {
       let updatedData = {
         testName: testName,
+        type: mock ? 1 : 0,
         syllabusID: syllabusID,
         questions: [...testInfo],
       };
@@ -148,7 +155,11 @@ const TestForm = ({ syllabusID }) => {
   const handleSubmit = () => {
     try {
       async function submitData() {
-        if (dataToSubmit.testName === "" || dataToSubmit.questions.length === 0)
+        if (
+          dataToSubmit.testName === "" ||
+          dataToSubmit.type === "" ||
+          dataToSubmit.questions.length === 0
+        )
           return;
         const serverResponse = await saveData(
           `${process.env.REACT_APP_API_URL}/api/test`,
@@ -273,6 +284,16 @@ const TestForm = ({ syllabusID }) => {
             onChange={addData}
           />
         </Grid>
+        <Grid item xs={12} sm={4}>
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+            <Select name="type" value={dataToSubmit.type} onChange={addData}>
+              <MenuItem value={0}>Exam</MenuItem>
+              <MenuItem value={1}>Mock</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
         <Grid item xs={12}>
           <Table>
             <TableHead>
