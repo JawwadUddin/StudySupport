@@ -13,6 +13,7 @@ class Test {
     this.difficulty = data.difficulty;
     this.marks = data.marks;
     this.marksReceived = data.marks_received;
+    this.mock = data.mock;
   }
 
   static get all() {
@@ -98,6 +99,7 @@ class Test {
         const testData = await pool
           .request()
           .input("TestName", sql.VarChar, test.testName)
+          .input("Type", sql.Bit, test.type)
           .input("SyllabusID", sql.Int, test.syllabusID)
           .input("JsonQuestions", sql.VarChar, JSON.stringify(test.questions))
           .output("TestID", sql.Int)

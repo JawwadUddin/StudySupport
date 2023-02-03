@@ -7,6 +7,7 @@ class Syllabus {
     this.syllabusName = data.syllabus_name;
     this.topicID = data.topic_id;
     this.topicName = data.topic_name;
+    this.mock = data.mock;
     this.testID = data.test_id;
     this.testName = data.test_name;
   }

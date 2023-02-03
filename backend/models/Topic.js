@@ -2,6 +2,11 @@ const sql = require("mssql");
 const { dbConnect } = require("../db");
 
 class Topic {
+  constructor(data) {
+    this.topicID = data.topic_id;
+    this.topicName = data.topic_name;
+  }
+
   static create(topic) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -17,6 +22,24 @@ class Topic {
       }
     });
   }
+
+  static findTopicsStudentTestedOn(studentID, syllabusID) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const topicData = await pool
+          .request()
+          .input("SyllabusID", sql.Int, syllabusID)
+          .input("StudentID", sql.Int, studentID)
+          .execute("SelectTopicsStudentTestedOn");
+        const topics = topicData.recordset.map((d) => new Topic(d));
+        resolve(topics);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   static delete(id) {
     return new Promise(async (resolve, reject) => {
       try {
