@@ -1,0 +1,57 @@
+.registerPageContainer {
+  .title {
+    margin: 20px;
+    color: rgb(51, 179, 179);
+  }
+  .listContainer {
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 20px;
+    margin: 20px;
+
+    .listHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      .listTitle {
+        font-weight: 500;
+        color: #9c27b0;
+      }
+    }
+    .sessionContainer {
+      margin: 50px 0;
+    }
+
+    .tableContainer {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .tableContent {
+      width: 300px;
+      margin: 0 20px 20px 0;
+      // border: solid 1px blue;
+
+      .tableContainer {
+        // min-height: 200px;
+        border: solid 1px grey;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+
+        .tableStudent {
+          padding: 10px 0;
+          background-color: #9b27b016;
+        }
+      }
+
+      .tableHeader {
+        text-align: center;
+        margin-bottom: 10px;
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+.registerPageContainer .title {
+  margin: 20px;
+  color: rgb(51, 179, 179);
+}
+.registerPageContainer .listContainer {
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 20px;
+  margin: 20px;
+}
+.registerPageContainer .listContainer .listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.registerPageContainer .listContainer .listHeader .listTitle {
+  font-weight: 500;
+  color: #9c27b0;
+}
+.registerPageContainer .listContainer .sessionContainer {
+  margin: 50px 0;
+}
+.registerPageContainer .listContainer .tableContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+.registerPageContainer .listContainer .tableContent {
+  width: 300px;
+  margin: 0 20px 20px 0;
+}
+.registerPageContainer .listContainer .tableContent .tableContainer {
+  border: solid 1px grey;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+.registerPageContainer .listContainer .tableContent .tableContainer .tableStudent {
+  padding: 10px 0;
+  background-color: rgba(155, 39, 176, 0.0862745098);
+}
+.registerPageContainer .listContainer .tableContent .tableHeader {
+  text-align: center;
+  margin-bottom: 10px;
+  color: red;
+  font-weight: bold;
+}/*# sourceMappingURL=registerPage.css.map */

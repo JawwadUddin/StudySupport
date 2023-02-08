@@ -17,6 +17,7 @@ import NewScorePage from "./pages/newScorePage/NewScorePage";
 import SyllabusPage from "./pages/syllabusPage/SyllabusPage";
 import NewSyllabusPage from "./pages/newSyllabusPage/NewSyllabusPage";
 import TopicPage from "./pages/topicPage/TopicPage";
+import RegisterPage from "./pages/registerPage/RegisterPage";
 
 function App() {
   return (
@@ -62,6 +63,9 @@ function App() {
               element={<NewTestPage />}
             />
             <Route path=":syllabusID/tests/new" element={<NewTestPage />} />
+          </Route>
+          <Route path="register">
+            <Route path="" element={<RegisterPage />} />
           </Route>
         </Routes>
       </div>
