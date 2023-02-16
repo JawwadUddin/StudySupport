@@ -1,0 +1,60 @@
+.session-time {
+  text-align: center;
+  font-size: 20px;
+  color: #9c27b0;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.tables-container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+.tables-container .table {
+  width: 250px;
+}
+.tables-container .table .table-name {
+  text-align: center;
+  color: #ed6c02;
+}
+.tables-container .table .table-items {
+  border: solid 2px #0c3389;
+  padding: 10px;
+}
+.tables-container .table .student {
+  padding: 5px 0;
+  display: flex;
+}
+.tables-container .table .student .student-name {
+  flex: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tables-container .table .student .student-name .compensation-tag {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+  background-color: #16629f;
+}
+.tables-container .table .student .student-attendance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-left: solid 1px blue;
+  padding-left: 5px;
+}
+.tables-container .table .student .student-attendance .absent-icon {
+  color: #d53737;
+  font-size: 25px;
+}
+.tables-container .table .student .student-attendance .present-icon {
+  color: #56c387;
+  font-size: 25px;
+}/*# sourceMappingURL=registerTable.css.map */

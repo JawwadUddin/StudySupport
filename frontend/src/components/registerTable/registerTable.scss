@@ -1,0 +1,71 @@
+.session-time {
+  text-align: center;
+  font-size: 20px;
+  color: #9c27b0;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.tables-container {
+  //   border: solid;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+
+  .table {
+    width: 250px;
+    // border: solid;
+    // padding: 10px;
+
+    .table-name {
+      text-align: center;
+      color: #ed6c02;
+    }
+
+    .table-items {
+      border: solid 2px #0c3389;
+      padding: 10px;
+    }
+
+    .student {
+      padding: 5px 0;
+      display: flex;
+
+      .student-name {
+        flex: 5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .compensation-tag {
+          width: 20px;
+          height: 20px;
+          border-radius: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 5px;
+          background-color: #16629f;
+        }
+      }
+
+      .student-attendance {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-left: solid 1px blue;
+        padding-left: 5px;
+
+        .absent-icon {
+          color: #d53737;
+          font-size: 25px;
+        }
+        .present-icon {
+          color: #56c387;
+          font-size: 25px;
+        }
+      }
+    }
+  }
+}
