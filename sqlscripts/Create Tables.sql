@@ -232,25 +232,15 @@ CREATE TABLE studentSessions (
 	session_table_id INT,
 	session_slot_id INT,
 	attendance BIT,
+	compensation_id INT
 	PRIMARY KEY(student_session_id),
 	CONSTRAINT FK_studentSessions_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
 	CONSTRAINT FK_studentSessions_sessionTables FOREIGN KEY (session_table_id) REFERENCES sessionTables(session_table_id),
 	CONSTRAINT FK_studentSessions_sessionDates FOREIGN KEY (session_date_id) REFERENCES sessionDates(session_date_id),
-	CONSTRAINT FK_studentSessions_sessionSlots FOREIGN KEY (session_slot_id) REFERENCES sessionSlots(session_slot_id)
-)
-
-CREATE TABLE compensations (
-	compensation_id INT IDENTITY(1,1) PRIMARY KEY,
-	student_session_id INT,
-	session_date_id INT,
-	session_table_id INT,
-	session_slot_id INT,
-	attendance BIT,
-	CONSTRAINT FK_compensations_studentSessions FOREIGN KEY (student_session_id) REFERENCES studentSessions(student_session_id) ON DELETE CASCADE,
-	CONSTRAINT FK_compensations_sessionTables FOREIGN KEY (session_table_id) REFERENCES sessionTables(session_table_id),
-	CONSTRAINT FK_compensations_sessionDates FOREIGN KEY (session_date_id) REFERENCES sessionDates(session_date_id),
-	CONSTRAINT FK_compensations_sessionSlots FOREIGN KEY (session_slot_id) REFERENCES sessionSlots(session_slot_id)
-)
+	CONSTRAINT FK_studentSessions_sessionSlots FOREIGN KEY (session_slot_id) REFERENCES sessionSlots(session_slot_id),
+	CONSTRAINT FK_compensations_studentSessions FOREIGN KEY (compensation_id) REFERENCES studentSessions(student_session_id)
+)																													 
+																													 
 
 INSERT INTO studentSessions (student_id, session_date_id, session_table_id, session_slot_id)
 VALUES 

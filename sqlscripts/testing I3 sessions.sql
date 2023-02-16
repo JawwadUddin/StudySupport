@@ -12,21 +12,23 @@ select student_id, session_date, session_table, session_time, attendance from st
 inner join sessionDates d on s.session_date_id = d.session_date_id
 inner join sessionTables t on s.session_table_id = t.session_table_id
 inner join sessionSlots l on s.session_slot_id = l.session_slot_id
+WHERE session_date = '2023-02-05'
 order by session_date, session_time, session_table
 for json auto
 
 
-
 -- investigating query that will bring back register
 SELECT
+(SELECT
 	d.session_date,
 	sessions = (
 		SELECT session_time, 
 		tables = (
 			SELECT session_table,
 			students = (
-				SELECT student_id, attendance 
-				FROM studentSessions s 
+				SELECT s.student_id, s.student_session_id, attendance, compensation_id, full_name 
+				FROM studentSessions s
+				INNER JOIN students st on s.student_id = st.student_id
 					WHERE s.session_date_id = d.session_date_id 
 					AND s.session_table_id = t.session_table_id
 					AND s.session_slot_id = l.session_slot_id
@@ -39,5 +41,8 @@ SELECT
 		FOR JSON PATH
 	) 
 FROM sessionDates d
-FOR JSON PATH
+WHERE session_date = '2023-02-05'
+FOR JSON PATH) AS register
 
+
+exec portal.Selectregister @SessionDate = '2023-02-05'
