@@ -1,0 +1,232 @@
+.registerPageContainer {
+  .title {
+    margin: 20px;
+    color: rgb(51, 179, 179);
+  }
+  .listContainer {
+    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+    padding: 20px;
+    margin: 20px;
+
+    .listHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      .listTitle {
+        font-weight: 500;
+        color: #9c27b0;
+      }
+    }
+    .sessionContainer {
+      margin: 50px 0;
+    }
+
+    .tableContainer {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .register {
+      // border: solid 1px blue;
+      background-color: rgba(219, 242, 242, 0.3);
+      height: 650px;
+      width: 1320px;
+      position: relative;
+      padding: 50px;
+      margin: 0 auto;
+      margin-bottom: 40px;
+
+      .table {
+        width: 150px;
+        height: 60px;
+        position: absolute;
+        border: solid 1px rgba(0, 0, 0, 0.5);
+        display: flex;
+
+        .student {
+          width: 50%;
+          // border: solid 1px blue;
+          text-align: center;
+          transform: translateY(-30px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .icon {
+            margin: 2px;
+          }
+        }
+      }
+
+      .left-orient {
+        transform: rotate(-90deg);
+        transform-origin: bottom left;
+      }
+
+      .right-orient {
+        transform: rotate(90deg);
+      }
+
+      .bottom-orient .student {
+        transform: translateY(30px);
+      }
+
+      #table1 {
+        top: 180px;
+      }
+
+      #table2 {
+        top: 330px;
+        left: 110px;
+      }
+
+      #table3 {
+        top: 390px;
+        align-items: end;
+      }
+
+      #table4,
+      #table5,
+      #table6 {
+        top: 125px;
+      }
+
+      #table7,
+      #table8,
+      #table9 {
+        top: 440px;
+      }
+
+      #table4 {
+        left: 310px;
+      }
+
+      #table5 {
+        left: 460px;
+      }
+
+      #table6 {
+        left: 610px;
+      }
+
+      #table7 {
+        left: 360px;
+      }
+
+      #table8 {
+        left: 510px;
+      }
+
+      #table9 {
+        left: 660px;
+      }
+
+      #table19 {
+        left: 360px;
+        top: 530px;
+      }
+
+      #table10 {
+        top: 140px;
+        left: 920px;
+      }
+
+      #table11,
+      #table14 {
+        top: 50px;
+        left: 920px;
+      }
+
+      #table12,
+      #table15 {
+        top: 200px;
+        align-items: end;
+      }
+
+      #table12 {
+        left: 860px;
+      }
+
+      #table13 {
+        top: -10px;
+        left: 1220px;
+        transform: rotate(90deg);
+      }
+
+      #table14 {
+        left: 1070px;
+      }
+
+      #table15 {
+        left: 1130px;
+      }
+
+      #table16,
+      #table17 {
+        left: 1040px;
+      }
+
+      #table16 {
+        top: 410px;
+      }
+
+      #table17 {
+        top: 500px;
+      }
+      #table18 {
+        top: 455px;
+        left: 1145px;
+      }
+    }
+
+    .tableContent {
+      margin: 0 20px 20px 0;
+      // border: solid 1px blue;
+
+      .tableContainer {
+        // min-height: 200px;
+        width: 405px;
+        height: 100px;
+        border: solid 1px black;
+        // padding: 5px;
+        display: flex;
+        // flex-direction: column;
+        border-radius: 10px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+
+        .tableStudent {
+          padding: 10px 0;
+          // background-color: #9b27b016;
+          // border: solid 1px blue;
+          position: relative;
+          // transform: translateY(-100%);
+          // border-radius: 100%;
+          // height: 40px;
+          width: 200px;
+          text-align: center;
+        }
+
+        .studentHead {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -100%);
+          .icon {
+            font-size: 25px;
+          }
+        }
+      }
+
+      .tableHeader {
+        text-align: center;
+        margin-bottom: 10px;
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+}

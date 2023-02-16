@@ -18,6 +18,7 @@ import SyllabusPage from "./pages/syllabusPage/SyllabusPage";
 import NewSyllabusPage from "./pages/newSyllabusPage/NewSyllabusPage";
 import TopicPage from "./pages/topicPage/TopicPage";
 import RegisterPage from "./pages/registerPage/RegisterPage";
+import RegisterPageOld from "./pages/registerPage/registerPageOld/registerPageOld";
 
 function App() {
   return (
