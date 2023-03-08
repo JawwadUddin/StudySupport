@@ -6,6 +6,18 @@
   margin-bottom: 20px;
 }
 
+.formEnd {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+
+  .submitBtn,
+  .editBtn,
+  .cancelBtn {
+    margin-top: 40px;
+  }
+}
+
 .tables-container {
   //   border: solid;
   display: flex;
@@ -26,6 +38,38 @@
     .table-items {
       border: solid 2px #0c3389;
       padding: 10px;
+      position: relative;
+
+      .add-icon,
+      .cancel-add-icon {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 50%);
+      }
+
+      .remove-icon {
+        position: absolute;
+        left: 0;
+        transform: translateX(-50%);
+        background-color: white;
+        padding: 0;
+      }
+    }
+
+    .student-session-form {
+      display: flex;
+      margin: 10px 0 20px;
+
+      .form-input {
+        flex: 5;
+        margin-right: 10px;
+      }
+
+      .form-tick-icon {
+        font-size: 25px;
+        padding: 0;
+      }
     }
 
     .student {
@@ -37,6 +81,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-left: 5px;
 
         .compensation-tag {
           width: 20px;

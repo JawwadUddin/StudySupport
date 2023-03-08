@@ -6,6 +6,17 @@
   margin-bottom: 20px;
 }
 
+.formEnd {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.formEnd .submitBtn,
+.formEnd .editBtn,
+.formEnd .cancelBtn {
+  margin-top: 40px;
+}
+
 .tables-container {
   display: flex;
   align-items: flex-start;
@@ -22,6 +33,33 @@
 .tables-container .table .table-items {
   border: solid 2px #0c3389;
   padding: 10px;
+  position: relative;
+}
+.tables-container .table .table-items .add-icon,
+.tables-container .table .table-items .cancel-add-icon {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+.tables-container .table .table-items .remove-icon {
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 0;
+}
+.tables-container .table .student-session-form {
+  display: flex;
+  margin: 10px 0 20px;
+}
+.tables-container .table .student-session-form .form-input {
+  flex: 5;
+  margin-right: 10px;
+}
+.tables-container .table .student-session-form .form-tick-icon {
+  font-size: 25px;
+  padding: 0;
 }
 .tables-container .table .student {
   padding: 5px 0;
@@ -32,6 +70,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 5px;
 }
 .tables-container .table .student .student-name .compensation-tag {
   width: 20px;

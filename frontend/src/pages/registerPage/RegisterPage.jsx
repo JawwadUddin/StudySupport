@@ -13,6 +13,13 @@ const RegisterPage = () => {
   const [sessionDate, setSessionDate] = useState([]);
   const [sessionDateID, setSessionDateID] = useState("");
   const [sessions, setSessions] = useState([]);
+  const [updatedSessions, setUpdatedSessions] = useState([]);
+  const [changes, setChanges] = useState({
+    add: [],
+    update: [],
+    remove: [],
+  });
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     try {
@@ -32,9 +39,29 @@ const RegisterPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setUpdatedSessions(JSON.parse(JSON.stringify(sessions)));
+  }, [sessions]);
+
+  function cancelChanges() {
+    setEditMode(false);
+    setUpdatedSessions(JSON.parse(JSON.stringify(sessions)));
+    setChanges({
+      add: [],
+      update: [],
+      remove: [],
+    });
+  }
+
   function findRegister(sessionDateID) {
     if (sessionDateID === "") return;
     setSessionDateID(sessionDateID);
+    setEditMode(false);
+    setChanges({
+      add: [],
+      update: [],
+      remove: [],
+    });
 
     try {
       async function fetchRegister() {
@@ -52,6 +79,163 @@ const RegisterPage = () => {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function updateRegisterState(input) {
+    console.log({ input });
+
+    setUpdatedSessions((prevState) => {
+      // find the index of the sessionTime that needs to be updated
+      const sessionIndex = prevState.findIndex(
+        (session) => session.session_time === input.sessionTime
+      );
+
+      if (sessionIndex === -1) {
+        // sessionTime not found, return the previous state
+        console.log("session index not found");
+        return prevState;
+      }
+
+      // find the index of the sessionTable that needs to be updated
+      const tableIndex = prevState[sessionIndex].tables.findIndex(
+        (table) => table.session_table === input.sessionTable
+      );
+
+      if (tableIndex === -1) {
+        // sessionTable not found, return the previous state
+        console.log("table index not found");
+        return prevState;
+      }
+
+      const { student_session_id, student_id } = input.student;
+
+      // find the index of the student session that needs to be updated
+      let studentSessionIndex;
+      // if (student_session_id !== "new") {
+      //   studentSessionIndex = prevState[sessionIndex].tables[
+      //     tableIndex
+      //   ].students.findIndex(
+      //     (student) => student.student_session_id === student_session_id
+      //   );
+      // } else {
+      studentSessionIndex = prevState[sessionIndex].tables[
+        tableIndex
+      ].students.findIndex(
+        (student) =>
+          student.student_session_id === student_session_id &&
+          student.student_id === student_id
+      );
+      // }
+
+      if (input.type === "update-attendance") {
+        prevState[sessionIndex].tables[tableIndex].students[
+          studentSessionIndex
+        ].attendance =
+          !prevState[sessionIndex].tables[tableIndex].students[
+            studentSessionIndex
+          ].attendance;
+
+        setChanges((prevChanges) => {
+          if (student_session_id === "new") {
+            const existingObjectIndex = prevChanges.add.findIndex(
+              (student) =>
+                student.student_session_id === student_session_id &&
+                student.student_id === student_id
+            );
+            const updatedObject = {
+              ...prevChanges.add[existingObjectIndex],
+              attendance: !prevChanges.add[existingObjectIndex].attendance,
+            };
+            const newAddArray = [...prevChanges.add];
+            newAddArray.splice(existingObjectIndex, 1, updatedObject);
+            return { ...prevChanges, add: newAddArray };
+          } else {
+            const existingObjectIndex = prevChanges.update.findIndex(
+              (student) =>
+                student.student_session_id === student_session_id &&
+                student.student_id === student_id
+            );
+
+            if (existingObjectIndex !== -1) {
+              const updatedObject = {
+                ...prevChanges.update[existingObjectIndex],
+                attendance: !prevChanges.update[existingObjectIndex].attendance,
+              };
+              const newUpdateArray = [...prevChanges.update];
+              newUpdateArray.splice(existingObjectIndex, 1, updatedObject);
+              return { ...prevChanges, update: newUpdateArray };
+            } else {
+              const newObject = {
+                ...input.student,
+              };
+              const newUpdateArray = [...prevChanges.update, newObject];
+              return { ...prevChanges, update: newUpdateArray };
+            }
+          }
+        });
+      }
+
+      if (input.type === "remove-session") {
+        prevState[sessionIndex].tables[tableIndex].students.splice(
+          studentSessionIndex,
+          1
+        );
+
+        if (student_session_id === "new") {
+          setChanges((prevChanges) => {
+            const existingObjectIndex = prevChanges.add.findIndex(
+              (student) =>
+                student.student_session_id === student_session_id &&
+                student.student_id === student_id
+            );
+            const newAddArray = [...prevChanges.add];
+            newAddArray.splice(existingObjectIndex, 1);
+            return {
+              ...prevChanges,
+              add: newAddArray,
+            };
+          });
+        } else {
+          setChanges((prevChanges) => {
+            const existingObjectIndex = prevChanges.update.findIndex(
+              (student) =>
+                student.student_session_id === student_session_id &&
+                student.student_id === student_id
+            );
+            let newUpdateArray = [...prevChanges.update];
+            if (existingObjectIndex !== -1) {
+              newUpdateArray.splice(existingObjectIndex, 1);
+            }
+            return {
+              ...prevChanges,
+              update: newUpdateArray,
+              remove: [
+                ...prevChanges.remove,
+                { student_session_id: input.student.student_session_id },
+              ],
+            };
+          });
+        }
+      }
+
+      if (input.type === "add-session") {
+        prevState[sessionIndex].tables[tableIndex].students.push(input.student);
+
+        setChanges((prevChanges) => {
+          const newObject = {
+            ...input.student,
+            session_slot: input.sessionTime,
+            session_table: input.sessionTable,
+            session_date_id: sessionDateID,
+          };
+          const newAddArray = [...prevChanges.add, newObject];
+          return { ...prevChanges, add: newAddArray };
+        });
+      }
+
+      // return the updated state
+      return [...prevState];
+    });
   }
 
   return (
@@ -89,7 +273,13 @@ const RegisterPage = () => {
           </FormControl>
         </Grid>
         {sessions.length !== 0 ? (
-          <RegisterTable sessions={sessions} />
+          <RegisterTable
+            updatedSessions={updatedSessions}
+            updateRegisterState={updateRegisterState}
+            editMode={editMode}
+            setEditMode={setEditMode}
+            cancelChanges={cancelChanges}
+          />
         ) : (
           <h3 style={{ marginTop: "20px", fontSize: "16px", color: "red" }}>
             Please select a date to show register
