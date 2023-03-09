@@ -17,6 +17,7 @@ const RegisterTable = ({
   editMode,
   setEditMode,
   cancelChanges,
+  handleSubmit,
 }) => {
   const [register, setRegister] = useState([]);
   const [students, setStudents] = useState([]);
@@ -218,7 +219,12 @@ const RegisterTable = ({
             >
               Cancel
             </Button>
-            <Button variant="contained" color="secondary" className="submitBtn">
+            <Button
+              onClick={() => handleSubmit()}
+              variant="contained"
+              color="secondary"
+              className="submitBtn"
+            >
               Confirm Changes
             </Button>
           </>

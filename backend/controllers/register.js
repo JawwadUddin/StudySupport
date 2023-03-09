@@ -11,4 +11,14 @@ async function index(req, res) {
   }
 }
 
-module.exports = { index };
+async function update(req, res) {
+  try {
+    const changes = req.body.data;
+    const register = await Register.edit(changes);
+    res.status(200).json(success("OK", { data: register }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
+module.exports = { index, update };

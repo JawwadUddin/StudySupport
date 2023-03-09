@@ -19,6 +19,23 @@ class Register {
       }
     });
   }
+
+  static edit(changes) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const registerData = await pool
+          .request()
+          .input("JsonAdd", sql.VarChar, JSON.stringify(changes.add))
+          .input("JsonUpdate", sql.VarChar, JSON.stringify(changes.update))
+          .input("JsonRemove", sql.VarChar, JSON.stringify(changes.remove))
+          .execute("UpdateRegister");
+        resolve("Register successfully updated");
+      } catch (err) {
+        reject("Error updating register: " + err.message);
+      }
+    });
+  }
 }
 
 module.exports = Register;

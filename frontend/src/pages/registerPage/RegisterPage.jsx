@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getData } from "../../helpers/apiFunctions";
+import { getData, updateData } from "../../helpers/apiFunctions";
 import "./registerPage.css";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
@@ -76,6 +76,25 @@ const RegisterPage = () => {
         }
       }
       fetchRegister();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handleSubmit() {
+    try {
+      async function updateRegister() {
+        const serverResponse = await updateData(
+          `${process.env.REACT_APP_API_URL}/api/register/`,
+          changes
+        );
+        if (serverResponse.message === "OK") {
+          findRegister(sessionDateID);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      updateRegister();
     } catch (error) {
       console.log(error);
     }
@@ -224,7 +243,7 @@ const RegisterPage = () => {
         setChanges((prevChanges) => {
           const newObject = {
             ...input.student,
-            session_slot: input.sessionTime,
+            session_time: input.sessionTime,
             session_table: input.sessionTable,
             session_date_id: sessionDateID,
           };
@@ -279,6 +298,7 @@ const RegisterPage = () => {
             editMode={editMode}
             setEditMode={setEditMode}
             cancelChanges={cancelChanges}
+            handleSubmit={handleSubmit}
           />
         ) : (
           <h3 style={{ marginTop: "20px", fontSize: "16px", color: "red" }}>
