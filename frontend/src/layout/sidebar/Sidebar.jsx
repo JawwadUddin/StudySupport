@@ -1,5 +1,6 @@
 import "./sidebar.css";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import QuizIcon from "@mui/icons-material/Quiz";
@@ -17,6 +18,10 @@ const Sidebar = () => {
           <li onClick={() => navigate("")}>
             <DashboardIcon className="icon" />
             <span>Dashboard</span>
+          </li>
+          <li onClick={() => navigate("register")}>
+            <AppRegistrationIcon className="icon" />
+            <span>Register</span>
           </li>
           <li onClick={() => navigate("contacts")}>
             <ImportContactsIcon className="icon" />

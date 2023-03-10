@@ -1,0 +1,105 @@
+.session-time {
+  text-align: center;
+  font-size: 20px;
+  color: #9c27b0;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.formEnd {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.formEnd .submitBtn,
+.formEnd .editBtn,
+.formEnd .cancelBtn {
+  margin-top: 40px;
+}
+
+.tables-container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+.tables-container .table {
+  width: 250px;
+}
+.tables-container .table .table-name {
+  text-align: center;
+  color: #ed6c02;
+}
+.tables-container .table .table-items {
+  border: solid 2px #0c3389;
+  padding: 10px;
+  position: relative;
+}
+.tables-container .table .table-items .add-icon,
+.tables-container .table .table-items .cancel-add-icon {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+.tables-container .table .table-items .remove-icon {
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 0;
+}
+.tables-container .table .student-session-form,
+.tables-container .table .compensation-session-form {
+  display: flex;
+  margin: 10px 0 20px;
+  position: relative;
+}
+.tables-container .table .student-session-form .form-input,
+.tables-container .table .compensation-session-form .form-input {
+  flex: 5;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.tables-container .table .student-session-form .form-tick-icon,
+.tables-container .table .compensation-session-form .form-tick-icon {
+  font-size: 25px;
+  padding: 0;
+}
+.tables-container .table .student {
+  padding: 5px 0;
+  display: flex;
+}
+.tables-container .table .student .student-name {
+  flex: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 5px;
+}
+.tables-container .table .student .student-name .compensation-tag {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+  background-color: #16629f;
+  color: white;
+}
+.tables-container .table .student .student-attendance {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-left: solid 1px blue;
+  padding-left: 5px;
+}
+.tables-container .table .student .student-attendance .absent-icon {
+  color: #d53737;
+  font-size: 25px;
+}
+.tables-container .table .student .student-attendance .present-icon {
+  color: #56c387;
+  font-size: 25px;
+}/*# sourceMappingURL=registerTable.css.map */

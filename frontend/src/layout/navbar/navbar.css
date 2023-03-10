@@ -29,9 +29,6 @@
 .navbar .wrapper .search input::-moz-placeholder {
   font-size: 12px;
 }
-.navbar .wrapper .search input:-ms-input-placeholder {
-  font-size: 12px;
-}
 .navbar .wrapper .search input::placeholder {
   font-size: 12px;
 }
