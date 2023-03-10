@@ -11,15 +11,32 @@ class SessionDate {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
-        const sessionDatasData = await pool
+        const sessionDatesData = await pool
           .request()
           .execute("SelectSessionDates");
-        const sessionDates = sessionDatasData.recordset.map(
+        const sessionDates = sessionDatesData.recordset.map(
           (d) => new SessionDate(d)
         );
         resolve(sessionDates);
       } catch (err) {
         reject(err);
+      }
+    });
+  }
+
+  static create(registerDate) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const sessionDatesData = await pool
+          .request()
+          .input("RegisterDate", sql.Date, registerDate)
+          .output("SessionDateID", sql.Int)
+          .execute("InsertSessionDate");
+        const newSessionDate = sessionDatesData.output.SessionDateID;
+        resolve({ newSessionDateID: newSessionDate });
+      } catch (err) {
+        reject("Error creating new session date: " + err.message);
       }
     });
   }

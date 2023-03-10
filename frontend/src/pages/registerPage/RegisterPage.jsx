@@ -8,6 +8,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import RegisterTable from "../../components/registerTable/RegisterTable";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const RegisterPage = () => {
   const [sessionDate, setSessionDate] = useState([]);
@@ -20,6 +21,11 @@ const RegisterPage = () => {
     remove: [],
   });
   const [editMode, setEditMode] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const newSessionDateID = location.state
+    ? location.state.newSessionDateID
+    : null;
 
   useEffect(() => {
     try {
@@ -38,6 +44,16 @@ const RegisterPage = () => {
       console.log(error);
     }
   }, []);
+
+  useEffect(() => {
+    if (newSessionDateID) {
+      setSessionDateID(newSessionDateID);
+    }
+  }, [newSessionDateID]);
+
+  useEffect(() => {
+    findRegister(sessionDateID);
+  }, [sessionDateID]);
 
   useEffect(() => {
     setUpdatedSessions(JSON.parse(JSON.stringify(sessions)));
@@ -101,8 +117,6 @@ const RegisterPage = () => {
   }
 
   function updateRegisterState(input) {
-    console.log({ input });
-
     setUpdatedSessions((prevState) => {
       // find the index of the sessionTime that needs to be updated
       const sessionIndex = prevState.findIndex(
@@ -130,13 +144,6 @@ const RegisterPage = () => {
 
       // find the index of the student session that needs to be updated
       let studentSessionIndex;
-      // if (student_session_id !== "new") {
-      //   studentSessionIndex = prevState[sessionIndex].tables[
-      //     tableIndex
-      //   ].students.findIndex(
-      //     (student) => student.student_session_id === student_session_id
-      //   );
-      // } else {
       studentSessionIndex = prevState[sessionIndex].tables[
         tableIndex
       ].students.findIndex(
@@ -264,7 +271,7 @@ const RegisterPage = () => {
         <div className="listHeader">
           <div className="listTitle">Register</div>
           <Button
-            // onClick={() => navigate("/contacts/new")}
+            onClick={() => navigate("new")}
             variant="contained"
             className="createBtn"
           >

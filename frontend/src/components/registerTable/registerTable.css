@@ -49,15 +49,20 @@
   background-color: white;
   padding: 0;
 }
-.tables-container .table .student-session-form {
+.tables-container .table .student-session-form,
+.tables-container .table .compensation-session-form {
   display: flex;
   margin: 10px 0 20px;
+  position: relative;
 }
-.tables-container .table .student-session-form .form-input {
+.tables-container .table .student-session-form .form-input,
+.tables-container .table .compensation-session-form .form-input {
   flex: 5;
   margin-right: 10px;
+  margin-left: 5px;
 }
-.tables-container .table .student-session-form .form-tick-icon {
+.tables-container .table .student-session-form .form-tick-icon,
+.tables-container .table .compensation-session-form .form-tick-icon {
   font-size: 25px;
   padding: 0;
 }
@@ -81,6 +86,7 @@
   align-items: center;
   margin-right: 5px;
   background-color: #16629f;
+  color: white;
 }
 .tables-container .table .student .student-attendance {
   display: flex;

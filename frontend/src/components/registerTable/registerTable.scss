@@ -57,13 +57,16 @@
       }
     }
 
-    .student-session-form {
+    .student-session-form,
+    .compensation-session-form {
       display: flex;
       margin: 10px 0 20px;
+      position: relative;
 
       .form-input {
         flex: 5;
         margin-right: 10px;
+        margin-left: 5px;
       }
 
       .form-tick-icon {
@@ -92,6 +95,7 @@
           align-items: center;
           margin-right: 5px;
           background-color: #16629f;
+          color: white;
         }
       }
 

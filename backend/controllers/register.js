@@ -11,6 +11,16 @@ async function index(req, res) {
   }
 }
 
+async function create(req, res) {
+  const submittedData = req.body.data;
+  try {
+    const sessionDate = await Register.create(submittedData);
+    res.status(201).json(success("OK", { data: sessionDate }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
 async function update(req, res) {
   try {
     const changes = req.body.data;
@@ -21,4 +31,4 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, update };
+module.exports = { index, create, update };

@@ -17,6 +17,7 @@ const syllabusRoutes = require("./routes/syllabus");
 const scoreRoutes = require("./routes/score");
 const registerRoutes = require("./routes/register");
 const sessionDateRoutes = require("./routes/sessionDate");
+const compensationRoutes = require("./routes/compensation");
 
 server.use("/api/family", familyRoutes);
 server.use("/api/student", studentRoutes);
@@ -29,6 +30,7 @@ server.use("/api/syllabus", syllabusRoutes);
 server.use("/api/score", scoreRoutes);
 server.use("/api/register", registerRoutes);
 server.use("/api/sessionDate", sessionDateRoutes);
+server.use("/api/compensations", compensationRoutes);
 
 server.get("/", (req, res) => {
   res

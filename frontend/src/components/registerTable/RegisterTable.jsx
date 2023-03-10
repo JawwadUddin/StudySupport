@@ -9,7 +9,7 @@ import { getData } from "../../helpers/apiFunctions";
 import IconButton from "@mui/material/IconButton";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const RegisterTable = ({
   updatedSessions,
@@ -21,6 +21,7 @@ const RegisterTable = ({
 }) => {
   const [register, setRegister] = useState([]);
   const [students, setStudents] = useState([]);
+  const [compensations, setCompensations] = useState([]);
 
   useEffect(() => {
     setRegister([...updatedSessions]);
@@ -29,13 +30,21 @@ const RegisterTable = ({
   useEffect(() => {
     try {
       async function fetchData() {
-        const serverResponse = await getData(
+        const serverStudentResponse = await getData(
           `${process.env.REACT_APP_API_URL}/api/student`
         );
-        if (serverResponse.message === "OK") {
-          setStudents(serverResponse.results.data);
+        if (serverStudentResponse.message === "OK") {
+          setStudents(serverStudentResponse.results.data);
         } else {
-          throw Error(serverResponse.message);
+          throw Error(serverStudentResponse.message);
+        }
+        const serverCompensationResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/compensations`
+        );
+        if (serverCompensationResponse.message === "OK") {
+          setCompensations(serverCompensationResponse.results.data);
+        } else {
+          throw Error(serverCompensationResponse.message);
         }
       }
       fetchData();
@@ -46,50 +55,96 @@ const RegisterTable = ({
 
   const NewStudentSession = ({ sessionTime, sessionTable }) => {
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [selectedCompensation, setSelectedCompensation] = useState(null);
     const [showField, setShowField] = useState(false);
 
     return (
       <>
         {showField ? (
-          <div className="student-session-form">
-            <Autocomplete
-              className="form-input"
-              size="small"
-              disablePortal
-              id="combo-box-demo"
-              options={students}
-              value={selectedStudent}
-              onChange={(e, value) => {
-                setSelectedStudent(value);
-              }}
-              sx={{ width: 300 }}
-              getOptionLabel={(option) => option.fullName}
-              renderInput={(params) => (
-                <TextField {...params} label="Student" />
-              )}
-            />
-            <IconButton
-              className="form-tick-icon"
-              onClick={() => {
-                if (selectedStudent === null) return;
-                updateRegisterState({
-                  type: "add-session",
-                  sessionTime,
-                  sessionTable,
-                  student: {
-                    student_id: selectedStudent.id,
-                    full_name: selectedStudent.fullName,
-                    attendance: false,
-                    student_session_id: "new",
-                  },
-                });
-              }}
-              aria-label="confirm-edit"
-              color="success"
-            >
-              <CheckIcon />
-            </IconButton>
-          </div>
+          <>
+            <div className="student-session-form">
+              <Autocomplete
+                className="form-input"
+                size="small"
+                disablePortal
+                id="combo-box-demo"
+                options={students}
+                value={selectedStudent}
+                onChange={(e, value) => {
+                  setSelectedStudent(value);
+                }}
+                sx={{ width: 300 }}
+                getOptionLabel={(option) => option.fullName}
+                renderInput={(params) => (
+                  <TextField {...params} label="Student" />
+                )}
+              />
+              <IconButton
+                className="form-tick-icon"
+                onClick={() => {
+                  if (selectedStudent === null) return;
+                  updateRegisterState({
+                    type: "add-session",
+                    sessionTime,
+                    sessionTable,
+                    student: {
+                      student_id: selectedStudent.id,
+                      full_name: selectedStudent.fullName,
+                      attendance: false,
+                      student_session_id: "new",
+                      compensation_id: null,
+                    },
+                  });
+                }}
+                aria-label="confirm-edit"
+                color="success"
+              >
+                <CheckIcon />
+              </IconButton>
+            </div>
+            <div className="compensation-session-form">
+              <Autocomplete
+                className="form-input"
+                size="small"
+                disablePortal
+                id="combo-box-demo"
+                options={compensations}
+                value={selectedCompensation}
+                onChange={(e, value) => {
+                  setSelectedCompensation(value);
+                }}
+                sx={{ width: 300 }}
+                getOptionLabel={(option) =>
+                  `${option.fullName} - ${option.sessionDate}`
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Compensation" />
+                )}
+              />
+              <IconButton
+                className="form-tick-icon"
+                onClick={() => {
+                  if (selectedCompensation === null) return;
+                  updateRegisterState({
+                    type: "add-session",
+                    sessionTime,
+                    sessionTable,
+                    student: {
+                      student_id: selectedCompensation.studentID,
+                      full_name: selectedCompensation.fullName,
+                      attendance: true,
+                      student_session_id: "new",
+                      compensation_id: selectedCompensation.studentSessionID,
+                    },
+                  });
+                }}
+                aria-label="confirm-edit"
+                color="success"
+              >
+                <CheckIcon />
+              </IconButton>
+            </div>
+          </>
         ) : null}
         {showField ? (
           <Button
@@ -158,7 +213,8 @@ const RegisterTable = ({
 
                               {student.full_name}
                               {student.compensation_id && (
-                                <div className="compensation-tag"></div>
+                                // <div className="compensation-tag"></div>
+                                <CachedIcon className="compensation-tag" />
                               )}
                             </div>
                             <div

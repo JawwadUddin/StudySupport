@@ -1,0 +1,31 @@
+const sql = require("mssql");
+const { dbConnect } = require("../db");
+
+class Compensation {
+  constructor(data) {
+    this.studentSessionID = data.student_session_id;
+    this.studentID = data.student_id;
+    this.fullName = data.full_name;
+    this.sessionDate = data.session_date;
+    this.sessionTime = data.session_time;
+  }
+
+  static get all() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const compensationData = await pool
+          .request()
+          .execute("SelectCompensationAllowedSessions");
+        const compensations = compensationData.recordset.map(
+          (d) => new Compensation(d)
+        );
+        resolve(compensations);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+}
+
+module.exports = Compensation;

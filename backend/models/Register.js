@@ -36,6 +36,24 @@ class Register {
       }
     });
   }
+
+  static create(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const registerData = await pool
+          .request()
+          .input("RegisterDate", sql.Date, data.registerDate)
+          .input("TemplateID", sql.Int, data.templateID)
+          .output("SessionDateID", sql.Int)
+          .execute("InsertRegister");
+        const newSessionDate = registerData.output.SessionDateID;
+        resolve({ newSessionDateID: newSessionDate });
+      } catch (err) {
+        reject("Error creating Question: " + err.message);
+      }
+    });
+  }
 }
 
 module.exports = Register;
