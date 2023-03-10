@@ -10,12 +10,13 @@ class Compensation {
     this.sessionTime = data.session_time;
   }
 
-  static get all() {
+  static find(sessionDateID) {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
         const compensationData = await pool
           .request()
+          .input("RegisterDateID", sql.Int, sessionDateID)
           .execute("SelectCompensationAllowedSessions");
         const compensations = compensationData.recordset.map(
           (d) => new Compensation(d)

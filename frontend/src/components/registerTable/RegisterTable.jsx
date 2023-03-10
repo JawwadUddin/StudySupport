@@ -18,6 +18,7 @@ const RegisterTable = ({
   setEditMode,
   cancelChanges,
   handleSubmit,
+  sessionDateID,
 }) => {
   const [register, setRegister] = useState([]);
   const [students, setStudents] = useState([]);
@@ -39,7 +40,7 @@ const RegisterTable = ({
           throw Error(serverStudentResponse.message);
         }
         const serverCompensationResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/compensations`
+          `${process.env.REACT_APP_API_URL}/api/compensations/${sessionDateID}`
         );
         if (serverCompensationResponse.message === "OK") {
           setCompensations(serverCompensationResponse.results.data);
