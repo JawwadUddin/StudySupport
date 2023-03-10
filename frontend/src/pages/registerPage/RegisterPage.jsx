@@ -306,6 +306,7 @@ const RegisterPage = () => {
             setEditMode={setEditMode}
             cancelChanges={cancelChanges}
             handleSubmit={handleSubmit}
+            sessionDateID={sessionDateID}
           />
         ) : (
           <h3 style={{ marginTop: "20px", fontSize: "16px", color: "red" }}>
