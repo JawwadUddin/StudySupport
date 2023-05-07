@@ -12,6 +12,7 @@ class Student {
     this.mobile = data.mobile;
     this.medicalInfo = data.medical_info;
     this.notes = data.notes;
+    this.levelID = data.level_id;
   }
 
   static get all() {
@@ -71,6 +72,7 @@ class Student {
           .input("School", sql.VarChar, student.school)
           .input("MedicalInfo", sql.VarChar, student.medicalInfo)
           .input("Notes", sql.VarChar, student.notes)
+          .input("LevelID", sql.Int, student.levelID)
           .output("StudentID", sql.Int)
           .execute("InsertStudent");
         const newStudent = studentData.output.StudentID;
@@ -95,6 +97,7 @@ class Student {
           .input("School", sql.VarChar, student.school)
           .input("MedicalInfo", sql.VarChar, student.medicalInfo)
           .input("Notes", sql.VarChar, student.notes)
+          .input("LevelID", sql.Int, student.levelID)
           .execute("UpdateStudent");
         resolve("Student successfully updated");
       } catch (err) {
