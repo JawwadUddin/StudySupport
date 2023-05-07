@@ -73,6 +73,11 @@
         font-size: 25px;
         padding: 0;
       }
+      .half-session-icon {
+        position: absolute;
+        transform: translateX(-75%);
+        background-color: white;
+      }
     }
 
     .student {
@@ -86,7 +91,8 @@
         align-items: center;
         margin-left: 5px;
 
-        .compensation-tag {
+        .compensation-tag,
+        .half-session-tag {
           width: 20px;
           height: 20px;
           border-radius: 100%;
@@ -96,6 +102,11 @@
           margin-right: 5px;
           background-color: #16629f;
           color: white;
+        }
+
+        .half-session-tag {
+          color: #16629f;
+          background-color: white;
         }
       }
 

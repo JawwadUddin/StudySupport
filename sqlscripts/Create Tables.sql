@@ -260,3 +260,34 @@ VALUES
 	(1032, 2, 3, 2),
 	(2033, 1, 1, 2),
 	(2033, 2, 3, 1)
+
+
+
+--INCREMENT 4 TABLES + CHANGES:
+
+ALTER TABLE studentSessions
+ADD full_session BIT
+
+CREATE TABLE level (
+	level_id INT IDENTITY(1,1),
+	level varchar(10),
+	PRIMARY KEY (level_id)
+)
+
+INSERT INTO LEVEL 
+VALUES ('KS2'), ('11+') , ('KS3'), ('GCSE'), ('A-LEVEL')
+
+ALTER TABLE students
+ADD level_id INT
+
+ALTER TABLE students
+ADD CONSTRAINT FK_students_level FOREIGN KEY (level_id) REFERENCES level(level_id)
+
+
+CREATE TABLE rate (
+	rate_id INT IDENTITY(1,1),
+	student_id INT,
+	rate DECIMAL(5,3),
+	PRIMARY KEY (rate_id),
+	CONSTRAINT FK_rate_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+)
