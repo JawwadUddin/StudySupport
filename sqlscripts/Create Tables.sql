@@ -291,3 +291,33 @@ CREATE TABLE rate (
 	PRIMARY KEY (rate_id),
 	CONSTRAINT FK_rate_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 )
+
+CREATE TABLE invoices (
+	invoice_id INT IDENTITY(20000,1),
+	family_id int,
+	invoice_date date,
+	due_date date,
+	start_date date,
+	amount_due decimal(4,2),
+	PRIMARY KEY(invoice_id),
+	CONSTRAINT FK_invoices_family FOREIGN KEY (family_id) REFERENCES family(family_id)
+)
+
+CREATE TABLE invoicesMisc (
+	invoice_misc_id INT IDENTITY(1,1),
+	invoice_id int,
+	description varchar(50),
+	rate decimal(5,2),
+	PRIMARY KEY (invoice_misc_id),
+	CONSTRAINT FK_invoicesMisc_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id) ON DELETE CASCADE
+)
+
+CREATE TABLE payment (
+	payment_id INT IDENTITY(20000,1),
+	family_id int,
+	invoice_id int,
+	payment_date date,
+	amount decimal(5,2),
+	PRIMARY KEY(payment_id),
+	CONSTRAINT FK_payment_family FOREIGN KEY (family_id) REFERENCES family(family_id)
+)
