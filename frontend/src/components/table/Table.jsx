@@ -66,13 +66,13 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
       break;
     case "student":
       columns = [
-        { field: "id", headerName: "ID", width: "10" },
+        { field: "id", headerName: "ID", width: 100 },
         { field: "fullName", headerName: "Full name", width: 200 },
         {
           field: "schoolYear",
           headerName: "Year",
           type: "number",
-          width: 200,
+          width: 100,
         },
         {
           field: "DOB",

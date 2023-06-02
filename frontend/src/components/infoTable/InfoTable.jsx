@@ -1,6 +1,7 @@
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
+import { level } from "../../helpers/level";
 
 const InfoTable = ({ data, type }) => {
   let output = [];
@@ -26,6 +27,7 @@ const InfoTable = ({ data, type }) => {
         { rowLabel: "Full Name", value: data.fullName },
         { rowLabel: "DOB", value: data.DOB },
         { rowLabel: "School Year", value: data.schoolYear },
+        { rowLabel: "Level", value: level[data.levelID] },
         { rowLabel: "School Name", value: data.school },
         { rowLabel: "Medical Info", value: data.medicalInfo },
         { rowLabel: "Notes", value: data.notes },

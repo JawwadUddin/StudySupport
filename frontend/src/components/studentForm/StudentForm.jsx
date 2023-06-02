@@ -54,7 +54,6 @@ const StudentForm = ({ idFamily }) => {
   useEffect(() => {
     if (studentInfo) {
       let dateArray = studentInfo.DOB.split("/");
-      console.log(studentInfo);
       let formattedDOB = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
       setDataToSubmit({
         ...studentInfo,
@@ -64,7 +63,6 @@ const StudentForm = ({ idFamily }) => {
   }, [studentInfo]);
 
   const handleChange = (e, type) => {
-    console.log(e, type);
     setFormErrors({});
     let updateData;
     if (type === "family") {
