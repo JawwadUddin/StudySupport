@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./invoiceForm.css";
-import { getData } from "../../helpers/apiFunctions";
+import { getData, updateData, saveData } from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
@@ -13,9 +13,17 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 
 const InvoiceForm = ({ invoiceInfo }) => {
-  const [editScreen, setEditScreen] = useState(false);
+  const navigate = useNavigate();
+  const [editMode, setEditMode] = useState(false);
+  const [currentlyEditing, setCurrentlyEditing] = useState(false);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: "",
@@ -27,18 +35,24 @@ const InvoiceForm = ({ invoiceInfo }) => {
     invoiceDate: "",
     dueDate: "",
     startDate: "",
-    amountDue: "",
+    amountDue: 0,
     JSONInvoiceMisc: [],
   });
   const [sessions, setSessions] = useState();
-  const [rate, setRate] = useState([]);
-
+  const [rate, setRate] = useState("");
+  const [description, setDescription] = useState("");
+  const [sessionsAmountDue, setSessionsAmountDue] = useState(0);
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     if (invoiceInfo) {
       setDataToSubmit({ ...invoiceInfo });
-      setEditScreen(true);
+      let amountDueMisc = 0;
+      amountDueMisc += invoiceInfo.JSONInvoiceMisc?.reduce(
+        (accumulator, invoiceMisc) => accumulator + Number(invoiceMisc.rate),
+        0
+      );
+      setSessionsAmountDue(invoiceInfo.amountDue - amountDueMisc);
       setFamilyDropdown([
         { id: dataToSubmit.familyID, fullName: dataToSubmit.fullName },
       ]);
@@ -54,32 +68,15 @@ const InvoiceForm = ({ invoiceInfo }) => {
             throw Error(serverResponse.message);
           }
         }
-        fetchData();
+        if (familyDropdown.length === 0) {
+          fetchData();
+        }
+        setEditMode(true);
       } catch (error) {
         console.log(error);
       }
     }
   }, [invoiceInfo]);
-
-  useEffect(() => {
-    try {
-      async function fetchData() {
-        const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/family`
-        );
-        if (serverResponse.message === "OK") {
-          setFamilyDropdown(serverResponse.results.data);
-        } else {
-          throw Error(serverResponse.message);
-        }
-      }
-      if (!invoiceInfo) {
-        fetchData();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   useEffect(() => {
     try {
@@ -102,6 +99,81 @@ const InvoiceForm = ({ invoiceInfo }) => {
     }
   }, [dataToSubmit.startDate]);
 
+  useEffect(() => {
+    try {
+      async function fetchContactInfo() {
+        const serverResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/family/${dataToSubmit.familyID}`
+        );
+        if (serverResponse.message === "OK") {
+          console.log("Obtaining contact details");
+          let { fullName, address, postCode, mobile, email } =
+            serverResponse.results.data;
+          setDataToSubmit((prev) => ({
+            ...prev,
+            fullName: fullName,
+            address: address,
+            postCode: postCode,
+            mobile: mobile,
+            email: email,
+            amountDue: 0,
+          }));
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      if (dataToSubmit.familyID) {
+        fetchContactInfo();
+        setSessions();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dataToSubmit.familyID]);
+
+  useEffect(() => {
+    try {
+      function updateAmountDue() {
+        let amountDue = 0;
+        sessions.map((student) => {
+          let QTY =
+            student.sessions?.reduce(
+              (accumulator, studentSessions) =>
+                accumulator + (studentSessions.full_session ? 2 : 1),
+              0
+            ) || 0;
+          amountDue += QTY * student.rate;
+        });
+        setSessionsAmountDue(amountDue);
+      }
+
+      if (sessions && !invoiceInfo) {
+        updateAmountDue();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [sessions]);
+
+  useEffect(() => {
+    try {
+      function updateAmountDue() {
+        let amountDueMisc = 0;
+        amountDueMisc += dataToSubmit.JSONInvoiceMisc?.reduce(
+          (accumulator, invoiceMisc) => accumulator + Number(invoiceMisc.rate),
+          0
+        );
+        setDataToSubmit((prev) => ({
+          ...prev,
+          amountDue: sessionsAmountDue + amountDueMisc,
+        }));
+      }
+      updateAmountDue();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dataToSubmit.JSONInvoiceMisc, sessionsAmountDue]);
+
   const handleChange = (e, type) => {
     setFormErrors({});
     let updateData;
@@ -122,6 +194,163 @@ const InvoiceForm = ({ invoiceInfo }) => {
     };
     setDataToSubmit((prev) => updatedData);
   };
+
+  function handleAddMisc() {
+    if (description === "" || rate === "") {
+      return;
+    }
+    setDataToSubmit((prev) => ({
+      ...prev,
+      JSONInvoiceMisc: [...prev.JSONInvoiceMisc, { rate, description }],
+    }));
+    setDescription("");
+    setRate("");
+  }
+
+  function editMiscMode(invoiceMisc) {
+    setCurrentlyEditing(true);
+    setDescription(invoiceMisc.description);
+    setRate(invoiceMisc.rate);
+
+    const updatedInvoiceMiscArray = dataToSubmit.JSONInvoiceMisc.map((item) => {
+      if (!invoiceMisc.invoice_misc_id) {
+        if (item !== invoiceMisc) {
+          return item;
+        } else {
+          return { ...invoiceMisc, edit: true };
+        }
+      }
+      if (item.invoice_misc_id !== invoiceMisc.invoice_misc_id) {
+        return item;
+      } else {
+        return { ...invoiceMisc, edit: true };
+      }
+    });
+    const updatedData = {
+      ...dataToSubmit,
+      JSONInvoiceMisc: updatedInvoiceMiscArray,
+    };
+    setDataToSubmit((prev) => updatedData);
+  }
+
+  function editMisc(invoiceMisc) {
+    setCurrentlyEditing(false);
+
+    const updatedInvoiceMiscArray = dataToSubmit.JSONInvoiceMisc.map((item) => {
+      if (!invoiceMisc.invoice_misc_id) {
+        if (item !== invoiceMisc) {
+          return item;
+        } else {
+          return {
+            ...invoiceMisc,
+            edit: false,
+            description: description,
+            rate: rate,
+          };
+        }
+      }
+      if (item.invoice_misc_id !== invoiceMisc.invoice_misc_id) {
+        return item;
+      } else {
+        return {
+          ...invoiceMisc,
+          edit: false,
+          description: description,
+          rate: rate,
+        };
+      }
+    });
+    const updatedData = {
+      ...dataToSubmit,
+      JSONInvoiceMisc: updatedInvoiceMiscArray,
+    };
+    setDataToSubmit((prev) => updatedData);
+    setDescription("");
+    setRate("");
+  }
+
+  function removeMisc(invoiceMisc) {
+    const newInvoiceMiscArray = dataToSubmit.JSONInvoiceMisc.filter(
+      (item) => item !== invoiceMisc
+    );
+    const updatedData = {
+      ...dataToSubmit,
+      JSONInvoiceMisc: newInvoiceMiscArray,
+    };
+    setDataToSubmit((prev) => updatedData);
+  }
+
+  const cancelEdit = (invoiceMisc) => {
+    const updatedInvoiceMiscArray = dataToSubmit.JSONInvoiceMisc.map((item) => {
+      if (!invoiceMisc.invoice_misc_id) {
+        if (item !== invoiceMisc) {
+          return item;
+        } else {
+          return { ...invoiceMisc, edit: false };
+        }
+      }
+      if (item.invoice_misc_id !== invoiceMisc.invoice_misc_id) {
+        return item;
+      } else {
+        return { ...invoiceMisc, edit: false };
+      }
+    });
+    const updatedData = {
+      ...dataToSubmit,
+      JSONInvoiceMisc: updatedInvoiceMiscArray,
+    };
+    setDataToSubmit((prev) => updatedData);
+    setCurrentlyEditing(false);
+    setDescription("");
+    setRate("");
+  };
+
+  function cancelChanges() {
+    setEditMode(false);
+    setDataToSubmit({ ...invoiceInfo });
+    let amountDueMisc = 0;
+    amountDueMisc += invoiceInfo.JSONInvoiceMisc?.reduce(
+      (accumulator, invoiceMisc) => accumulator + Number(invoiceMisc.rate),
+      0
+    );
+    setSessionsAmountDue(invoiceInfo.amountDue - amountDueMisc);
+  }
+
+  function handleSubmit() {
+    try {
+      async function submitData() {
+        let serverResponse;
+        if (invoiceInfo) {
+          serverResponse = await updateData(
+            `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
+            dataToSubmit
+          );
+        } else {
+          serverResponse = await saveData(
+            `${process.env.REACT_APP_API_URL}/api/invoice`,
+            dataToSubmit
+          );
+        }
+        if (serverResponse.message === "OK") {
+          if (invoiceInfo) {
+            navigate(`/invoices`, {
+              replace: true,
+            });
+          } else {
+            const { newInvoiceID } = serverResponse.results.data;
+            navigate(`/invoices/${newInvoiceID}`, {
+              replace: true,
+            });
+          }
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      submitData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="invoiceForm">
@@ -191,6 +420,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled={!editMode}
           />
         </Grid>
         <Grid item xs={12}>
@@ -208,6 +438,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled={!editMode || invoiceInfo}
           />
         </Grid>
         <Grid item xs={12}>
@@ -225,6 +456,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled={!editMode}
           />
         </Grid>
       </Grid>
@@ -250,14 +482,18 @@ const InvoiceForm = ({ invoiceInfo }) => {
         <TableBody>
           {sessions
             ? sessions.map((student) => {
-                let QTY = 0;
+                let QTY =
+                  student.sessions?.reduce(
+                    (accumulator, studentSessions) =>
+                      accumulator + (studentSessions.full_session ? 2 : 1),
+                    0
+                  ) || 0;
                 return (
                   <TableRow key={student.student_id}>
                     <TableCell>{student.full_name}</TableCell>
                     <TableCell>
                       {student.sessions ? (
                         student.sessions.map((studentSession) => {
-                          QTY += studentSession.full_session ? 2 : 1;
                           return (
                             <div key={studentSession.student_session_id}>
                               {studentSession.session_date} -{" "}
@@ -291,27 +527,170 @@ const InvoiceForm = ({ invoiceInfo }) => {
               })
             : null}
           {dataToSubmit.JSONInvoiceMisc
-            ? dataToSubmit.JSONInvoiceMisc.map((invoiceMisc) => {
+            ? dataToSubmit.JSONInvoiceMisc?.map((invoiceMisc, index) => {
                 return (
-                  <TableRow key={invoiceMisc.invoice_misc_id}>
-                    <TableCell>Miscallaneous</TableCell>
-                    <TableCell>{invoiceMisc.description}</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>{invoiceMisc.rate}</TableCell>
-                    <TableCell>{invoiceMisc.rate}</TableCell>
+                  <TableRow key={invoiceMisc.invoice_misc_id || index}>
+                    <TableCell>
+                      {editMode ? (
+                        invoiceMisc.edit ? (
+                          <>
+                            <IconButton
+                              onClick={() => cancelEdit(invoiceMisc)}
+                              aria-label="cancel-edit"
+                              color="error"
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => editMisc(invoiceMisc)}
+                              aria-label="confirm-edit"
+                              color="success"
+                            >
+                              <CheckIcon />
+                            </IconButton>
+                          </>
+                        ) : (
+                          <>
+                            <IconButton
+                              onClick={() => editMiscMode(invoiceMisc)}
+                              aria-label="edit"
+                              color="secondary"
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => removeMisc(invoiceMisc)}
+                              aria-label="delete"
+                              color="error"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        )
+                      ) : null}{" "}
+                    </TableCell>
+                    {invoiceMisc.edit ? (
+                      <>
+                        <TableCell>
+                          <TextField
+                            error={!!formErrors.description}
+                            required
+                            id="description"
+                            name="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                          ></TextField>
+                        </TableCell>
+                        <TableCell>1</TableCell>
+                        <TableCell>
+                          <TextField
+                            error={!!formErrors.rate}
+                            required
+                            id="rate"
+                            type="number"
+                            name="rate"
+                            value={rate}
+                            onChange={(e) => setRate(e.target.value)}
+                          ></TextField>
+                        </TableCell>
+                        <TableCell>{invoiceMisc.rate}</TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell>{invoiceMisc.description}</TableCell>
+                        <TableCell>1</TableCell>
+                        <TableCell>{invoiceMisc.rate}</TableCell>
+                        <TableCell>{invoiceMisc.rate}</TableCell>
+                      </>
+                    )}
                   </TableRow>
                 );
               })
             : null}
+          {!currentlyEditing && editMode && (
+            <TableRow>
+              <TableCell>
+                <Button onClick={handleAddMisc}>+</Button>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  error={!!formErrors.description}
+                  required
+                  id="description"
+                  name="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                ></TextField>
+              </TableCell>
+              <TableCell>1</TableCell>
+              <TableCell>
+                <TextField
+                  error={!!formErrors.rate}
+                  required
+                  id="rate"
+                  type="number"
+                  name="rate"
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
+                ></TextField>
+              </TableCell>
+              <TableCell>{rate}</TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
-      <div>
-        Total due -{" "}
-        {dataToSubmit.amountDue +
-          dataToSubmit.JSONInvoiceMisc.reduce(
-            (accumulator, currentValue) => accumulator + currentValue.rate,
-            0
-          )}
+      <div>Balance Due - {dataToSubmit.amountDue}</div>
+      <div className="formEnd">
+        {invoiceInfo ? (
+          <>
+            {editMode ? (
+              <>
+                <Button
+                  onClick={() => cancelChanges()}
+                  variant="outlined"
+                  color="warning"
+                  className="cancelBtn"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSubmit}
+                  variant="contained"
+                  className="submitBtn"
+                >
+                  Save
+                </Button>
+              </>
+            ) : (
+              <Button
+                onClick={() => setEditMode(true)}
+                variant="outlined"
+                color="warning"
+                className="editBtn"
+              >
+                Edit
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => navigate("/invoices")}
+              variant="outlined"
+              color="warning"
+              className="cancelBtn"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              className="submitBtn"
+            >
+              Save
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

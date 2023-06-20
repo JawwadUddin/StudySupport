@@ -21,6 +21,7 @@ import RegisterPage from "./pages/registerPage/RegisterPage";
 import NewRegisterPage from "./pages/newRegisterPage/NewRegisterPage";
 import InvoicePage from "./pages/invoicePage/InvoicePage";
 import SingleInvoicePage from "./pages/singleInvoicePage/SingleInvoicePage";
+import NewInvoicePage from "./pages/newInvoicePage/newInvoicePage";
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
           </Route>
           <Route path="invoices">
             <Route path="" element={<InvoicePage />} />
+            <Route path="new" element={<NewInvoicePage />} />
             <Route path=":invoiceID" element={<SingleInvoicePage />} />
           </Route>
         </Routes>

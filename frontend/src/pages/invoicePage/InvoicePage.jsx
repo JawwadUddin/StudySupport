@@ -6,8 +6,10 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Table from "../../components/table/Table";
+import { useNavigate } from "react-router-dom";
 
 const InvoicePage = () => {
+  const navigate = useNavigate();
   const [invoices, setInvoices] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [query, setQuery] = useState("");
@@ -41,7 +43,7 @@ const InvoicePage = () => {
         <div className="listHeader">
           <div className="listTitle">All Invoices</div>
           <Button
-            // onClick={() => navigate("/invoices/new")}
+            onClick={() => navigate("/invoices/new")}
             variant="contained"
             className="createBtn"
           >
