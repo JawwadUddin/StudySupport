@@ -4,6 +4,7 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import QuizIcon from "@mui/icons-material/Quiz";
+import DescriptionIcon from "@mui/icons-material/Description";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
@@ -18,6 +19,10 @@ const Sidebar = () => {
           <li onClick={() => navigate("")}>
             <DashboardIcon className="icon" />
             <span>Dashboard</span>
+          </li>
+          <li onClick={() => navigate("invoices")}>
+            <DescriptionIcon className="icon" />
+            <span>Invoices</span>
           </li>
           <li onClick={() => navigate("register")}>
             <AppRegistrationIcon className="icon" />

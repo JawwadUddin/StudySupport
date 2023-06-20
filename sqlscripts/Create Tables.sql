@@ -288,6 +288,7 @@ CREATE TABLE rate (
 	rate_id INT IDENTITY(1,1),
 	student_id INT,
 	rate DECIMAL(5,3),
+	rateDate DATE,
 	PRIMARY KEY (rate_id),
 	CONSTRAINT FK_rate_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
 )
