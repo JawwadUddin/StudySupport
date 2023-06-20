@@ -99,6 +99,7 @@ class Invoice {
           .input("InvoiceID", sql.Int, id)
           .input("InvoiceDate", sql.Date, invoice.invoiceDate)
           .input("DueDate", sql.Date, invoice.dueDate)
+          .input("AmountDue", sql.Decimal(6, 2), invoice.amountDue)
           .input(
             "JSONInvoiceMisc",
             sql.VarChar,
