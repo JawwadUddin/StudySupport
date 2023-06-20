@@ -18,8 +18,9 @@ import SyllabusPage from "./pages/syllabusPage/SyllabusPage";
 import NewSyllabusPage from "./pages/newSyllabusPage/NewSyllabusPage";
 import TopicPage from "./pages/topicPage/TopicPage";
 import RegisterPage from "./pages/registerPage/RegisterPage";
-import RegisterPageOld from "./pages/registerPage/registerPageOld/registerPageOld";
 import NewRegisterPage from "./pages/newRegisterPage/NewRegisterPage";
+import InvoicePage from "./pages/invoicePage/InvoicePage";
+import SingleInvoicePage from "./pages/singleInvoicePage/SingleInvoicePage";
 
 function App() {
   return (
@@ -69,6 +70,10 @@ function App() {
           <Route path="register">
             <Route path="" element={<RegisterPage />} />
             <Route path="new" element={<NewRegisterPage />} />
+          </Route>
+          <Route path="invoices">
+            <Route path="" element={<InvoicePage />} />
+            <Route path=":invoiceID" element={<SingleInvoicePage />} />
           </Route>
         </Routes>
       </div>

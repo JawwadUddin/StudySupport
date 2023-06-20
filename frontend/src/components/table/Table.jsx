@@ -113,6 +113,41 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
         },
       ];
       break;
+    case "invoice":
+      columns = [
+        { field: "id", headerName: "NO.", width: 100 },
+        { field: "invoiceDate", headerName: "Date", width: 200 },
+        { field: "fullName", headerName: "Full name", width: 200 },
+        {
+          field: "amountDue",
+          headerName: "Amount",
+          type: "number",
+          width: 100,
+        },
+        {
+          field: "view-delete",
+          headerName: "",
+          width: 300,
+          sortable: false,
+          type: "number",
+          renderCell: (params) => {
+            return (
+              <>
+                <Button
+                  className="viewBtn"
+                  name={params.row.id}
+                  onClick={handleView}
+                  variant="outlined"
+                  style={{ marginRight: "20px" }}
+                >
+                  View
+                </Button>
+              </>
+            );
+          },
+        },
+      ];
+      break;
     default:
       console.log("Type given does not match a case");
   }
@@ -123,6 +158,9 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
     }
     if (type === "student") {
       navigate(`/students/${e.target.name}`);
+    }
+    if (type === "invoice") {
+      navigate(`/invoices/${e.target.name}`);
     }
   };
 
@@ -140,6 +178,19 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
         // rowsPerPageOptions={[3]}
         checkboxSelection
         autoHeight
+        sx={{
+          boxShadow: 2,
+          border: 2,
+          borderColor: "#962626",
+          "& .MuiDataGrid-cell": {
+            borderColor: "#962626",
+            color: "black",
+            fontWeight: "600",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            borderColor: "#962626",
+          },
+        }}
       />
     </>
   );

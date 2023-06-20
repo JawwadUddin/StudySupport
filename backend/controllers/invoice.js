@@ -21,6 +21,17 @@ async function show(req, res) {
   }
 }
 
+async function findSessions(req, res) {
+  try {
+    const familyID = req.params.familyID;
+    const startDate = req.params.startDate;
+    const sessions = await Invoice.sessionsForInvoice(familyID, startDate);
+    res.status(200).json(success("OK", { data: sessions }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 async function create(req, res) {
   const submittedInvoice = req.body.data;
   try {
@@ -42,4 +53,4 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, create, update };
+module.exports = { index, show, create, update, findSessions };

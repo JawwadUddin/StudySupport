@@ -1,0 +1,32 @@
+.invoiceForm h3 {
+  margin-bottom: 20px;
+  color: rgb(51, 179, 179);
+}
+.invoiceForm h3:not(:nth-of-type(1)) {
+  margin-top: 20px;
+}
+.invoiceForm h4 {
+  color: rgba(0, 0, 0, 0.6);
+}
+.invoiceForm .contactInfo {
+  border: solid 1px rgba(0, 0, 0, 0.2588235294);
+  padding: 16.5px 14px;
+  border-radius: 4px;
+  min-width: 200px;
+}
+.invoiceForm .formEnd {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.invoiceForm .formEnd .submitBtn {
+  background-color: rgb(51, 179, 179);
+  margin-top: 40px;
+}
+.invoiceForm .formEnd .submitBtn:hover {
+  background-color: rgba(51, 179, 179, 0.842);
+}
+.invoiceForm .formEnd .editBtn,
+.invoiceForm .formEnd .cancelBtn {
+  margin-top: 40px;
+}/*# sourceMappingURL=invoiceForm.css.map */

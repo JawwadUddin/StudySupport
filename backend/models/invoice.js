@@ -5,10 +5,18 @@ class Invoice {
   constructor(data) {
     this.id = data.invoice_id;
     this.familyID = data.family_id;
+    this.fullName = data.full_name;
+    this.address = data.address;
+    this.postCode = data.post_code;
+    this.mobile = data.mobile;
+    this.email = data.email;
     this.invoiceDate = data.invoice_date;
     this.dueDate = data.due_date;
     this.startDate = data.start_date;
     this.amountDue = data.amount_due;
+    this.JSONInvoiceMisc = data.JSONInvoiceMisc
+      ? JSON.parse(data.JSONInvoiceMisc)
+      : [];
   }
 
   static get all() {
@@ -34,6 +42,22 @@ class Invoice {
           .execute("SelectInvoiceByID");
         const invoice = invoiceData.recordset.map((d) => new Invoice(d))[0];
         resolve(invoice);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static sessionsForInvoice(familyID, startDate) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const sessionsData = await pool
+          .request()
+          .input("FamilyID", sql.Int, familyID)
+          .input("StartDate", sql.Date, startDate)
+          .execute("SelectSessionsForInvoice");
+        resolve(JSON.parse(sessionsData.recordset[0].students));
       } catch (err) {
         reject(err);
       }
