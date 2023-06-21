@@ -24,6 +24,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
+  const [rateInfo, setRateInfo] = useState([]);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: "",
@@ -92,12 +93,45 @@ const InvoiceForm = ({ invoiceInfo }) => {
         }
       }
       if (dataToSubmit.familyID && dataToSubmit.startDate) {
+        setDataToSubmit((prev) => ({
+          ...prev,
+          dueDate: new Date(
+            new Date(prev.startDate).getTime() + 14 * 24 * 60 * 60 * 1000
+          )
+            .toISOString()
+            .split("T")[0],
+        }));
         fetchSessions();
       }
     } catch (error) {
       console.log(error);
     }
   }, [dataToSubmit.startDate]);
+
+  useEffect(() => {
+    try {
+      function updateAmountDue() {
+        let amountDue = 0;
+        console.log("updating the sessionsAmount");
+        sessions.map((student) => {
+          let QTY =
+            student.sessions?.reduce(
+              (accumulator, studentSessions) =>
+                accumulator + (studentSessions.full_session ? 2 : 1),
+              0
+            ) || 0;
+          amountDue += QTY * (student.rateInfo ? student.rateInfo[0].rate : 0);
+        });
+        setSessionsAmountDue(amountDue);
+      }
+
+      if (sessions) {
+        updateAmountDue();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [sessions]);
 
   useEffect(() => {
     try {
@@ -117,43 +151,20 @@ const InvoiceForm = ({ invoiceInfo }) => {
             mobile: mobile,
             email: email,
             amountDue: 0,
+            startDate: "",
           }));
         } else {
           throw Error(serverResponse.message);
         }
       }
-      if (dataToSubmit.familyID) {
+      if (dataToSubmit.familyID && !invoiceInfo) {
         fetchContactInfo();
-        setSessions();
+        setSessions(null);
       }
     } catch (error) {
       console.log(error);
     }
   }, [dataToSubmit.familyID]);
-
-  useEffect(() => {
-    try {
-      function updateAmountDue() {
-        let amountDue = 0;
-        sessions.map((student) => {
-          let QTY =
-            student.sessions?.reduce(
-              (accumulator, studentSessions) =>
-                accumulator + (studentSessions.full_session ? 2 : 1),
-              0
-            ) || 0;
-          amountDue += QTY * student.rate;
-        });
-        setSessionsAmountDue(amountDue);
-      }
-
-      if (sessions && !invoiceInfo) {
-        updateAmountDue();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [sessions]);
 
   useEffect(() => {
     try {
@@ -320,15 +331,20 @@ const InvoiceForm = ({ invoiceInfo }) => {
     try {
       async function submitData() {
         let serverResponse;
+        let JSONRateInfo = [];
+        sessions.map((item) => {
+          return JSONRateInfo.push(...item.rateInfo);
+        });
+
         if (invoiceInfo) {
           serverResponse = await updateData(
             `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
-            dataToSubmit
+            { ...dataToSubmit, JSONRateInfo }
           );
         } else {
           serverResponse = await saveData(
             `${process.env.REACT_APP_API_URL}/api/invoice`,
-            dataToSubmit
+            { ...dataToSubmit, JSONRateInfo }
           );
         }
         if (serverResponse.message === "OK") {
@@ -350,6 +366,39 @@ const InvoiceForm = ({ invoiceInfo }) => {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function updateStudentRate(studentID, e) {
+    const rateValue = e.target.value;
+    if (!studentID) return;
+
+    const updatedSessions = sessions.map((student) => {
+      if (student.student_id !== studentID) {
+        return student;
+      } else if (!student.rateInfo) {
+        return {
+          ...student,
+          rateInfo: [
+            {
+              student_id: studentID,
+              rate: rateValue,
+            },
+          ],
+        };
+      } else {
+        return {
+          ...student,
+          rateInfo: [
+            {
+              ...student.rateInfo[0],
+              student_id: studentID,
+              rate: rateValue,
+            },
+          ],
+        };
+      }
+    });
+    setSessions((prev) => updatedSessions);
   }
 
   return (
@@ -515,12 +564,26 @@ const InvoiceForm = ({ invoiceInfo }) => {
                     </TableCell>
                     <TableCell>{QTY}</TableCell>
                     <TableCell>
-                      {/* <input type="number" value={student.rate} disabled /> */}
-                      {student.rate}
+                      <TextField
+                        error={!!formErrors.rate}
+                        helperText={formErrors.rate}
+                        required
+                        id="rate"
+                        label="Rate"
+                        type="number"
+                        value={student.rateInfo ? student.rateInfo[0].rate : ""}
+                        onChange={(e) =>
+                          updateStudentRate(student.student_id, e)
+                        }
+                        sx={{ backgroundColor: "white" }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        disabled={!editMode}
+                      />
                     </TableCell>
                     <TableCell>
-                      {/* <input type="amount" value={QTY * student.rate} disabled /> */}
-                      {QTY * student.rate}
+                      {student.rateInfo ? QTY * student.rateInfo[0].rate : 0}
                     </TableCell>
                   </TableRow>
                 );
@@ -639,7 +702,26 @@ const InvoiceForm = ({ invoiceInfo }) => {
           )}
         </TableBody>
       </Table>
-      <div>Balance Due - {dataToSubmit.amountDue}</div>
+      <div className="summary">
+        <div className="summaryItem">
+          <div className="summaryText">Total</div>
+          <div className="summaryValue">
+            £{Number(dataToSubmit.amountDue).toFixed(2)}
+          </div>
+        </div>
+        {invoiceInfo && (
+          <>
+            <div className="summaryItem">
+              <div className="summaryText">Amount Received</div>
+              <div className="summaryValue">£0.00</div>
+            </div>
+            <div className="summaryItem">
+              <div className="summaryText">Due</div>
+              <div className="summaryValue"></div>
+            </div>
+          </>
+        )}
+      </div>
       <div className="formEnd">
         {invoiceInfo ? (
           <>
@@ -664,8 +746,8 @@ const InvoiceForm = ({ invoiceInfo }) => {
             ) : (
               <Button
                 onClick={() => setEditMode(true)}
-                variant="outlined"
-                color="warning"
+                variant="contained"
+                color="secondary"
                 className="editBtn"
               >
                 Edit

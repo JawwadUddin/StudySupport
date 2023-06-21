@@ -80,6 +80,11 @@ class Invoice {
             sql.VarChar,
             JSON.stringify(invoice.JSONInvoiceMisc)
           )
+          .input(
+            "JSONRateInfo",
+            sql.VarChar,
+            JSON.stringify(invoice.JSONRateInfo)
+          )
           .output("InvoiceID", sql.Int)
           .execute("InsertInvoice");
         const newInvoice = invoiceData.output.InvoiceID;
@@ -94,16 +99,23 @@ class Invoice {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
+        console.log(id, invoice);
         const invoiceData = await pool
           .request()
           .input("InvoiceID", sql.Int, id)
           .input("InvoiceDate", sql.Date, invoice.invoiceDate)
           .input("DueDate", sql.Date, invoice.dueDate)
+          .input("StartDate", sql.Date, invoice.startDate)
           .input("AmountDue", sql.Decimal(6, 2), invoice.amountDue)
           .input(
             "JSONInvoiceMisc",
             sql.VarChar,
             JSON.stringify(invoice.JSONInvoiceMisc)
+          )
+          .input(
+            "JSONRateInfo",
+            sql.VarChar,
+            JSON.stringify(invoice.JSONRateInfo)
           )
           .execute("UpdateInvoice");
         resolve("Invoice successfully updated");
