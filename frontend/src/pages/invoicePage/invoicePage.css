@@ -17,11 +17,11 @@
   font-weight: 500;
   color: #9c27b0;
 }
-.invoicePageContainer .listContainer .listHeader .createBtn {
-  background-color: rgb(51, 179, 179);
+.invoicePageContainer .listContainer .listHeader .createInvoiceBtn {
+  background-color: rgb(179, 51, 51);
 }
-.invoicePageContainer .listContainer .listHeader .createBtn:hover {
-  background-color: rgba(51, 179, 179, 0.842);
+.invoicePageContainer .listContainer .listHeader .createInvoiceBtn:hover {
+  background-color: rgb(180, 23, 23);
 }
 .invoicePageContainer .listContainer .search {
   display: flex;

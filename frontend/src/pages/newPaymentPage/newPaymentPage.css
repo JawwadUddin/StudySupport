@@ -1,10 +1,10 @@
-.newInvoicePageContainer .title {
+.newPaymentPageContainer .title {
   margin: 20px;
   color: rgb(51, 179, 179);
 }
-.newInvoicePageContainer .formContainer {
+.newPaymentPageContainer .formContainer {
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
   padding: 20px;
   margin: 20px;
   background-color: rgba(0, 0, 0, 0.1294117647);
-}/*# sourceMappingURL=newInvoicePage.css.map */
+}/*# sourceMappingURL=newPaymentPage.css.map */

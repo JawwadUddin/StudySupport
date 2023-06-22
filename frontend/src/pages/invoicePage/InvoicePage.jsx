@@ -42,13 +42,24 @@ const InvoicePage = () => {
       <div className="listContainer">
         <div className="listHeader">
           <div className="listTitle">All Invoices</div>
-          <Button
-            onClick={() => navigate("/invoices/new")}
-            variant="contained"
-            className="createBtn"
-          >
-            Create New Invoice
-          </Button>
+          <div>
+            <Button
+              onClick={() => navigate("/invoices/new")}
+              variant="contained"
+              className="createInvoiceBtn"
+            >
+              New Invoice
+            </Button>
+            <Button
+              onClick={() => navigate("/payments/new")}
+              variant="contained"
+              className="createPaymentBtn"
+              color="secondary"
+              style={{ marginLeft: "20px" }}
+            >
+              New Payment
+            </Button>
+          </div>
         </div>
         <div className="search">
           <TextField
@@ -69,15 +80,18 @@ const InvoicePage = () => {
             onChange={({ target: { value } }) => setColumnToQuery(value)}
           >
             <MenuItem value="fullName">Full Name</MenuItem>
-            <MenuItem value="address">Status</MenuItem>
-            <MenuItem value="mobile">Amount</MenuItem>
+            {/* <MenuItem value="address">Status</MenuItem> */}
+            <MenuItem value="amountDue">Amount</MenuItem>
           </Select>
         </div>
         <Table
           data={
             query
               ? invoices.filter((invoice) =>
-                  invoice[columnToQuery].toLowerCase().includes(query)
+                  invoice[columnToQuery]
+                    .toString()
+                    .toLowerCase()
+                    .includes(query)
                 )
               : invoices
           }

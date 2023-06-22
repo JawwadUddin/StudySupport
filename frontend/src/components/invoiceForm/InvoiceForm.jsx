@@ -24,7 +24,6 @@ const InvoiceForm = ({ invoiceInfo }) => {
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
-  const [rateInfo, setRateInfo] = useState([]);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: "",
