@@ -14,6 +14,7 @@ class Invoice {
     this.dueDate = data.due_date;
     this.startDate = data.start_date;
     this.amountDue = data.amount_due;
+    this.amountPaid = data.amount_paid;
     this.JSONInvoiceMisc = data.JSONInvoiceMisc
       ? JSON.parse(data.JSONInvoiceMisc)
       : [];
@@ -64,6 +65,22 @@ class Invoice {
     });
   }
 
+  static outstandingTransactionsByFamilyID(familyID) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const paymentsData = await pool
+          .request()
+          .input("FamilyID", sql.Int, familyID)
+          .execute("SelectOutstandingInvoicesByFamilyID");
+        const payments = paymentsData.recordset.map((d) => new Invoice(d));
+        resolve(payments);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   static create(invoice) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -99,7 +116,6 @@ class Invoice {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
-        console.log(id, invoice);
         const invoiceData = await pool
           .request()
           .input("InvoiceID", sql.Int, id)
