@@ -14,32 +14,43 @@ import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useNavigate, useParams } from "react-router-dom";
 
-const PaymentForm = ({ paymentInfo }) => {
+const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
+  const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [currentlyEditing, setCurrentlyEditing] = useState(
-    paymentInfo ? true : false
-  );
+  const [initialLoad, setInitialLoad] = useState(true);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: "",
     paymentDate: "",
     outstandingTransactions: [],
+    credit: 0,
   });
   const [formErrors, setFormErrors] = useState({});
   const [amountReceived, setAmountReceived] = useState(0);
+
   useEffect(() => {
     if (paymentInfo) {
-      //   setDataToSubmit({ ...invoiceInfo });
-      //   let amountDueMisc = 0;
-      //   amountDueMisc += invoiceInfo.JSONInvoiceMisc?.reduce(
-      //     (accumulator, invoiceMisc) => accumulator + Number(invoiceMisc.rate),
-      //     0
-      //   );
-      //   setFamilyDropdown([
-      //     { id: dataToSubmit.familyID, fullName: dataToSubmit.fullName },
-      //   ]);
+      let updatedCredit = paymentInfo.find(
+        (transaction) => transaction.id === null
+      ).payment;
+
+      setDataToSubmit({
+        familyID: familyID,
+        paymentDate: paymentDate.split("-").join("/"),
+        outstandingTransactions: paymentInfo,
+        credit: updatedCredit,
+      });
+
+      setAmountReceived(
+        paymentInfo.reduce((accumulator, transaction) => {
+          return accumulator + Number(transaction.payment || 0);
+        }, 0)
+      );
+
+      setFamilyDropdown([{ id: dataToSubmit.familyID }]);
     } else {
       try {
         async function fetchData() {
@@ -55,7 +66,6 @@ const PaymentForm = ({ paymentInfo }) => {
         if (familyDropdown.length === 0) {
           fetchData();
         }
-        setEditMode(true);
       } catch (error) {
         console.log(error);
       }
@@ -82,6 +92,7 @@ const PaymentForm = ({ paymentInfo }) => {
         }
       }
       if (dataToSubmit.familyID && !paymentInfo) {
+        setEditMode(true);
         fetchOutstandingInfo();
       }
     } catch (error) {
@@ -89,6 +100,44 @@ const PaymentForm = ({ paymentInfo }) => {
       setLoading(false);
     }
   }, [dataToSubmit.familyID]);
+
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false);
+      return;
+    }
+    if (amountReceived === "" || amountReceived === 0) {
+      return;
+    }
+    let updatedData;
+    if (dataToSubmit.outstandingTransactions.length !== 0) {
+      updatedData = {
+        ...dataToSubmit,
+        credit: amountReceived,
+      };
+    }
+    let remaining = amountReceived;
+    const updatedTransactionsArray = dataToSubmit.outstandingTransactions.map(
+      (transaction) => {
+        if (remaining === 0) return { ...transaction, payment: 0 };
+        const openBalance = transaction.amountDue - transaction.amountPaid;
+        if (remaining > openBalance) {
+          remaining -= openBalance;
+          return { ...transaction, payment: openBalance };
+        } else {
+          let payment = remaining;
+          remaining = 0;
+          return { ...transaction, payment: payment };
+        }
+      }
+    );
+    updatedData = {
+      ...dataToSubmit,
+      outstandingTransactions: updatedTransactionsArray,
+      credit: remaining,
+    };
+    setDataToSubmit((prev) => updatedData);
+  }, [amountReceived]);
 
   const handleChange = (e, type) => {
     setFormErrors({});
@@ -110,6 +159,74 @@ const PaymentForm = ({ paymentInfo }) => {
     };
     setDataToSubmit((prev) => updatedData);
   };
+
+  function updateInvoicePayment(invoice_id, e) {
+    const payment = Number(e.target.value);
+    let udpatedCredit = dataToSubmit.credit;
+
+    const invoicePayments = dataToSubmit.outstandingTransactions.reduce(
+      (accumulator, transaction) => {
+        if (transaction.id === invoice_id || transaction.id === null)
+          return accumulator;
+        return accumulator + Number(transaction.payment || 0);
+      },
+      0
+    );
+
+    if (amountReceived < invoicePayments + payment) {
+      return;
+    }
+
+    const updatedTransactions = dataToSubmit.outstandingTransactions.map(
+      (transaction) => {
+        if (transaction.id !== invoice_id) {
+          return transaction;
+        } else {
+          if (payment > transaction.amountDue - transaction.amountPaid) {
+            return transaction;
+          }
+          udpatedCredit = amountReceived - (invoicePayments + payment);
+          return { ...transaction, payment: payment };
+        }
+      }
+    );
+    const updatedData = {
+      ...dataToSubmit,
+      outstandingTransactions: updatedTransactions,
+      credit: udpatedCredit,
+    };
+    setDataToSubmit((prev) => updatedData);
+  }
+
+  function handleSubmit() {
+    try {
+      async function submitData() {
+        let serverResponse;
+
+        if (paymentInfo) {
+          // serverResponse = await updateData(
+          //   `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
+          //   { ...dataToSubmit, JSONRateInfo }
+          // );
+        } else {
+          serverResponse = await saveData(
+            `${process.env.REACT_APP_API_URL}/api/payment`,
+            dataToSubmit
+          );
+        }
+        if (serverResponse.message === "OK") {
+          navigate(`/invoices`, {
+            replace: true,
+          });
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      submitData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="paymentForm">
@@ -207,6 +324,7 @@ const PaymentForm = ({ paymentInfo }) => {
             <CircularProgress />
           ) : dataToSubmit.outstandingTransactions.length !== 0 ? (
             dataToSubmit.outstandingTransactions.map((invoice) => {
+              if (!invoice.id) return;
               return (
                 <TableRow>
                   <TableCell>{invoice.id}</TableCell>
@@ -223,10 +341,8 @@ const PaymentForm = ({ paymentInfo }) => {
                       id="payment"
                       label="Payment"
                       type="number"
-                      // value={student.rateInfo ? student.rateInfo[0].rate : ""}
-                      // onChange={(e) =>
-                      //   updateStudentRate(student.student_id, e)
-                      // }
+                      value={invoice.payment || ""}
+                      onChange={(e) => updateInvoicePayment(invoice.id, e)}
                       sx={{ backgroundColor: "white" }}
                       InputLabelProps={{
                         shrink: true,
@@ -251,11 +367,65 @@ const PaymentForm = ({ paymentInfo }) => {
             </div>
             <div className="summaryItem">
               <div className="summaryText">Amount to Credit</div>
-              <div className="summaryValue">sort out later</div>
+              <div className="summaryValue">
+                £{Number(dataToSubmit.credit).toFixed(2)}
+              </div>
             </div>
           </div>
         </>
       )}
+      <div className="formEnd">
+        {paymentInfo ? (
+          <>
+            {editMode ? (
+              <>
+                <Button
+                  // onClick={() => cancelChanges()}
+                  variant="outlined"
+                  color="warning"
+                  className="cancelBtn"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  // onClick={handleSubmit}
+                  variant="contained"
+                  className="submitBtn"
+                >
+                  Save
+                </Button>
+              </>
+            ) : (
+              <Button
+                onClick={() => setEditMode(true)}
+                variant="contained"
+                color="secondary"
+                className="editBtn"
+              >
+                Edit
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            <Button
+              onClick={() => navigate("/payments")}
+              variant="outlined"
+              color="warning"
+              className="cancelBtn"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              className="submitBtn"
+            >
+              Save
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

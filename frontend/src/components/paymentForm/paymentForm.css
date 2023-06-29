@@ -20,7 +20,7 @@
 }
 .paymentForm .summary .summaryItem {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .paymentForm .summary .summaryItem .summaryText,
 .paymentForm .summary .summaryItem .summaryValue {
