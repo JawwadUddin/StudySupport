@@ -19,10 +19,11 @@ import NewSyllabusPage from "./pages/newSyllabusPage/NewSyllabusPage";
 import TopicPage from "./pages/topicPage/TopicPage";
 import RegisterPage from "./pages/registerPage/RegisterPage";
 import NewRegisterPage from "./pages/newRegisterPage/NewRegisterPage";
-import InvoicePage from "./pages/invoicePage/InvoicePage";
 import SingleInvoicePage from "./pages/singleInvoicePage/SingleInvoicePage";
 import NewInvoicePage from "./pages/newInvoicePage/newInvoicePage";
 import NewPaymentPage from "./pages/newPaymentPage/NewPaymentPage";
+import SinglePaymentPage from "./pages/singlePaymentPage/SinglePaymentPage";
+import TransactionPage from "./pages/transactionPage/TransactionPage";
 
 function App() {
   return (
@@ -73,14 +74,21 @@ function App() {
             <Route path="" element={<RegisterPage />} />
             <Route path="new" element={<NewRegisterPage />} />
           </Route>
+          <Route path="transactions">
+            <Route path="" element={<TransactionPage />} />
+          </Route>
           <Route path="invoices">
-            <Route path="" element={<InvoicePage />} />
+            <Route path="" element={<TransactionPage />} />
             <Route path="new" element={<NewInvoicePage />} />
             <Route path=":invoiceID" element={<SingleInvoicePage />} />
           </Route>
           <Route path="payments">
             {/* <Route path="" element={<InvoicePage />} /> */}
             <Route path="new" element={<NewPaymentPage />} />
+            <Route
+              path=":familyID/:paymentDate"
+              element={<SinglePaymentPage />}
+            />
           </Route>
         </Routes>
       </div>
