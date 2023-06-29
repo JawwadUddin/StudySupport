@@ -3,6 +3,7 @@ const router = express.Router();
 const paymentController = require("../controllers/payment");
 
 router.get("/", paymentController.index);
-router.get("/:id", paymentController.show);
+router.post("/", paymentController.create);
+router.get("/:familyID/:paymentDate", paymentController.show);
 
 module.exports = router;

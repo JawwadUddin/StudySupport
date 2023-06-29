@@ -20,9 +20,9 @@ const Sidebar = () => {
             <DashboardIcon className="icon" />
             <span>Dashboard</span>
           </li>
-          <li onClick={() => navigate("invoices")}>
+          <li onClick={() => navigate("transactions")}>
             <DescriptionIcon className="icon" />
-            <span>Invoices</span>
+            <span>Transactions</span>
           </li>
           <li onClick={() => navigate("register")}>
             <AppRegistrationIcon className="icon" />

@@ -3,11 +3,15 @@ const { dbConnect } = require("../db");
 
 class Payment {
   constructor(data) {
-    this.id = data.payment_id;
+    this.paymentID = data.payment_id;
     this.familyID = data.family_id;
     this.fullName = data.full_name;
     this.paymentDate = data.payment_date;
-    this.amountPaid = data.amount;
+    this.id = data.invoice_id;
+    this.payment = data.payment;
+    this.dueDate = data.due_date;
+    this.amountDue = data.amount_due;
+    this.amountPaid = data.amount_paid;
   }
 
   static get all() {
@@ -23,18 +27,42 @@ class Payment {
     });
   }
 
-  static findByID(id) {
+  static findByFamilyIDPaymentDate(id, paymentDate) {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
         const paymentData = await pool
           .request()
-          .input("PaymentID", sql.Int, id)
-          .execute("SelectPaymentByID");
-        const payment = paymentData.recordset.map((d) => new Payment(d))[0];
+          .input("FamilyID", sql.Int, id)
+          .input("PaymentDate", sql.Date, paymentDate)
+          .execute("SelectPaymentsByFamilyIDPaymentDate");
+        const payment = paymentData.recordset.map((d) => new Payment(d));
         resolve(payment);
       } catch (err) {
         reject(err);
+      }
+    });
+  }
+
+  static create(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        console.log(data);
+        const paymentData = await pool
+          .request()
+          .input("FamilyID", sql.Int, data.familyID)
+          .input("PaymentDate", sql.Date, data.paymentDate)
+          .input(
+            "JSONTransactionInfo",
+            sql.VarChar,
+            JSON.stringify(data.outstandingTransactions)
+          )
+          .input("Credit", sql.Decimal(5, 2), data.credit)
+          .execute("InsertPayments");
+        resolve("Successfully created payments");
+      } catch (err) {
+        reject("Error creating payments: " + err.message);
       }
     });
   }
