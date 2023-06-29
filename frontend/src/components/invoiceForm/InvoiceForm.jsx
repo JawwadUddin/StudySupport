@@ -18,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import { validateInputs } from "../../helpers/validateInput";
 import { useNavigate } from "react-router-dom";
 
 const InvoiceForm = ({ invoiceInfo }) => {
@@ -328,12 +329,18 @@ const InvoiceForm = ({ invoiceInfo }) => {
 
   function handleSubmit() {
     try {
+      let errorCount;
+      errorCount = validateForm(dataToSubmit);
+      if (errorCount !== 0) {
+        return;
+      }
       async function submitData() {
         let serverResponse;
         let JSONRateInfo = [];
-        sessions.map((item) => {
-          return JSONRateInfo.push(...item.rateInfo);
-        });
+        sessions &&
+          sessions.map((item) => {
+            return JSONRateInfo.push(...item.rateInfo);
+          });
 
         if (invoiceInfo) {
           serverResponse = await updateData(
@@ -399,6 +406,48 @@ const InvoiceForm = ({ invoiceInfo }) => {
     });
     setSessions((prev) => updatedSessions);
   }
+
+  function cleanErrorObject(obj) {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === null) {
+        delete obj[key];
+      }
+    });
+  }
+  const validateForm = (inputData) => {
+    const _errors = {};
+    _errors.familyID = validateInputs({
+      data: inputData.familyID,
+      required: true,
+    });
+    _errors.invoiceDate = validateInputs({
+      data: inputData.invoiceDate,
+      required: true,
+    });
+    _errors.startDate = validateInputs({
+      data: inputData.startDate,
+      required: true,
+    });
+    _errors.dueDate = validateInputs({
+      data: inputData.dueDate,
+      required: true,
+    });
+    let message = null;
+    if (sessions) {
+      for (let i = 0; i < sessions.length; i++) {
+        if (!sessions[i].rateInfo || sessions[i].rateInfo[0].rate === "") {
+          message = "This is a required field";
+          break;
+        }
+      }
+    }
+    _errors.rate = message;
+
+    cleanErrorObject(_errors);
+    setFormErrors(_errors);
+    let errorCount = Object.keys(_errors).length;
+    return errorCount;
+  };
 
   return (
     <div className="invoiceForm">
@@ -676,7 +725,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
               </TableCell>
               <TableCell>
                 <TextField
-                  error={!!formErrors.description}
+                  // error={!!formErrors.description}
                   required
                   id="description"
                   name="description"
@@ -687,7 +736,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
               <TableCell>1</TableCell>
               <TableCell>
                 <TextField
-                  error={!!formErrors.rate}
+                  // error={!!formErrors.rate}
                   required
                   id="rate"
                   type="number"

@@ -20,7 +20,7 @@
 }
 .invoiceForm .summary .summaryItem {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .invoiceForm .summary .summaryItem .summaryText,
 .invoiceForm .summary .summaryItem .summaryValue {
