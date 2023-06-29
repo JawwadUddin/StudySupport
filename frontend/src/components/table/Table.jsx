@@ -2,6 +2,7 @@ import "./table.css";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
+import { v4 as uuidv4 } from "uuid";
 
 const Table = ({ data, type, setDeleteID, openModal }) => {
   const navigate = useNavigate();
@@ -115,8 +116,8 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
       break;
     case "invoice":
       columns = [
-        { field: "id", headerName: "NO.", width: 100 },
         { field: "invoiceDate", headerName: "Date", width: 200 },
+        { field: "id", headerName: "NO.", width: 100 },
         { field: "fullName", headerName: "Full name", width: 200 },
         {
           field: "amountDue",
@@ -148,6 +149,41 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
         },
       ];
       break;
+    case "payment":
+      columns = [
+        { field: "paymentDate", headerName: "Date", width: 200 },
+        { field: "id", headerName: "NO.", width: 100 },
+        { field: "fullName", headerName: "Full name", width: 200 },
+        {
+          field: "amountPaid",
+          headerName: "Amount",
+          type: "number",
+          width: 100,
+        },
+        {
+          field: "view-delete",
+          headerName: "",
+          width: 300,
+          sortable: false,
+          type: "number",
+          renderCell: (params) => {
+            return (
+              <>
+                <Button
+                  className="viewBtn"
+                  name={params.row.familyID + "/" + params.row.paymentDate}
+                  onClick={handleView}
+                  variant="outlined"
+                  style={{ marginRight: "20px" }}
+                >
+                  View
+                </Button>
+              </>
+            );
+          },
+        },
+      ];
+      break;
     default:
       console.log("Type given does not match a case");
   }
@@ -161,6 +197,9 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
     }
     if (type === "invoice") {
       navigate(`/invoices/${e.target.name}`);
+    }
+    if (type === "payment") {
+      navigate(`/payments/${e.target.name}`);
     }
   };
 
@@ -177,6 +216,7 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
         // pageSize={3}
         // rowsPerPageOptions={[3]}
         checkboxSelection
+        getRowId={(row) => row.id || uuidv4()}
         autoHeight
         sx={{
           boxShadow: 2,
