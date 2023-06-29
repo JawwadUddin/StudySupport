@@ -126,16 +126,21 @@ const RegisterTable = ({
                 className="form-input"
                 size="small"
                 disablePortal
-                id="combo-box-demo"
+                id="combo-box"
                 options={compensations}
                 value={selectedCompensation}
                 onChange={(e, value) => {
                   setSelectedCompensation(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) =>
-                  `${option.fullName} - ${option.sessionDate}`
-                }
+                getOptionLabel={(option) => option.fullName}
+                renderOption={(props, option) => {
+                  return (
+                    <li {...props} key={option.studentSessionID}>
+                      {option.fullName} - {option.sessionDate}
+                    </li>
+                  );
+                }}
                 renderInput={(params) => (
                   <TextField {...params} label="Compensation" />
                 )}
