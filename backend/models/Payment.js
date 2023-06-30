@@ -66,6 +66,28 @@ class Payment {
       }
     });
   }
+
+  static edit(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const paymentData = await pool
+          .request()
+          .input("FamilyID", sql.Int, data.familyID)
+          .input("PaymentDate", sql.Date, data.paymentDate)
+          .input(
+            "JSONTransactionInfo",
+            sql.VarChar,
+            JSON.stringify(data.outstandingTransactions)
+          )
+          .input("Credit", sql.Decimal(5, 2), data.credit)
+          .execute("UpdatePayments");
+        resolve("Successfully udpated payments");
+      } catch (err) {
+        reject("Error creating payments: " + err.message);
+      }
+    });
+  }
 }
 
 module.exports = Payment;

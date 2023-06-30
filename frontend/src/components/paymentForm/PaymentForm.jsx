@@ -33,13 +33,13 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
 
   useEffect(() => {
     if (paymentInfo) {
-      let updatedCredit = paymentInfo.find(
-        (transaction) => transaction.id === null
-      ).payment;
+      let updatedCredit =
+        paymentInfo.find((transaction) => transaction.id === null)?.payment ||
+        0;
 
       setDataToSubmit({
         familyID: familyID,
-        paymentDate: paymentDate.split("-").join("/"),
+        paymentDate: paymentDate.split("-").reverse().join("-"),
         outstandingTransactions: paymentInfo,
         credit: updatedCredit,
       });
@@ -204,28 +204,55 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
         let serverResponse;
 
         if (paymentInfo) {
-          // serverResponse = await updateData(
-          //   `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
-          //   { ...dataToSubmit, JSONRateInfo }
-          // );
+          console.log(dataToSubmit);
+          serverResponse = await updateData(
+            `${process.env.REACT_APP_API_URL}/api/payment/update`,
+            dataToSubmit
+          );
+          if (serverResponse.message === "OK") {
+            navigate(`/invoices`, {
+              replace: true,
+            });
+          } else {
+            throw Error(serverResponse.message);
+          }
         } else {
           serverResponse = await saveData(
             `${process.env.REACT_APP_API_URL}/api/payment`,
             dataToSubmit
           );
-        }
-        if (serverResponse.message === "OK") {
-          navigate(`/invoices`, {
-            replace: true,
-          });
-        } else {
-          throw Error(serverResponse.message);
+          if (serverResponse.message === "OK") {
+            navigate(`/invoices`, {
+              replace: true,
+            });
+          } else {
+            throw Error(serverResponse.message);
+          }
         }
       }
       submitData();
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function cancelChanges() {
+    setEditMode(false);
+    let updatedCredit =
+      paymentInfo.find((transaction) => transaction.id === null)?.payment || 0;
+
+    setDataToSubmit({
+      familyID: familyID,
+      paymentDate: paymentDate.split("-").reverse().join("-"),
+      outstandingTransactions: paymentInfo,
+      credit: updatedCredit,
+    });
+
+    setAmountReceived(
+      paymentInfo.reduce((accumulator, transaction) => {
+        return accumulator + Number(transaction.payment || 0);
+      }, 0)
+    );
   }
 
   return (
@@ -380,7 +407,7 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
             {editMode ? (
               <>
                 <Button
-                  // onClick={() => cancelChanges()}
+                  onClick={() => cancelChanges()}
                   variant="outlined"
                   color="warning"
                   className="cancelBtn"
@@ -388,7 +415,7 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
                   Cancel
                 </Button>
                 <Button
-                  // onClick={handleSubmit}
+                  onClick={handleSubmit}
                   variant="contained"
                   className="submitBtn"
                 >

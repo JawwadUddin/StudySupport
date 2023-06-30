@@ -35,4 +35,14 @@ async function create(req, res) {
   }
 }
 
-module.exports = { index, show, create };
+async function update(req, res) {
+  const submittedData = req.body.data;
+  try {
+    const payment = await Payment.edit(submittedData);
+    res.status(201).json(success("OK", { data: payment }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
+module.exports = { index, show, create, update };
