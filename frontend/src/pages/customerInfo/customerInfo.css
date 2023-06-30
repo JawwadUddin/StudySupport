@@ -1,0 +1,30 @@
+.gridContainer {
+  display: grid;
+  width: 100%;
+  min-height: 800px;
+  border: solid 1px red;
+  grid-template-columns: repeat(5, 1fr); /* Three columns of equal width */
+  grid-template-rows: repeat(9, 1fr); /* Three rows of equal height */
+}
+.gridContainer div {
+  border: solid 1px blue;
+}
+.gridContainer .customerSidebar {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 10;
+}
+.gridContainer .customerMain,
+.gridContainer .customerInfo {
+  grid-column-start: 2;
+  grid-column-end: 6;
+}
+.gridContainer .customerMain {
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+.gridContainer .customerInfo {
+  grid-row-start: 3;
+  grid-row-end: 10;
+}/*# sourceMappingURL=customerInfo.css.map */

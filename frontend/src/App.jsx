@@ -24,6 +24,8 @@ import NewInvoicePage from "./pages/newInvoicePage/newInvoicePage";
 import NewPaymentPage from "./pages/newPaymentPage/NewPaymentPage";
 import SinglePaymentPage from "./pages/singlePaymentPage/SinglePaymentPage";
 import TransactionPage from "./pages/transactionPage/TransactionPage";
+import CustomerPage from "./pages/customerPage/CustomerPage";
+import CustomerInfo from "./pages/customerInfo/CustomerInfo";
 
 function App() {
   return (
@@ -73,6 +75,10 @@ function App() {
           <Route path="register">
             <Route path="" element={<RegisterPage />} />
             <Route path="new" element={<NewRegisterPage />} />
+          </Route>
+          <Route path="customers">
+            <Route path="" element={<CustomerPage />} />
+            <Route path="detail" element={<CustomerInfo />} />
           </Route>
           <Route path="transactions">
             <Route path="" element={<TransactionPage />} />

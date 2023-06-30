@@ -20,6 +20,7 @@ const sessionDateRoutes = require("./routes/sessionDate");
 const compensationRoutes = require("./routes/compensation");
 const invoiceRoutes = require("./routes/invoice");
 const paymentRoutes = require("./routes/payment");
+const customerRoutes = require("./routes/customer");
 
 server.use("/api/family", familyRoutes);
 server.use("/api/student", studentRoutes);
@@ -35,6 +36,7 @@ server.use("/api/sessionDate", sessionDateRoutes);
 server.use("/api/compensations", compensationRoutes);
 server.use("/api/invoice", invoiceRoutes);
 server.use("/api/payment", paymentRoutes);
+server.use("/api/customer", customerRoutes);
 
 server.get("/", (req, res) => {
   res

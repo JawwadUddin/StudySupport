@@ -18,6 +18,9 @@ class Invoice {
     this.JSONInvoiceMisc = data.JSONInvoiceMisc
       ? JSON.parse(data.JSONInvoiceMisc)
       : [];
+    this.students = data.students;
+    this.overdueInvoices = data.overdue_invoices;
+    this.overdueBalance = data.overdue_balance;
   }
 
   static get all() {
@@ -59,6 +62,21 @@ class Invoice {
           .input("StartDate", sql.Date, startDate)
           .execute("SelectSessionsForInvoice");
         resolve(JSON.parse(sessionsData.recordset[0].students));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static outstandingInvoices() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const paymentsData = await pool
+          .request()
+          .execute("SelectOutstandingInvoices");
+        const payments = paymentsData.recordset.map((d) => new Invoice(d));
+        resolve(payments);
       } catch (err) {
         reject(err);
       }

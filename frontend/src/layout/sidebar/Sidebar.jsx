@@ -16,9 +16,9 @@ const Sidebar = () => {
       </div>
       <div className="center">
         <ul>
-          <li onClick={() => navigate("")}>
+          <li onClick={() => navigate("customers")}>
             <DashboardIcon className="icon" />
-            <span>Dashboard</span>
+            <span>Customers</span>
           </li>
           <li onClick={() => navigate("transactions")}>
             <DescriptionIcon className="icon" />

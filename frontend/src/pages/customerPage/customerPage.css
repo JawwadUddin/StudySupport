@@ -1,0 +1,29 @@
+.customerPageContainer .title {
+  margin: 20px;
+  color: rgb(51, 179, 179);
+}
+.customerPageContainer .listContainer {
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 20px;
+  margin: 20px;
+}
+.customerPageContainer .listContainer .listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.customerPageContainer .listContainer .listHeader .listTitle {
+  font-weight: 500;
+  color: #9c27b0;
+}
+.customerPageContainer .listContainer .listHeader .createInvoiceBtn {
+  background-color: rgb(179, 51, 51);
+}
+.customerPageContainer .listContainer .listHeader .createInvoiceBtn:hover {
+  background-color: rgb(180, 23, 23);
+}
+.customerPageContainer .listContainer .search {
+  display: flex;
+  margin-bottom: 20px;
+}/*# sourceMappingURL=customerPage.css.map */

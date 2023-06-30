@@ -535,7 +535,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
             InputLabelProps={{
               shrink: true,
             }}
-            disabled={!editMode || invoiceInfo}
+            disabled={!editMode || invoiceInfo ? true : false}
           />
         </Grid>
         <Grid item xs={12}>

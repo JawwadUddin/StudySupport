@@ -53,6 +53,15 @@ async function update(req, res) {
   }
 }
 
+async function showOutstandingInvoices(req, res) {
+  try {
+    const payments = await Invoice.outstandingInvoices();
+    res.status(200).json(success("OK", { data: payments }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 async function findOutstandingTransactions(req, res) {
   try {
     const familyID = req.params.familyID;
@@ -69,5 +78,6 @@ module.exports = {
   create,
   update,
   findSessions,
+  showOutstandingInvoices,
   findOutstandingTransactions,
 };
