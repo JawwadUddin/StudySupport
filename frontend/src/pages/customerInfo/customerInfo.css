@@ -2,18 +2,14 @@
   display: grid;
   width: 100%;
   min-height: 800px;
-  border: solid 1px red;
   grid-template-columns: repeat(5, 1fr); /* Three columns of equal width */
-  grid-template-rows: repeat(9, 1fr); /* Three rows of equal height */
-}
-.gridContainer div {
-  border: solid 1px blue;
+  grid-template-rows: repeat(11, 1fr); /* Three rows of equal height */
 }
 .gridContainer .customerSidebar {
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row-start: 1;
-  grid-row-end: 10;
+  grid-row-end: 12;
 }
 .gridContainer .customerMain,
 .gridContainer .customerInfo {
@@ -22,9 +18,99 @@
 }
 .gridContainer .customerMain {
   grid-row-start: 1;
-  grid-row-end: 3;
+  grid-row-end: 4;
 }
 .gridContainer .customerInfo {
-  grid-row-start: 3;
-  grid-row-end: 10;
+  grid-row-start: 4;
+  grid-row-end: 12;
+}
+
+.customerSidebar {
+  border-right: 2px solid rgb(155, 154, 154);
+}
+
+.customerMainHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  height: 100%;
+  background-color: #f9fafb;
+  border-bottom: 2px solid rgb(155, 154, 154);
+}
+.customerMainHeader .customerMainSum {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.customerMainHeader .customerMainSum .openSection,
+.customerMainHeader .customerMainSum .overdueSection {
+  padding-left: 10px;
+}
+.customerMainHeader .customerMainSum .openSection .amount,
+.customerMainHeader .customerMainSum .overdueSection .amount {
+  font-size: 20px;
+}
+.customerMainHeader .customerMainSum .openSection .text,
+.customerMainHeader .customerMainSum .overdueSection .text {
+  color: #6e8ba8;
+  font-size: 14px;
+}
+.customerMainHeader .customerMainSum .openSection {
+  border-left: 5px solid #f2b835;
+  margin-bottom: 20px;
+}
+.customerMainHeader .customerMainSum .overdueSection {
+  border-left: 5px solid #ce5133;
+}
+.customerMainHeader .customerMainInfo {
+  font-weight: 500;
+  color: #333333;
+  font-size: 24px;
+  height: 100%;
+}
+.customerMainHeader .createPaymentBtn {
+  background-color: #4949d9;
+}
+.customerMainHeader .createPaymentBtn:hover {
+  background-color: rgba(73, 73, 217, 0.9333333333);
+}
+.customerMainHeader .createBtn {
+  background-color: rgb(51, 179, 179);
+}
+.customerMainHeader .createBtn:hover {
+  background-color: rgba(51, 179, 179, 0.842);
+}
+
+.search {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.customerInfo {
+  margin-top: 20px;
+}
+.customerInfo .statusComplete {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.customerInfo .text {
+  font-weight: bold;
+  color: #404040;
+  margin-left: 30px;
+}
+.customerInfo .credit {
+  font-size: 90%;
+  color: #0075c5;
+  margin-left: 30px;
+}
+.customerInfo .overdue {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.customerInfo .icon {
+  position: absolute;
 }/*# sourceMappingURL=customerInfo.css.map */
