@@ -35,9 +35,11 @@ class Payment {
           .request()
           .input("FamilyID", sql.Int, id)
           .input("PaymentDate", sql.Date, paymentDate)
+          .output("PaymentType", sql.VarChar)
           .execute("SelectPaymentsByFamilyIDPaymentDate");
+        const paymentType = paymentData.output.PaymentType;
         const payment = paymentData.recordset.map((d) => new Payment(d));
-        resolve(payment);
+        resolve({ payment, paymentType });
       } catch (err) {
         reject(err);
       }
@@ -48,11 +50,11 @@ class Payment {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
-        console.log(data);
         const paymentData = await pool
           .request()
           .input("FamilyID", sql.Int, data.familyID)
           .input("PaymentDate", sql.Date, data.paymentDate)
+          .input("PaymentType", sql.VarChar, data.paymentType)
           .input(
             "JSONTransactionInfo",
             sql.VarChar,
@@ -75,6 +77,7 @@ class Payment {
           .request()
           .input("FamilyID", sql.Int, data.familyID)
           .input("PaymentDate", sql.Date, data.paymentDate)
+          .input("PaymentType", sql.VarChar, data.paymentType)
           .input(
             "JSONTransactionInfo",
             sql.VarChar,

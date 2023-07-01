@@ -42,7 +42,8 @@ const SinglePaymentPage = () => {
               <PaymentForm
                 familyID={familyID}
                 paymentDate={paymentDate}
-                paymentInfo={payment}
+                paymentInfo={payment.payment}
+                paymentType={payment.paymentType}
               />
             ) : (
               <h2 className="title">Invoice Not Found</h2>

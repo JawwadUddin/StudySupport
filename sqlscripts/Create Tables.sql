@@ -313,12 +313,25 @@ CREATE TABLE invoicesMisc (
 	CONSTRAINT FK_invoicesMisc_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id) ON DELETE CASCADE
 )
 
+CREATE TABLE paymentType 
+(
+	payment_type_id INT IDENTITY(1,1) PRIMARY KEY,
+	payment_type VARCHAR(20)
+)
+
+INSERT INTO paymentType (payment_type) VALUES ('Cash'), ('Bank Transfer')
+
 CREATE TABLE payment (
 	payment_id INT IDENTITY(20000,1),
 	family_id int,
 	invoice_id int,
 	payment_date date,
 	amount decimal(5,2),
+	payment_type_id INT,
 	PRIMARY KEY(payment_id),
-	CONSTRAINT FK_payment_family FOREIGN KEY (family_id) REFERENCES family(family_id)
+	CONSTRAINT FK_payment_family FOREIGN KEY (family_id) REFERENCES family(family_id),
+	CONSTRAINT FK_payment_paymentType FOREIGN KEY (payment_type_id) REFERENCES paymentType(payment_type_id)
 )
+
+
+

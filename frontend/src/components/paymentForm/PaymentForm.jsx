@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getData, updateData, saveData } from "../../helpers/apiFunctions";
+import { validateInputs } from "../../helpers/validateInput";
 import "./paymentForm.css";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -16,15 +17,16 @@ import TableBody from "@mui/material/TableBody";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate, useParams } from "react-router-dom";
 
-const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
+const PaymentForm = ({ familyID, paymentDate, paymentInfo, paymentType }) => {
   const navigate = useNavigate();
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: "",
     paymentDate: "",
+    paymentType: "",
     outstandingTransactions: [],
     credit: 0,
   });
@@ -33,6 +35,7 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
 
   useEffect(() => {
     if (paymentInfo) {
+      setEditMode(false);
       let updatedCredit =
         paymentInfo.find((transaction) => transaction.id === null)?.payment ||
         0;
@@ -40,6 +43,7 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
       setDataToSubmit({
         familyID: familyID,
         paymentDate: paymentDate.split("-").reverse().join("-"),
+        paymentType: paymentType,
         outstandingTransactions: paymentInfo,
         credit: updatedCredit,
       });
@@ -200,6 +204,11 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
 
   function handleSubmit() {
     try {
+      let errorCount;
+      errorCount = validateForm(dataToSubmit);
+      if (errorCount !== 0) {
+        return;
+      }
       async function submitData() {
         let serverResponse;
 
@@ -209,25 +218,18 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
             `${process.env.REACT_APP_API_URL}/api/payment/update`,
             dataToSubmit
           );
-          if (serverResponse.message === "OK") {
-            navigate(`/invoices`, {
-              replace: true,
-            });
-          } else {
-            throw Error(serverResponse.message);
-          }
         } else {
           serverResponse = await saveData(
             `${process.env.REACT_APP_API_URL}/api/payment`,
             dataToSubmit
           );
-          if (serverResponse.message === "OK") {
-            navigate(`/invoices`, {
-              replace: true,
-            });
-          } else {
-            throw Error(serverResponse.message);
-          }
+        }
+        if (serverResponse.message === "OK") {
+          navigate(-1, {
+            replace: true,
+          });
+        } else {
+          throw Error(serverResponse.message);
         }
       }
       submitData();
@@ -254,6 +256,39 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
       }, 0)
     );
   }
+
+  function cleanErrorObject(obj) {
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === null) {
+        delete obj[key];
+      }
+    });
+  }
+  const validateForm = (inputData) => {
+    const _errors = {};
+    _errors.familyID = validateInputs({
+      data: inputData.familyID,
+      required: true,
+    });
+    _errors.paymentDate = validateInputs({
+      data: inputData.paymentDate,
+      required: true,
+    });
+    _errors.paymentType = validateInputs({
+      data: inputData.paymentType,
+      required: true,
+    });
+    let message = null;
+    if (amountReceived === 0 || amountReceived === "") {
+      message = "This is a required field";
+    }
+    _errors.amountReceived = message;
+
+    cleanErrorObject(_errors);
+    setFormErrors(_errors);
+    let errorCount = Object.keys(_errors).length;
+    return errorCount;
+  };
 
   return (
     <div className="paymentForm">
@@ -287,13 +322,8 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
         </Grid>
       </Grid>
       <h3>Key Dates</h3>
-      <Grid
-        container
-        spacing={3}
-        sx={{ marginBottom: 3 }}
-        justifyContent="space-between"
-      >
-        <Grid item xs={4}>
+      <Grid container sx={{ marginBottom: 3 }}>
+        <Grid item xs={12}>
           <TextField
             error={!!formErrors.paymentDate}
             helperText={formErrors.paymentDate}
@@ -310,6 +340,36 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
             }}
             disabled={!editMode}
           />
+        </Grid>
+      </Grid>
+      <h3>Key Dates</h3>
+      <Grid
+        container
+        spacing={3}
+        sx={{ marginBottom: 3 }}
+        justifyContent="space-between"
+      >
+        <Grid item xs={4}>
+          <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
+            <InputLabel id="demo-simple-select-label">Payment Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="paymentType"
+              error={!!formErrors.paymentType}
+              multiline
+              value={dataToSubmit.paymentType}
+              onChange={(e) =>
+                setDataToSubmit((prev) => ({
+                  ...prev,
+                  paymentType: e.target.value,
+                }))
+              }
+              disabled={!editMode}
+            >
+              <MenuItem value={"Cash"}>Cash</MenuItem>
+              <MenuItem value={"Bank Transfer"}>Bank Transfer</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item>
           <TextField
@@ -436,7 +496,7 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo }) => {
         ) : (
           <>
             <Button
-              onClick={() => navigate("/payments")}
+              onClick={() => navigate(-1)}
               variant="outlined"
               color="warning"
               className="cancelBtn"
