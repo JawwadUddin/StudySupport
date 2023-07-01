@@ -129,3 +129,42 @@
     }
   }
 }
+
+.legend {
+  margin-top: 40px;
+  padding: 10px;
+  display: inline-block;
+  box-shadow: 2px 4px 10px 1px rgb(201, 201, 201);
+
+  div {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
+
+  .compensation-tag,
+  .half-session-tag {
+    font-size: 20px;
+    border-radius: 100%;
+    background-color: #16629f;
+    color: white;
+  }
+
+  .half-session-tag {
+    color: #16629f;
+    background-color: white;
+  }
+
+  .absent-icon {
+    color: #d53737;
+    font-size: 20px;
+  }
+  .present-icon {
+    color: #56c387;
+    font-size: 20px;
+  }
+}

@@ -113,4 +113,38 @@
 .tables-container .table .student .student-attendance .present-icon {
   color: #56c387;
   font-size: 25px;
+}
+
+.legend {
+  margin-top: 40px;
+  padding: 10px;
+  display: inline-block;
+  box-shadow: 2px 4px 10px 1px rgb(201, 201, 201);
+}
+.legend div {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+.legend div .icon {
+  margin-right: 10px;
+}
+.legend .compensation-tag,
+.legend .half-session-tag {
+  font-size: 20px;
+  border-radius: 100%;
+  background-color: #16629f;
+  color: white;
+}
+.legend .half-session-tag {
+  color: #16629f;
+  background-color: white;
+}
+.legend .absent-icon {
+  color: #d53737;
+  font-size: 20px;
+}
+.legend .present-icon {
+  color: #56c387;
+  font-size: 20px;
 }/*# sourceMappingURL=registerTable.css.map */

@@ -284,6 +284,21 @@ const RegisterTable = ({
           </div>
         );
       })}
+      <div className="legend">
+        <div>
+          <CachedIcon className="compensation-tag icon" /> Compensation
+        </div>
+        <div>
+          <HourglassBottomIcon className="half-session-tag icon" /> 1 Hour
+          Session
+        </div>
+        <div>
+          <CheckCircleIcon className="present-icon icon" /> Present
+        </div>
+        <div>
+          <CancelIcon className="absent-icon icon" /> Absent
+        </div>
+      </div>
       <div className="formEnd">
         {!editMode ? (
           <Button
