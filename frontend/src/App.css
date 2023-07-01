@@ -1,4 +1,4 @@
-.App {
+.appWrapper {
   display: flex;
   box-sizing: border-box;
 }
@@ -14,9 +14,9 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+/* input[type="number"] {
   -moz-appearance: textfield;
-}
+} */
 
 .status {
   padding: 10px;
