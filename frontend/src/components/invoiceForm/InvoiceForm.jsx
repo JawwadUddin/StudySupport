@@ -355,7 +355,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
         }
         if (serverResponse.message === "OK") {
           if (invoiceInfo) {
-            navigate(`/invoices`, {
+            navigate(-1, {
               replace: true,
             });
           } else {
@@ -805,7 +805,7 @@ const InvoiceForm = ({ invoiceInfo }) => {
         ) : (
           <>
             <Button
-              onClick={() => navigate("/invoices")}
+              onClick={() => navigate(-1)}
               variant="outlined"
               color="warning"
               className="cancelBtn"
