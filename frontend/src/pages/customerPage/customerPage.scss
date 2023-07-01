@@ -33,4 +33,57 @@
       margin-bottom: 20px;
     }
   }
+
+  table,
+  th,
+  td {
+    // border: 1px solid;
+    border-color: grey;
+    padding: 0px 10px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    thead {
+      tr {
+        border-bottom: 3px solid;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid;
+
+        cursor: pointer;
+        &:hover {
+          background-color: #afafaf6e;
+        }
+
+        td {
+          font-weight: 600;
+        }
+        .customerName {
+          // font-size: 14px;
+          font-weight: bold;
+          color: #404040;
+        }
+        .studentNames {
+          font-size: 80%;
+          color: #0075c5;
+        }
+        .overdueInvoice {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+    }
+
+    tr {
+      height: 60px;
+      text-align: left;
+    }
+  }
 }

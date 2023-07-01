@@ -78,25 +78,55 @@ const CustomerPage = () => {
             </tr>
           </thead>
           <tbody>
+            {/* {query
+              ? customers.filter((customer) =>
+                  (customer.fullName + customer.students)
+                    .toString()
+                    .toLowerCase()
+                    .includes(query)
+                )
+              : customers} */}
             {customers.length !== 0 ? (
-              customers.map((customer) => {
+              (query
+                ? customers.filter((customer) =>
+                    (customer.fullName + customer.students)
+                      .toString()
+                      .toLowerCase()
+                      .includes(query)
+                  )
+                : customers
+              ).map((customer) => {
                 return (
-                  <tr>
-                    <th
-                      onClick={() =>
-                        navigate("/customers/detail", {
-                          state: { customerID: customer.familyID },
-                        })
-                      }
-                    >
-                      {customer.fullName}
-                    </th>
-                    <th>{customer.mobile}</th>
-                    <th>{customer.email}</th>
-                    <th>
-                      <ErrorIcon /> {customer.overdueInvoices} Overdue Invoice
-                    </th>
-                    <th>£{Number(customer.overdueBalance).toFixed(2)}</th>
+                  <tr
+                    onClick={() =>
+                      navigate("/customers/detail", {
+                        state: {
+                          customerDetail: {
+                            customerID: customer.familyID,
+                            customerName: customer.fullName,
+                            customerMobile: customer.mobile,
+                          },
+                        },
+                      })
+                    }
+                  >
+                    <td>
+                      <div className="customerName">{customer.fullName}</div>
+                      <div className="studentNames">
+                        Ref: {customer.students}
+                      </div>
+                    </td>
+                    <td>{customer.mobile}</td>
+                    <td>{customer.email}</td>
+                    <td>
+                      <div className="overdueInvoice">
+                        <ErrorIcon sx={{ color: "#da4647" }} />{" "}
+                        <span style={{ color: "#0075c5" }}>
+                          {customer.overdueInvoices} Overdue Invoice
+                        </span>
+                      </div>
+                    </td>
+                    <td>£{Number(customer.overdueBalance).toFixed(2)}</td>
                   </tr>
                 );
               })
