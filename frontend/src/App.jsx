@@ -84,6 +84,7 @@ function App() {
           <Route path="customers">
             <Route path="" element={<CustomerPage />} />
             <Route path="detail" element={<CustomerInfo />} />
+            <Route path="detail/:customerID" element={<CustomerInfo />} />
           </Route>
           <Route path="transactions">
             <Route path="" element={<TransactionPage />} />

@@ -78,14 +78,6 @@ const CustomerPage = () => {
             </tr>
           </thead>
           <tbody>
-            {/* {query
-              ? customers.filter((customer) =>
-                  (customer.fullName + customer.students)
-                    .toString()
-                    .toLowerCase()
-                    .includes(query)
-                )
-              : customers} */}
             {customers.length !== 0 ? (
               (query
                 ? customers.filter((customer) =>
@@ -99,13 +91,32 @@ const CustomerPage = () => {
                 return (
                   <tr
                     onClick={() =>
-                      navigate("/customers/detail", {
+                      navigate(`/customers/detail/${customer.familyID}`, {
                         state: {
                           customerDetail: {
                             customerID: customer.familyID,
                             customerName: customer.fullName,
                             customerMobile: customer.mobile,
                           },
+                          customers: customers.map((obj) => {
+                            // Extract the desired keys from each object
+                            const {
+                              familyID,
+                              fullName,
+                              students,
+                              overdueBalance,
+                              mobile,
+                            } = obj;
+
+                            // Create a new object with the extracted keys
+                            return {
+                              familyID,
+                              fullName,
+                              students,
+                              overdueBalance,
+                              mobile,
+                            };
+                          }),
                         },
                       })
                     }
@@ -119,12 +130,14 @@ const CustomerPage = () => {
                     <td>{customer.mobile}</td>
                     <td>{customer.email}</td>
                     <td>
-                      <div className="overdueInvoice">
-                        <ErrorIcon sx={{ color: "#da4647" }} />{" "}
-                        <span style={{ color: "#0075c5" }}>
-                          {customer.overdueInvoices} Overdue Invoice
-                        </span>
-                      </div>
+                      {customer.overdueInvoices ? (
+                        <div className="overdueInvoice">
+                          <ErrorIcon sx={{ color: "#da4647" }} />{" "}
+                          <span style={{ color: "#0075c5" }}>
+                            {customer.overdueInvoices} Overdue Invoice
+                          </span>
+                        </div>
+                      ) : null}
                     </td>
                     <td>£{Number(customer.overdueBalance).toFixed(2)}</td>
                   </tr>

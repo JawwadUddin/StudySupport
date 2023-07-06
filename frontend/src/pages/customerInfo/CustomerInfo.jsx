@@ -1,10 +1,9 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import "./customerInfo.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
@@ -12,14 +11,29 @@ const CustomerInfo = () => {
   const [customerInfo, setCustomerInfo] = useState([]);
   const [query, setQuery] = useState("");
   const { state } = useLocation();
+  let { customerID } = useParams();
   const navigate = useNavigate();
-  const [customerDetail, setCustomerDetail] = useState(state.customerDetail);
+  const [customerDetail, setCustomerDetail] = useState("");
+  const [customers, setCustomers] = useState(state?.customers || "");
 
   useEffect(() => {
     try {
+      if (customers.length !== 0 && customerID) {
+        let customer = customers.find(
+          (customer) => customer.familyID == customerID
+        );
+        if (customer) {
+          let { fullName, mobile } = customer;
+          console.log(fullName, mobile);
+          setCustomerDetail({
+            fullName,
+            mobile,
+          });
+        }
+      }
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/customer/${customerDetail.customerID}`
+          `${process.env.REACT_APP_API_URL}/api/customer/${customerID}`
         );
         if (serverResponse.message === "OK") {
           setCustomerInfo(serverResponse.results.data);
@@ -27,16 +41,36 @@ const CustomerInfo = () => {
           throw Error(serverResponse.message);
         }
       }
-      fetchData();
+      if (customerID) {
+        fetchData();
+      }
     } catch (error) {
       console.log(error);
     }
-  }, [customerDetail.customerID]);
+  }, [customerID, customers]);
+
+  useEffect(() => {
+    try {
+      async function fetchData() {
+        const serverResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/invoice/outstanding`
+        );
+        if (serverResponse.message === "OK") {
+          setCustomers(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      if (customers === "") fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [customers]);
 
   function getStatus(customer) {
     if (customer.status === "Paid") {
       return (
-        <div className="statusComplete">
+        <div className="statusComplete iconContainer">
           <CheckCircleIcon
             className="icon"
             sx={{ color: "#2ca01c", fontSize: "24px" }}
@@ -48,7 +82,7 @@ const CustomerInfo = () => {
     if (customer.status < 0) {
       if (customer.amountPaid !== 0) {
         return (
-          <div className="overdue">
+          <div className="overdue iconContainer">
             <ErrorOutlineIcon
               className="icon"
               sx={{ color: "#ff9331", fontSize: "24px" }}
@@ -65,7 +99,7 @@ const CustomerInfo = () => {
         );
       } else {
         return (
-          <div className="overdue">
+          <div className="overdue iconContainer">
             <ErrorOutlineIcon
               className="icon"
               sx={{ color: "#ff9331", fontSize: "24px" }}
@@ -109,25 +143,60 @@ const CustomerInfo = () => {
       <h2 className="title">Customers</h2>
       <div className="listContainer">
         <div className="gridContainer">
-          <div className="customerSidebar"></div>
+          <div className="customerSidebar">
+            <div className="customerSidebarContent">
+              {customers.length !== 0
+                ? customers.map((customer) => {
+                    return (
+                      <div
+                        key={customer.familyID}
+                        className="customerSummary"
+                        onClick={() =>
+                          navigate(`/customers/detail/${customer.familyID}`)
+                        }
+                      >
+                        <div className="customerName">{customer.fullName}</div>
+                        <div className="studentNames">
+                          Ref: {customer.students}
+                        </div>
+                        <div className="customerBalance">
+                          £{Number(customer.overdueBalance).toFixed(2)}
+                        </div>
+                      </div>
+                    );
+                  })
+                : "Error retrieving customers, please go back to the customers page and come back again"}
+            </div>
+          </div>
           <div className="customerMain">
             <div className="customerMainHeader">
               <div className="customerMainInfo">
-                <h1>{customerDetail.customerName}</h1>
-                <span>{customerDetail.customerMobile}</span>
+                {customerDetail ? (
+                  <>
+                    <h1>{customerDetail.fullName}</h1>
+                    <span>{customerDetail.mobile}</span>
+                  </>
+                ) : null}
               </div>
               <div className="customerMainStage">
                 <div className="customerMainButtons">
                   <Button
-                    onClick={() => navigate("/invoices/new")}
+                    onClick={() =>
+                      navigate("/invoices/new", {
+                        state: { familyID: customerID },
+                      })
+                    }
                     variant="contained"
-                    // className="createInvoiceBtn"
                     className="createBtn"
                   >
                     New Invoice
                   </Button>
                   <Button
-                    onClick={() => navigate("/payments/new")}
+                    onClick={() =>
+                      navigate("/payments/new", {
+                        state: { familyID: customerID },
+                      })
+                    }
                     variant="contained"
                     className="createPaymentBtn"
                     color="secondary"
@@ -171,14 +240,18 @@ const CustomerInfo = () => {
                               navigate(`/invoices/${customer.id}`);
                             } else {
                               navigate(
-                                `/payments/${
-                                  customerDetail.customerID
-                                }/${customer.date.split("/").join("-")}`
+                                `/payments/${customerID}/${customer.date
+                                  .split("-")
+                                  .reverse()
+                                  .join("-")}`,
+                                { state: { fullName: customerDetail.fullName } }
                               );
                             }
                           }}
                         >
-                          <td>{customer.date}</td>
+                          <td>
+                            {customer.date.split("-").reverse().join("/")}
+                          </td>
                           <td>{customer.type}</td>
                           <td>{customer.id}</td>
                           <td style={{ textAlign: "right" }}>
@@ -200,7 +273,7 @@ const CustomerInfo = () => {
                                 </div>
                               </div>
                             ) : (
-                              <div className="statusComplete">
+                              <div className="statusComplete iconContainer">
                                 <CheckCircleIcon
                                   className="icon"
                                   sx={{ color: "#2ca01c", fontSize: "24px" }}
