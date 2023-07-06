@@ -26,7 +26,7 @@ const ScoreForm = () => {
   const [dataToSubmit, setDataToSubmit] = useState({
     studentID: studentID,
     testID: "",
-    testDate: "",
+    testDate: new Date().toISOString().split("T")[0],
     scores: [],
     comment: "",
   });

@@ -15,17 +15,23 @@ import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const PaymentForm = ({ familyID, paymentDate, paymentInfo, paymentType }) => {
+const PaymentForm = ({
+  familyID,
+  fullName,
+  paymentDate,
+  paymentInfo,
+  paymentType,
+}) => {
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
-    familyID: "",
-    paymentDate: "",
+    familyID: familyID || "",
+    paymentDate: new Date().toISOString().split("T")[0],
     paymentType: "",
     outstandingTransactions: [],
     credit: 0,
@@ -54,7 +60,7 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo, paymentType }) => {
         }, 0)
       );
 
-      setFamilyDropdown([{ id: dataToSubmit.familyID }]);
+      setFamilyDropdown([{ id: familyID, fullName: fullName }]);
     } else {
       try {
         async function fetchData() {
@@ -415,7 +421,9 @@ const PaymentForm = ({ familyID, paymentDate, paymentInfo, paymentType }) => {
               return (
                 <TableRow>
                   <TableCell>{invoice.id}</TableCell>
-                  <TableCell>{invoice.dueDate}</TableCell>
+                  <TableCell>
+                    {invoice.dueDate.split("-").reverse().join("/")}
+                  </TableCell>
                   <TableCell>{invoice.amountDue}</TableCell>
                   <TableCell>
                     {invoice.amountDue - invoice.amountPaid}

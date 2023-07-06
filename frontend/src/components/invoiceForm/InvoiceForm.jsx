@@ -21,13 +21,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { validateInputs } from "../../helpers/validateInput";
 import { useNavigate } from "react-router-dom";
 
-const InvoiceForm = ({ invoiceInfo }) => {
+const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
-    familyID: "",
+    familyID: familyID || "",
     fullName: "",
     address: "",
     postCode: "",
