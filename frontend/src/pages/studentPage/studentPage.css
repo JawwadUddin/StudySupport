@@ -1,6 +1,6 @@
 .studentPageContainer .title {
   margin: 20px;
-  color: rgb(51, 179, 179);
+  color: rgb(37, 150, 190);
 }
 .studentPageContainer .listContainer {
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
@@ -18,10 +18,10 @@
   color: #9c27b0;
 }
 .studentPageContainer .listHeader .createBtn {
-  background-color: rgb(51, 179, 179);
+  background-color: rgb(37, 150, 190);
 }
 .studentPageContainer .listHeader .createBtn:hover {
-  background-color: rgba(51, 179, 179, 0.842);
+  background-color: rgba(37, 150, 190, 0.842);
 }
 .studentPageContainer .search {
   display: flex;

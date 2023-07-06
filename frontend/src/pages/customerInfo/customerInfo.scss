@@ -1,7 +1,7 @@
 .gridContainer {
   display: grid;
   width: 100%;
-  min-height: 800px;
+  height: 900px;
   // border: solid 1px red;
   grid-template-columns: repeat(5, 1fr); /* Three columns of equal width */
   grid-template-rows: repeat(11, 1fr); /* Three rows of equal height */
@@ -33,6 +33,32 @@
 
 .customerSidebar {
   border-right: 2px solid rgb(155, 154, 154);
+  overflow-y: scroll;
+
+  .customerSummary {
+    margin-right: 20px;
+    border-bottom: solid 1px grey;
+    padding: 5px 0;
+
+    cursor: pointer;
+    &:hover {
+      background-color: #afafaf6e;
+    }
+
+    .customerName {
+      // font-size: 14px;
+      font-weight: bold;
+      color: #404040;
+    }
+    .studentNames {
+      font-size: 80%;
+      color: #0075c5;
+    }
+    .customerBalance {
+      color: #ef44d1;
+      font-weight: 600;
+    }
+  }
 }
 
 .customerMainHeader {
@@ -90,10 +116,10 @@
   }
 
   .createBtn {
-    background-color: rgb(51, 179, 179);
+    background-color: rgb(37, 150, 190);
 
     &:hover {
-      background-color: rgba(51, 179, 179, 0.842);
+      background-color: rgba(37, 150, 190, 0.842);
     }
   }
 }
@@ -105,6 +131,8 @@
 
 .customerInfo {
   margin-top: 20px;
+  overflow-y: scroll;
+  // height: 600px;
   .statusComplete {
     display: flex;
     align-items: center;
@@ -126,6 +154,10 @@
     display: flex;
     align-items: center;
     gap: 5px;
+  }
+
+  .iconContainer {
+    position: relative;
   }
 
   .icon {

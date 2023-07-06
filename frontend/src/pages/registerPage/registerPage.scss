@@ -1,7 +1,7 @@
 .registerPageContainer {
   .title {
     margin: 20px;
-    color: rgb(51, 179, 179);
+    color: rgb(37, 150, 190);
   }
 
   .listContainer {
@@ -21,10 +21,10 @@
       }
 
       .createBtn {
-        background-color: rgb(51, 179, 179);
+        background-color: rgb(37, 150, 190);
 
         &:hover {
-          background-color: rgba(51, 179, 179, 0.842);
+          background-color: rgba(37, 150, 190, 0.842);
         }
       }
     }

@@ -1,7 +1,7 @@
 .gridContainer {
   display: grid;
   width: 100%;
-  min-height: 800px;
+  height: 900px;
   grid-template-columns: repeat(5, 1fr); /* Three columns of equal width */
   grid-template-rows: repeat(11, 1fr); /* Three rows of equal height */
 }
@@ -27,6 +27,28 @@
 
 .customerSidebar {
   border-right: 2px solid rgb(155, 154, 154);
+  overflow-y: scroll;
+}
+.customerSidebar .customerSummary {
+  margin-right: 20px;
+  border-bottom: solid 1px grey;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.customerSidebar .customerSummary:hover {
+  background-color: rgba(175, 175, 175, 0.431372549);
+}
+.customerSidebar .customerSummary .customerName {
+  font-weight: bold;
+  color: #404040;
+}
+.customerSidebar .customerSummary .studentNames {
+  font-size: 80%;
+  color: #0075c5;
+}
+.customerSidebar .customerSummary .customerBalance {
+  color: #ef44d1;
+  font-weight: 600;
 }
 
 .customerMainHeader {
@@ -77,10 +99,10 @@
   background-color: rgba(73, 73, 217, 0.9333333333);
 }
 .customerMainHeader .createBtn {
-  background-color: rgb(51, 179, 179);
+  background-color: rgb(37, 150, 190);
 }
 .customerMainHeader .createBtn:hover {
-  background-color: rgba(51, 179, 179, 0.842);
+  background-color: rgba(37, 150, 190, 0.842);
 }
 
 .search {
@@ -90,6 +112,7 @@
 
 .customerInfo {
   margin-top: 20px;
+  overflow-y: scroll;
 }
 .customerInfo .statusComplete {
   display: flex;
@@ -110,6 +133,9 @@
   display: flex;
   align-items: center;
   gap: 5px;
+}
+.customerInfo .iconContainer {
+  position: relative;
 }
 .customerInfo .icon {
   position: absolute;

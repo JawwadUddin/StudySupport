@@ -39,11 +39,11 @@
   gap: 20px;
 }
 .invoiceForm .formEnd .submitBtn {
-  background-color: rgb(51, 179, 179);
+  background-color: rgb(37, 150, 190);
   margin-top: 40px;
 }
 .invoiceForm .formEnd .submitBtn:hover {
-  background-color: rgba(51, 179, 179, 0.842);
+  background-color: rgba(37, 150, 190, 0.842);
 }
 .invoiceForm .formEnd .editBtn,
 .invoiceForm .formEnd .cancelBtn {
