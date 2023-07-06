@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./singlePaymentPage.css";
@@ -9,6 +9,10 @@ const SinglePaymentPage = () => {
   const { familyID, paymentDate } = useParams();
   const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(true);
+  const { state } = useLocation();
+  const {
+    state: { fullName },
+  } = useLocation();
   const formattedPaymentDate = paymentDate.split("-").reverse().join("-");
 
   useEffect(() => {
@@ -41,6 +45,7 @@ const SinglePaymentPage = () => {
             {payment ? (
               <PaymentForm
                 familyID={familyID}
+                fullName={fullName}
                 paymentDate={paymentDate}
                 paymentInfo={payment.payment}
                 paymentType={payment.paymentType}
