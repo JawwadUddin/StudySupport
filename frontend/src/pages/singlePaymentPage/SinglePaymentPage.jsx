@@ -9,7 +9,6 @@ const SinglePaymentPage = () => {
   const { familyID, paymentDate } = useParams();
   const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(true);
-  const { state } = useLocation();
   const {
     state: { fullName },
   } = useLocation();
