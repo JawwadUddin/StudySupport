@@ -85,3 +85,11 @@
   display: flex;
   justify-content: center;
 }
+
+.error-message {
+  margin-bottom: 50px;
+  color: #ffcccc;
+  text-align: center;
+  text-shadow: 0 0 20px #fff, 0 0 20px #dd1515, 0 0 20px #dd1515,
+    0 0 20px #dd1515, 0 0 20px #dd1515, 0 0 20px #dd1515, 0 0 20px #dd1515;
+}
