@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./invoiceForm.css";
 import { getData, updateData, saveData } from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
@@ -20,6 +20,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { validateInputs } from "../../helpers/validateInput";
 import { useNavigate } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
+
+import logo from "./studysupportlogo.png";
 
 const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const navigate = useNavigate();
@@ -37,6 +40,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
     dueDate: "",
     startDate: "",
     amountDue: 0,
+    amountPaid: 0,
     JSONInvoiceMisc: [],
   });
   const [sessions, setSessions] = useState();
@@ -44,6 +48,68 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const [description, setDescription] = useState("");
   const [sessionsAmountDue, setSessionsAmountDue] = useState(0);
   const [formErrors, setFormErrors] = useState({});
+  const [invoiceSummary, setInvoiceSummary] = useState([]);
+  const componentPrintRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentPrintRef.current,
+  });
+
+  const styles = {
+    page: {
+      border: "solid 1px red",
+    },
+    company: {
+      display: "flex",
+      marginBottom: "30px",
+      padding: "50px 50px 0px 50px",
+      companyLogo: {
+        width: "100px",
+        height: "100px",
+      },
+      companyAddress: {
+        marginLeft: "20px",
+      },
+    },
+    invoice: {
+      padding: "0 50px",
+      marginTop: "20px",
+      display: "flex",
+      justifyContent: "space-between",
+      recipient: {},
+      dates: {},
+    },
+    details: {
+      margin: "0 20px",
+      width: "-webkit-fill-available",
+      textAlign: "left",
+      borderCollapse: "collapse",
+      padding: "5px",
+      position: "relative",
+      header: {
+        border: "none",
+        backgroundColor: "rgb(207 233 235)",
+      },
+    },
+    horizontal: {
+      border: "none",
+      borderTop: "3px dotted rgb(191 178 178)",
+      margin: "30px 50px",
+    },
+    summary: {
+      padding: "0 50px",
+      display: "flex",
+      message: {
+        flex: 2,
+        fontSize: "14px",
+      },
+      balance: {
+        flex: 1,
+      },
+    },
+    account: {
+      padding: "100px 0 50px 50px",
+    },
+  };
 
   useEffect(() => {
     if (invoiceInfo) {
@@ -343,6 +409,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
           });
 
         if (invoiceInfo) {
+          console.log(invoiceInfo);
           serverResponse = await updateData(
             `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
             { ...dataToSubmit, JSONRateInfo }
@@ -450,379 +517,607 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   };
 
   return (
-    <div className="invoiceForm">
-      <h3>Customer Information</h3>
-      <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-        <Grid item xs={12}>
-          <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
-            <InputLabel id="demo-simple-select-label">Family</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="relation"
-              error={!!formErrors.familyID}
-              multiline
-              value={dataToSubmit.familyID}
-              onChange={(e) => handleChange(e, "family")}
-              disabled={invoiceInfo ? true : false}
+    <>
+      <div className="invoiceForm" style={{ position: "relative" }}>
+        <h3>Customer Information</h3>
+        {dataToSubmit.amountDue !== 0 &&
+        dataToSubmit.amountDue - dataToSubmit.amountPaid === 0 ? (
+          <div className="paymentStatus">
+            <div
+              style={{
+                fontWeight: 600,
+                color: "#6b6c72",
+                fontSize: "1.2rem",
+                textAlign: "center",
+              }}
             >
-              {familyDropdown.map((item) => {
-                return (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.fullName}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+              PAYMENT STATUS
+            </div>
+            <div
+              style={{
+                fontWeight: 600,
+                color: "#6b6c72",
+                fontSize: "4.8rem",
+                textAlign: "center",
+              }}
+            >
+              PAID
+            </div>
+          </div>
+        ) : null}
+        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+          <Grid item xs={12}>
+            <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
+              <InputLabel id="demo-simple-select-label">Family</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="relation"
+                error={!!formErrors.familyID}
+                multiline
+                value={dataToSubmit.familyID}
+                onChange={(e) => handleChange(e, "family")}
+                disabled={invoiceInfo ? true : false}
+              >
+                {familyDropdown.map((item) => {
+                  return (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.fullName}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
+          <div
+            style={{
+              marginLeft: "24px",
+              marginTop: "24px",
+              display: "flex",
+              gap: "20px",
+            }}
+          >
+            <div>
+              <h4>Billing Address</h4>
+              <div className="contactInfo">
+                {dataToSubmit.address} <br /> {dataToSubmit.postCode} <br />
+              </div>
+            </div>
+            <div>
+              <h4>Contact Number</h4>
+              <div className="contactInfo">{dataToSubmit.mobile}</div>
+            </div>
+
+            <div>
+              <h4>Customer Email</h4>
+              <div className="contactInfo">{dataToSubmit.email}</div>
+            </div>
+          </div>
         </Grid>
-        <div
-          style={{
-            marginLeft: "24px",
-            marginTop: "24px",
-            display: "flex",
-            gap: "20px",
+        <h3>Key Dates</h3>
+        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+          <Grid item xs={12}>
+            <TextField
+              error={!!formErrors.invoiceDate}
+              helperText={formErrors.invoiceDate}
+              required
+              id="invoiceDate"
+              label="Invoice Date"
+              type="date"
+              name="invoiceDate"
+              value={dataToSubmit.invoiceDate}
+              onChange={addData}
+              sx={{ backgroundColor: "white" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              disabled={!editMode}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              error={!!formErrors.startDate}
+              helperText={formErrors.startDate}
+              required
+              id="startDate"
+              label="Start Date"
+              type="date"
+              name="startDate"
+              value={dataToSubmit.startDate}
+              onChange={addData}
+              sx={{ backgroundColor: "white" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              disabled={!editMode || invoiceInfo ? true : false}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              error={!!formErrors.dueDate}
+              helperText={formErrors.dueDate}
+              required
+              id="dueDate"
+              label="Due Date"
+              type="date"
+              name="dueDate"
+              value={dataToSubmit.dueDate}
+              onChange={addData}
+              sx={{ backgroundColor: "white" }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              disabled={!editMode}
+            />
+          </Grid>
+        </Grid>
+        <h3>Product Information</h3>
+        <Table
+          sx={{
+            backgroundColor: "white",
+            outline: "solid 1px #962626",
+            "& .MuiTableCell-head": {
+              fontWeight: "800",
+            },
           }}
         >
-          <div>
-            <h4>Billing Address</h4>
-            <div className="contactInfo">
-              {dataToSubmit.address} <br /> {dataToSubmit.postCode} <br />
-            </div>
-          </div>
-          <div>
-            <h4>Contact Number</h4>
-            <div className="contactInfo">{dataToSubmit.mobile}</div>
-          </div>
-
-          <div>
-            <h4>Customer Email</h4>
-            <div className="contactInfo">{dataToSubmit.email}</div>
-          </div>
-        </div>
-      </Grid>
-      <h3>Key Dates</h3>
-      <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-        <Grid item xs={12}>
-          <TextField
-            error={!!formErrors.invoiceDate}
-            helperText={formErrors.invoiceDate}
-            required
-            id="invoiceDate"
-            label="Invoice Date"
-            type="date"
-            name="invoiceDate"
-            value={dataToSubmit.invoiceDate}
-            onChange={addData}
-            sx={{ backgroundColor: "white" }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            disabled={!editMode}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            error={!!formErrors.startDate}
-            helperText={formErrors.startDate}
-            required
-            id="startDate"
-            label="Start Date"
-            type="date"
-            name="startDate"
-            value={dataToSubmit.startDate}
-            onChange={addData}
-            sx={{ backgroundColor: "white" }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            disabled={!editMode || invoiceInfo ? true : false}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            error={!!formErrors.dueDate}
-            helperText={formErrors.dueDate}
-            required
-            id="dueDate"
-            label="Due Date"
-            type="date"
-            name="dueDate"
-            value={dataToSubmit.dueDate}
-            onChange={addData}
-            sx={{ backgroundColor: "white" }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            disabled={!editMode}
-          />
-        </Grid>
-      </Grid>
-      <h3>Product Information</h3>
-      <Table
-        sx={{
-          backgroundColor: "white",
-          outline: "solid 1px #962626",
-          "& .MuiTableCell-head": {
-            fontWeight: "800",
-          },
-        }}
-      >
-        <TableHead>
-          <TableRow>
-            <TableCell>STUDENT NAME</TableCell>
-            <TableCell>DESCRIPTION</TableCell>
-            <TableCell>QTY</TableCell>
-            <TableCell>RATE</TableCell>
-            <TableCell>AMOUNT</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sessions
-            ? sessions.map((student) => {
-                let QTY =
-                  student.sessions?.reduce(
-                    (accumulator, studentSessions) =>
-                      accumulator + (studentSessions.full_session ? 2 : 1),
-                    0
-                  ) || 0;
-                return (
-                  <TableRow key={student.student_id}>
-                    <TableCell>{student.full_name}</TableCell>
-                    <TableCell>
-                      {student.sessions ? (
-                        student.sessions.map((studentSession) => {
-                          return (
-                            <div key={studentSession.student_session_id}>
-                              {studentSession.session_date} -{" "}
-                              {studentSession.full_session
-                                ? "(2 hours)"
-                                : "(1 hour)"}{" "}
-                              <span>
-                                {!studentSession.attendance && " - absent"}
-                              </span>
-                              <br />
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <h3 style={{ margin: 0, color: "#962626" }}>
-                          The student has not booked any sessions this month
-                        </h3>
-                      )}
-                    </TableCell>
-                    <TableCell>{QTY}</TableCell>
-                    <TableCell>
-                      <TextField
-                        error={!!formErrors.rate}
-                        helperText={formErrors.rate}
-                        required
-                        id="rate"
-                        label="Rate"
-                        type="number"
-                        value={student.rateInfo ? student.rateInfo[0].rate : ""}
-                        onChange={(e) =>
-                          updateStudentRate(student.student_id, e)
-                        }
-                        sx={{ backgroundColor: "white" }}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        disabled={!editMode}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {student.rateInfo ? QTY * student.rateInfo[0].rate : 0}
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            : null}
-          {dataToSubmit.JSONInvoiceMisc
-            ? dataToSubmit.JSONInvoiceMisc?.map((invoiceMisc, index) => {
-                return (
-                  <TableRow key={invoiceMisc.invoice_misc_id || index}>
-                    <TableCell>
-                      {editMode ? (
-                        invoiceMisc.edit ? (
-                          <>
-                            <IconButton
-                              onClick={() => cancelEdit(invoiceMisc)}
-                              aria-label="cancel-edit"
-                              color="error"
-                            >
-                              <CloseIcon />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => editMisc(invoiceMisc)}
-                              aria-label="confirm-edit"
-                              color="success"
-                            >
-                              <CheckIcon />
-                            </IconButton>
-                          </>
-                        ) : (
-                          <>
-                            <IconButton
-                              onClick={() => editMiscMode(invoiceMisc)}
-                              aria-label="edit"
-                              color="secondary"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => removeMisc(invoiceMisc)}
-                              aria-label="delete"
-                              color="error"
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
-                        )
-                      ) : null}{" "}
-                    </TableCell>
-                    {invoiceMisc.edit ? (
-                      <>
-                        <TableCell>
-                          <TextField
-                            error={!!formErrors.description}
-                            required
-                            id="description"
-                            name="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                          ></TextField>
-                        </TableCell>
-                        <TableCell>1</TableCell>
-                        <TableCell>
-                          <TextField
-                            error={!!formErrors.rate}
-                            required
-                            id="rate"
-                            type="number"
-                            name="rate"
-                            value={rate}
-                            onChange={(e) => setRate(e.target.value)}
-                          ></TextField>
-                        </TableCell>
-                        <TableCell>{invoiceMisc.rate}</TableCell>
-                      </>
-                    ) : (
-                      <>
-                        <TableCell>{invoiceMisc.description}</TableCell>
-                        <TableCell>1</TableCell>
-                        <TableCell>{invoiceMisc.rate}</TableCell>
-                        <TableCell>{invoiceMisc.rate}</TableCell>
-                      </>
-                    )}
-                  </TableRow>
-                );
-              })
-            : null}
-          {!currentlyEditing && editMode && (
+          <TableHead>
             <TableRow>
-              <TableCell>
-                <Button onClick={handleAddMisc}>+</Button>
-              </TableCell>
-              <TableCell>
-                <TextField
-                  // error={!!formErrors.description}
-                  required
-                  id="description"
-                  name="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                ></TextField>
-              </TableCell>
-              <TableCell>1</TableCell>
-              <TableCell>
-                <TextField
-                  // error={!!formErrors.rate}
-                  required
-                  id="rate"
-                  type="number"
-                  name="rate"
-                  value={rate}
-                  onChange={(e) => setRate(e.target.value)}
-                ></TextField>
-              </TableCell>
-              <TableCell>{rate}</TableCell>
+              <TableCell>STUDENT NAME</TableCell>
+              <TableCell>DESCRIPTION</TableCell>
+              <TableCell>QTY</TableCell>
+              <TableCell>RATE</TableCell>
+              <TableCell>AMOUNT</TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <div className="summary">
-        <div className="summaryItem">
-          <div className="summaryText">Total</div>
-          <div className="summaryValue">
-            £{Number(dataToSubmit.amountDue).toFixed(2)}
-          </div>
-        </div>
-        {invoiceInfo && (
-          <>
-            <div className="summaryItem">
-              <div className="summaryText">Amount Received</div>
-              <div className="summaryValue">£0.00</div>
-            </div>
-            <div className="summaryItem">
-              <div className="summaryText">Due</div>
-              <div className="summaryValue"></div>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="formEnd">
-        {invoiceInfo ? (
-          <>
-            {editMode ? (
-              <>
-                <Button
-                  onClick={() => cancelChanges()}
-                  variant="outlined"
-                  color="warning"
-                  className="cancelBtn"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  variant="contained"
-                  className="submitBtn"
-                >
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button
-                onClick={() => setEditMode(true)}
-                variant="contained"
-                color="secondary"
-                className="editBtn"
-              >
-                Edit
-              </Button>
+          </TableHead>
+          <TableBody>
+            {sessions
+              ? sessions.map((student) => {
+                  let QTY =
+                    student.sessions?.reduce(
+                      (accumulator, studentSessions) =>
+                        accumulator + (studentSessions.full_session ? 2 : 1),
+                      0
+                    ) || 0;
+                  return (
+                    <TableRow key={student.student_id}>
+                      <TableCell>{student.full_name}</TableCell>
+                      <TableCell>
+                        {student.sessions ? (
+                          student.sessions.map((studentSession) => {
+                            return (
+                              <div key={studentSession.student_session_id}>
+                                {studentSession.session_date} -{" "}
+                                {studentSession.full_session
+                                  ? "(2 hours)"
+                                  : "(1 hour)"}{" "}
+                                <span>
+                                  {!studentSession.attendance && " - absent"}
+                                </span>
+                                <br />
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <h3 style={{ margin: 0, color: "#962626" }}>
+                            The student has not booked any sessions this month
+                          </h3>
+                        )}
+                      </TableCell>
+                      <TableCell>{QTY}</TableCell>
+                      <TableCell>
+                        <TextField
+                          error={!!formErrors.rate}
+                          helperText={formErrors.rate}
+                          required
+                          id="rate"
+                          label="Rate"
+                          type="number"
+                          value={
+                            student.rateInfo ? student.rateInfo[0].rate : ""
+                          }
+                          onChange={(e) =>
+                            updateStudentRate(student.student_id, e)
+                          }
+                          sx={{ backgroundColor: "white" }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          disabled={!editMode}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {student.rateInfo ? QTY * student.rateInfo[0].rate : 0}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              : null}
+            {dataToSubmit.JSONInvoiceMisc
+              ? dataToSubmit.JSONInvoiceMisc?.map((invoiceMisc, index) => {
+                  return (
+                    <TableRow key={invoiceMisc.invoice_misc_id || index}>
+                      <TableCell>
+                        {editMode ? (
+                          invoiceMisc.edit ? (
+                            <>
+                              <IconButton
+                                onClick={() => cancelEdit(invoiceMisc)}
+                                aria-label="cancel-edit"
+                                color="error"
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => editMisc(invoiceMisc)}
+                                aria-label="confirm-edit"
+                                color="success"
+                              >
+                                <CheckIcon />
+                              </IconButton>
+                            </>
+                          ) : (
+                            <>
+                              <IconButton
+                                onClick={() => editMiscMode(invoiceMisc)}
+                                aria-label="edit"
+                                color="secondary"
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => removeMisc(invoiceMisc)}
+                                aria-label="delete"
+                                color="error"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </>
+                          )
+                        ) : null}{" "}
+                      </TableCell>
+                      {invoiceMisc.edit ? (
+                        <>
+                          <TableCell>
+                            <TextField
+                              error={!!formErrors.description}
+                              required
+                              id="description"
+                              name="description"
+                              value={description}
+                              onChange={(e) => setDescription(e.target.value)}
+                            ></TextField>
+                          </TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>
+                            <TextField
+                              error={!!formErrors.rate}
+                              required
+                              id="rate"
+                              type="number"
+                              name="rate"
+                              value={rate}
+                              onChange={(e) => setRate(e.target.value)}
+                            ></TextField>
+                          </TableCell>
+                          <TableCell>{invoiceMisc.rate}</TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell>{invoiceMisc.description}</TableCell>
+                          <TableCell>1</TableCell>
+                          <TableCell>{invoiceMisc.rate}</TableCell>
+                          <TableCell>{invoiceMisc.rate}</TableCell>
+                        </>
+                      )}
+                    </TableRow>
+                  );
+                })
+              : null}
+            {!currentlyEditing && editMode && (
+              <TableRow>
+                <TableCell>
+                  <Button onClick={handleAddMisc}>+</Button>
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    // error={!!formErrors.description}
+                    required
+                    id="description"
+                    name="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  ></TextField>
+                </TableCell>
+                <TableCell>1</TableCell>
+                <TableCell>
+                  <TextField
+                    // error={!!formErrors.rate}
+                    required
+                    id="rate"
+                    type="number"
+                    name="rate"
+                    value={rate}
+                    onChange={(e) => setRate(e.target.value)}
+                  ></TextField>
+                </TableCell>
+                <TableCell>{rate}</TableCell>
+              </TableRow>
             )}
-          </>
-        ) : (
-          <>
-            <Button
-              onClick={() => navigate(-1)}
-              variant="outlined"
-              color="warning"
-              className="cancelBtn"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              className="submitBtn"
-            >
-              Save
-            </Button>
-          </>
-        )}
+          </TableBody>
+        </Table>
+        <div className="summary">
+          <div className="summaryItem">
+            <div className="summaryText">Total</div>
+            <div className="summaryValue">
+              £{Number(dataToSubmit.amountDue).toFixed(2)}
+            </div>
+          </div>
+          {invoiceInfo && (
+            <>
+              <div className="summaryItem">
+                <div className="summaryText">Amount Received</div>
+                <div className="summaryValue">
+                  £{Number(dataToSubmit.amountPaid).toFixed(2)}
+                </div>
+              </div>
+              <div className="summaryItem">
+                <div className="summaryText">Balance Due</div>
+                <div className="summaryValue">
+                  £
+                  {Number(
+                    dataToSubmit.amountDue - dataToSubmit.amountPaid
+                  ).toFixed(2)}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="formEnd">
+          {invoiceInfo ? (
+            <>
+              {editMode ? (
+                <>
+                  <Button
+                    onClick={() => cancelChanges()}
+                    variant="outlined"
+                    color="warning"
+                    className="cancelBtn"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSubmit}
+                    variant="contained"
+                    className="submitBtn"
+                  >
+                    Save
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  onClick={() => setEditMode(true)}
+                  variant="contained"
+                  color="secondary"
+                  className="editBtn"
+                >
+                  Edit
+                </Button>
+              )}
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => navigate(-1)}
+                variant="outlined"
+                color="warning"
+                className="cancelBtn"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                variant="contained"
+                className="submitBtn"
+              >
+                Save
+              </Button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+      {invoiceInfo && !editMode && (
+        <>
+          <div className="horizontal"></div>
+          <div className="pdfView">
+            <Button
+              variant="contained"
+              color="warning"
+              style={{
+                margin: "0 auto",
+                display: "block",
+                marginBottom: "20px",
+              }}
+              onClick={handlePrint}
+            >
+              PRINT
+            </Button>
+            <div
+              size="A4"
+              // style={styles.page}
+              ref={componentPrintRef}
+              className="page"
+            >
+              <div style={styles.company}>
+                <img style={styles.company.companyLogo} src={logo} alt="" />
+                <div style={styles.company.companyAddress}>
+                  <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                    Study Support
+                  </span>
+                  <br />
+                  255 Commercial Road <br /> London <br /> E12BT <br />{" "}
+                  info@studysupportuk.com <br /> www.studysupportuk.com
+                </div>
+              </div>
+
+              <h1 style={{ color: "rgb(48 177 178)", padding: "0 50px" }}>
+                INVOICE
+              </h1>
+
+              <div style={styles.invoice}>
+                <div style={styles.invoice.recipient}>
+                  <span style={{ fontWeight: "bold" }}>INVOICE TO</span> <br />
+                  {dataToSubmit.fullName} <br /> {dataToSubmit.address} <br />{" "}
+                  {dataToSubmit.postCode}
+                </div>
+                <div style={styles.invoice.dates}>
+                  <table>
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>INVOICE NO.</td>
+                      <td style={{ paddingLeft: "5px" }}>{invoiceInfo.id}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>DATE</td>
+                      <td style={{ paddingLeft: "5px" }}>
+                        {dataToSubmit.invoiceDate
+                          .split("-")
+                          .reverse()
+                          .join("/")}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>DUE DATE</td>
+                      <td style={{ paddingLeft: "5px" }}>
+                        {dataToSubmit.dueDate.split("-").reverse().join("/")}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>TERMS</td>
+                      <td style={{ paddingLeft: "5px" }}>Due on receipt</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  border: "solid 2px rgb(48 177 178)",
+                  margin: "40px 50px 20px 50px",
+                }}
+              ></div>
+
+              <div style={{ marginBottom: "40px", padding: "0 50px" }}>
+                <span style={{ fontWeight: "bold" }}>START DATE</span> <br />
+                {dataToSubmit.startDate.split("-").reverse().join("/")}
+              </div>
+
+              <table style={styles.details}>
+                {dataToSubmit.amountDue === dataToSubmit.amountPaid ? (
+                  <div class="watermark">
+                    <div class="watermark__inner">
+                      <div class="watermark__body">PAID</div>
+                    </div>
+                  </div>
+                ) : null}
+
+                <tr style={styles.details.header}>
+                  <th style={{ width: "50%", padding: "5px 30px" }}>
+                    ACTIVTIY
+                  </th>
+                  <th style={{ width: "20%" }}>QTY</th>
+                  <th style={{ width: "15%" }}>RATE</th>
+                  <th style={{ width: "15%", paddingRight: "30px" }}>AMOUNT</th>
+                </tr>
+                {sessions
+                  ? sessions.map((student) => {
+                      let QTY =
+                        student.sessions?.reduce(
+                          (accumulator, studentSessions) =>
+                            accumulator +
+                            (studentSessions.full_session ? 2 : 1),
+                          0
+                        ) || 0;
+                      return (
+                        <tr key={student.student_id}>
+                          <td
+                            style={{
+                              paddingTop: "10px",
+                              paddingBottom: "10px",
+                              paddingLeft: "30px",
+                            }}
+                          >
+                            Sessions - ({student.full_name})
+                          </td>
+                          <td>{QTY}</td>
+                          <td>
+                            {student.rateInfo ? student.rateInfo[0].rate : 0}
+                          </td>
+                          <td>
+                            {student.rateInfo
+                              ? QTY * student.rateInfo[0].rate
+                              : 0}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  : null}
+                {dataToSubmit.JSONInvoiceMisc
+                  ? dataToSubmit.JSONInvoiceMisc?.map((invoiceMisc, index) => {
+                      return (
+                        <tr>
+                          <td
+                            style={{
+                              paddingTop: "10px",
+                              paddingBottom: "10px",
+                              paddingLeft: "30px",
+                            }}
+                          >
+                            {invoiceMisc.description}
+                          </td>
+                          <td>1</td>
+                          <td>{invoiceMisc.rate}</td>
+                          <td>{invoiceMisc.rate}</td>
+                        </tr>
+                      );
+                    })
+                  : null}
+              </table>
+
+              <hr style={styles.horizontal} />
+
+              <div style={styles.summary}>
+                <div style={styles.summary.message}>
+                  Thank you for your continued commitment to us.
+                </div>
+                <div style={styles.summary.balance}>
+                  <table style={{ width: "100%" }}>
+                    {dataToSubmit.amountPaid !== 0 ? (
+                      <tr>
+                        <td style={{ fontWeight: "bold" }}>PAYMENT</td>
+                        <td>{dataToSubmit.amountPaid}</td>
+                      </tr>
+                    ) : null}
+                    <tr>
+                      <td style={{ fontWeight: "bold" }}>BALANCE DUE</td>
+                      <td style={{ fontSize: "30px", fontWeight: "bold" }}>
+                        £
+                        {Number(
+                          dataToSubmit.amountDue - dataToSubmit.amountPaid
+                        ).toFixed(2)}
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+              <div style={styles.account}>
+                Account Details: <br /> Study Support <br /> Account Number:
+                17084545 <br /> Sort Code: 04-06-05
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
