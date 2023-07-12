@@ -158,6 +158,21 @@ class Invoice {
       }
     });
   }
+
+  static delete(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const invoiceData = await pool
+          .request()
+          .input("InvoiceID", sql.Int, id)
+          .execute("DeleteInvoiceByID");
+        resolve("Invoice successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 }
 
 module.exports = Invoice;

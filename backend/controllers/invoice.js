@@ -72,6 +72,16 @@ async function findOutstandingTransactions(req, res) {
   }
 }
 
+async function remove(req, res) {
+  const invoiceID = req.params.id;
+  try {
+    const invoice = await Invoice.delete(invoiceID);
+    res.status(204).json(success("OK", { data: invoice }, res.statusCode));
+  } catch (err) {
+    res.status(404).json(error(err, res.statusCode));
+  }
+}
+
 module.exports = {
   index,
   show,
@@ -80,4 +90,5 @@ module.exports = {
   findSessions,
   showOutstandingInvoices,
   findOutstandingTransactions,
+  remove,
 };
