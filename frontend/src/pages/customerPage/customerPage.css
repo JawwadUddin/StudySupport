@@ -1,3 +1,6 @@
+.customerPageContainer {
+  position: relative;
+}
 .customerPageContainer .title {
   margin: 20px;
   color: rgb(37, 150, 190);
@@ -42,10 +45,6 @@
 }
 .customerPageContainer table tbody tr {
   border-bottom: 1px solid;
-  cursor: pointer;
-}
-.customerPageContainer table tbody tr:hover {
-  background-color: rgba(175, 175, 175, 0.431372549);
 }
 .customerPageContainer table tbody tr td {
   font-weight: 600;
@@ -66,4 +65,11 @@
 .customerPageContainer table tr {
   height: 60px;
   text-align: left;
+}
+
+.hoverable {
+  cursor: pointer;
+}
+.hoverable:hover {
+  background-color: rgba(175, 175, 175, 0.431372549);
 }/*# sourceMappingURL=customerPage.css.map */

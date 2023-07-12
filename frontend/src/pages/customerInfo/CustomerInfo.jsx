@@ -2,10 +2,14 @@ import { useLocation, useParams } from "react-router-dom";
 import "./customerInfo.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../../helpers/apiFunctions";
+import { getData, deleteData } from "../../helpers/apiFunctions";
 import Button from "@mui/material/Button";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const CustomerInfo = () => {
   const [customerInfo, setCustomerInfo] = useState([]);
@@ -15,6 +19,8 @@ const CustomerInfo = () => {
   const navigate = useNavigate();
   const [customerDetail, setCustomerDetail] = useState("");
   const [customers, setCustomers] = useState(state?.customers || "");
+  const [openModal, setOpenModal] = useState(false);
+  const [deleteID, setDeleteID] = useState(null);
 
   useEffect(() => {
     try {
@@ -139,6 +145,29 @@ const CustomerInfo = () => {
     }
   }
 
+  function openDeleteModel(id) {
+    setOpenModal(true);
+    setDeleteID(id);
+  }
+
+  function cancelDeleteModel() {
+    setOpenModal(false);
+    setDeleteID(null);
+  }
+
+  function handleDeleteInvoice() {
+    //run delete request
+    async function removeData() {
+      await deleteData(
+        `${process.env.REACT_APP_API_URL}/api/invoice/${deleteID}`
+      );
+    }
+    removeData();
+    window.location.reload(false);
+    setOpenModal(false);
+    setDeleteID(null);
+  }
+
   return (
     <div className="customerPageContainer">
       <h2 className="title">Customers</h2>
@@ -237,21 +266,7 @@ const CustomerInfo = () => {
                 {customerInfo.length !== 0
                   ? customerInfo.map((customer) => {
                       return (
-                        <tr
-                          onClick={() => {
-                            if (customer.type === "Invoice") {
-                              navigate(`/invoices/${customer.id}`);
-                            } else {
-                              navigate(
-                                `/payments/${customerID}/${customer.date
-                                  .split("-")
-                                  .reverse()
-                                  .join("-")}`,
-                                { state: { fullName: customerDetail.fullName } }
-                              );
-                            }
-                          }}
-                        >
+                        <tr>
                           <td>
                             {customer.date.split("-").reverse().join("/")}
                           </td>
@@ -285,7 +300,40 @@ const CustomerInfo = () => {
                               </div>
                             )}
                           </td>
-                          <td></td>
+                          <td>
+                            <IconButton
+                              onClick={() => {
+                                if (customer.type === "Invoice") {
+                                  navigate(`/invoices/${customer.id}`);
+                                } else {
+                                  navigate(
+                                    `/payments/${customerID}/${customer.date
+                                      .split("-")
+                                      .reverse()
+                                      .join("-")}`,
+                                    {
+                                      state: {
+                                        fullName: customerDetail.fullName,
+                                      },
+                                    }
+                                  );
+                                }
+                              }}
+                              aria-label="edit"
+                              color="secondary"
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            {customer.type === "Invoice" ? (
+                              <IconButton
+                                onClick={() => openDeleteModel(customer.id)}
+                                aria-label="delete"
+                                color="error"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            ) : null}
+                          </td>
                         </tr>
                       );
                     })
@@ -295,6 +343,48 @@ const CustomerInfo = () => {
           </div>
         </div>
       </div>
+      {openModal && (
+        <div className="modalContainer">
+          <div className="modal">
+            <div className="modalTop">
+              <IconButton
+                onClick={() => cancelDeleteModel()}
+                aria-label="delete"
+                color="primary"
+                className="modalExit"
+              >
+                <ClearIcon />
+              </IconButton>
+            </div>
+            <div className="modalWarning">
+              <ErrorOutlineIcon className="warningIcon" />
+              <h1>Delete invoice?</h1>
+              <p>
+                This erases the invoice forever. You can’t undo this. <br />{" "}
+                <br /> Any payments associated with this invoice will become
+                unapplied rather than deleted.
+              </p>
+            </div>
+            <div className="modalButtons">
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={() => cancelDeleteModel()}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                size="large"
+                color="error"
+                onClick={() => handleDeleteInvoice()}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

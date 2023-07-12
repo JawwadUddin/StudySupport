@@ -90,6 +90,7 @@ const CustomerPage = () => {
               ).map((customer) => {
                 return (
                   <tr
+                    className="hoverable"
                     onClick={() =>
                       navigate(`/customers/detail/${customer.familyID}`, {
                         state: {
