@@ -72,9 +72,8 @@
 
   .customerMainSum {
     margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: inline-block;
+    margin-left: 100px;
 
     .openSection,
     .overdueSection {
