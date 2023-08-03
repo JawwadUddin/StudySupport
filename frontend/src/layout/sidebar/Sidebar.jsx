@@ -12,7 +12,9 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="top">
-        <span className="logo">StudySupport</span>
+        <span className="logo" onClick={() => navigate("/")}>
+          StudySupport
+        </span>
       </div>
       <div className="center">
         <ul>

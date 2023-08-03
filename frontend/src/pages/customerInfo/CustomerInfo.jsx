@@ -30,7 +30,6 @@ const CustomerInfo = () => {
         );
         if (customer) {
           let { fullName, mobile, overdueBalance } = customer;
-          console.log(fullName, mobile);
           setCustomerDetail({
             fullName,
             mobile,

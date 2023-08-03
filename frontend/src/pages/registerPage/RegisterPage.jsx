@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getData, updateData } from "../../helpers/apiFunctions";
-import "./registerPage.css";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";

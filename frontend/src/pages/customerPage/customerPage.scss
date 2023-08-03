@@ -1,67 +1,78 @@
 .customerPageContainer {
   position: relative;
-  .title {
-    margin: 20px;
-    color: rgb(37, 150, 190);
-  }
-  .listContainer {
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-    padding: 20px;
-    margin: 20px;
+  // .title {
+  //   margin: 20px;
+  //   color: rgb(37, 150, 190);
+  // }
+  // .listContainer {
+  //   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  //   padding: 20px;
+  //   margin: 20px;
 
-    .listHeader {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
+  //   .listHeader {
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: space-between;
+  //     margin-bottom: 20px;
 
-      .listTitle {
-        font-weight: 500;
-        color: #9c27b0;
-      }
+  //     .listTitle {
+  //       font-weight: 500;
+  //       color: #9c27b0;
+  //     }
 
-      .createInvoiceBtn {
-        background-color: rgb(179 51 51);
+  //     .createInvoiceBtn {
+  //       background-color: rgb(179 51 51);
 
-        &:hover {
-          background-color: rgb(180, 23, 23);
-        }
-      }
-    }
+  //       &:hover {
+  //         background-color: rgb(180, 23, 23);
+  //       }
+  //     }
+  //   }
 
-    .search {
-      display: flex;
-      margin-bottom: 20px;
-    }
-  }
+  //   .search {
+  //     display: flex;
+  //     margin-bottom: 20px;
+  //   }
+  //}
 
   table,
   th,
   td {
-    // border: 1px solid;
-    border-color: grey;
-    padding: 0px 10px;
+    padding: 10px 10px;
   }
 
   table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
+
+    .sortable {
+      cursor: pointer;
+      &:hover {
+        background-color: aliceblue;
+      }
+    }
 
     thead {
       tr {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 1;
+      }
+      th {
         border-bottom: 3px solid;
       }
     }
 
     tbody {
       tr {
-        border-bottom: 1px solid;
-
         td {
           font-weight: 600;
+          border-bottom: 1px solid;
+          border-color: grey;
         }
         .customerName {
-          // font-size: 14px;
           font-weight: bold;
           color: #404040;
         }
@@ -78,7 +89,7 @@
     }
 
     tr {
-      height: 60px;
+      // height: 100px;
       text-align: left;
     }
   }
@@ -89,4 +100,13 @@
   &:hover {
     background-color: #afafaf6e;
   }
+}
+
+.container {
+  height: 900px;
+  overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }

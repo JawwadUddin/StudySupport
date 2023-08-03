@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getData, saveData, updateData } from "../../helpers/apiFunctions";
 import { validateInputs } from "../../helpers/validateInput";
-import "./contactForm.css";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
@@ -182,7 +181,7 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="contactForm">
+    <div className="contactForm form">
       <h3>Contact Lead Information</h3>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>

@@ -6,17 +6,6 @@
   margin-bottom: 20px;
 }
 
-.formEnd {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-}
-.formEnd .submitBtn,
-.formEnd .editBtn,
-.formEnd .cancelBtn {
-  margin-top: 40px;
-}
-
 .tables-container {
   display: flex;
   align-items: flex-start;

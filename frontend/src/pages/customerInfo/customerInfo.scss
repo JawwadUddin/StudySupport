@@ -219,3 +219,11 @@
     margin-bottom: 30px;
   }
 }
+
+.customerSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.customerInfo::-webkit-scrollbar {
+  display: none;
+}

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import CircularProgress from "@mui/material/CircularProgress";
-import "./singlePaymentPage.css";
 import PaymentForm from "../../components/paymentForm/PaymentForm";
 
 const SinglePaymentPage = () => {
@@ -36,7 +35,7 @@ const SinglePaymentPage = () => {
   return (
     <div className="singleInvoicePageContainer">
       <h2 className="title">Receive Payment</h2>
-      <div className="listContainer">
+      <div className="listContainer backgroundGrey">
         {loading ? (
           <CircularProgress />
         ) : (

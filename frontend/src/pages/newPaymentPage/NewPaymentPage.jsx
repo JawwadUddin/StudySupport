@@ -1,4 +1,3 @@
-import "./newPaymentPage.css";
 import PaymentForm from "../../components/paymentForm/PaymentForm";
 import { useLocation } from "react-router-dom";
 
@@ -9,7 +8,7 @@ const NewPaymentPage = () => {
   return (
     <div className="newPaymentPageContainer">
       <h2 className="title">New Payment</h2>
-      <div className="formContainer">
+      <div className="formContainer backgroundGrey">
         <PaymentForm familyID={familyID} />
       </div>
     </div>

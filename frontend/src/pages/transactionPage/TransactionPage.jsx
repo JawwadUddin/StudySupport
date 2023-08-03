@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./transactionPage.css";
 import { getData } from "../../helpers/apiFunctions";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -64,14 +63,14 @@ const TransactionPage = () => {
             <Button
               onClick={() => navigate("/invoices/new")}
               variant="contained"
-              className="createInvoiceBtn"
+              className="createBtn"
             >
               New Invoice
             </Button>
             <Button
               onClick={() => navigate("/payments/new")}
               variant="contained"
-              className="createPaymentBtn"
+              className="createBtn"
               color="secondary"
               style={{ marginLeft: "20px" }}
             >

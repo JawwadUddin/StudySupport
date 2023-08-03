@@ -1,5 +1,3 @@
-import React from "react";
-import "./newTestPage.css";
 import TestForm from "../../components/testForm/TestForm";
 import { useLocation } from "react-router-dom";
 

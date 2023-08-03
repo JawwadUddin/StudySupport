@@ -1,4 +1,3 @@
-import "./testPage.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getData, deleteData } from "../../helpers/apiFunctions";
@@ -87,8 +86,8 @@ const TestPage = () => {
       <Grid container>
         <Grid item xs={12}>
           <div className="listContainer">
-            <div className="syllabusHeader">
-              <div className="syllabusTitle">{syllabusName}</div>
+            <div className="listHeader">
+              <div className="listTitle">{syllabusName}</div>
               <Button
                 onClick={() =>
                   navigate(`new`, {

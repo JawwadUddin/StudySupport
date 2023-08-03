@@ -1,7 +1,4 @@
-import React from "react";
 import RegisterForm from "../../components/registerForm/RegisterForm";
-import "./newRegisterPage.css";
-
 const NewRegisterPage = () => {
   return (
     <div className="newRegisterPageContainer">

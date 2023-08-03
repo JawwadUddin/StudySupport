@@ -1,5 +1,3 @@
-import "./topicPage.css";
-import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";

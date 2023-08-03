@@ -16,6 +16,9 @@
   font-weight: bold;
   color: rgb(37, 150, 190);
 }
+.sidebar .top .logo:hover {
+  cursor: pointer;
+}
 .sidebar .center li {
   padding: 10px;
   display: flex;

@@ -1,5 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
+import DashboardPage from "./pages/dashboardPage/DashboardPage";
 import ContactPage from "./pages/contactPage/ContactPage";
 import NewContactPage from "./pages/newContactPage/NewContactPage";
 import NewStudentPage from "./pages/newStudentPage/NewStudentPage";
@@ -40,6 +41,7 @@ function App() {
             </RequireAuth>
           }
         >
+          <Route path="" element={<DashboardPage />} />
           <Route path="/contacts">
             <Route path="" element={<ContactPage />} />
             <Route path=":contactID" element={<SingleContactPage />} />

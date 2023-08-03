@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";
 import CircularProgress from "@mui/material/CircularProgress";
-import "./singleInvoicePage.css";
 import InvoiceForm from "../../components/invoiceForm/InvoiceForm";
 
 const SingleInvoicePage = () => {
@@ -32,7 +31,7 @@ const SingleInvoicePage = () => {
   return (
     <div className="singleInvoicePageContainer">
       <h2 className="title">Invoice No. {invoiceID}</h2>
-      <div className="listContainer">
+      <div className="listContainer backgroundGrey">
         {loading ? (
           <CircularProgress />
         ) : (

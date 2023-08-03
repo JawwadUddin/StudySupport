@@ -1,4 +1,3 @@
-import "./studentForm.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getData, saveData, updateData } from "../../helpers/apiFunctions";
@@ -185,7 +184,7 @@ const StudentForm = ({ idFamily }) => {
   };
 
   return (
-    <div className="studentForm">
+    <div className="studentForm form">
       <h3>Student Information</h3>
 
       <Grid container spacing={3}>

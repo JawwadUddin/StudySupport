@@ -297,7 +297,7 @@ const PaymentForm = ({
   };
 
   return (
-    <div className="paymentForm">
+    <div className="paymentForm form">
       <h3>Customer Information</h3>
       <Grid container spacing={3} sx={{ marginBottom: 3 }}>
         <Grid item xs={12}>

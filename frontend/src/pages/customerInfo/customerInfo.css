@@ -188,4 +188,12 @@
   gap: 30px;
   margin-top: 50px;
   margin-bottom: 30px;
+}
+
+.customerSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.customerInfo::-webkit-scrollbar {
+  display: none;
 }/*# sourceMappingURL=customerInfo.css.map */

@@ -518,7 +518,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
 
   return (
     <>
-      <div className="invoiceForm" style={{ position: "relative" }}>
+      <div className="invoiceForm form" style={{ position: "relative" }}>
         <h3>Customer Information</h3>
         {dataToSubmit.amountDue !== 0 &&
         dataToSubmit.amountDue - dataToSubmit.amountPaid === 0 ? (

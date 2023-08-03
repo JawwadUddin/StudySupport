@@ -1,4 +1,3 @@
-import "./newContactPage.css";
 import ContactForm from "../../components/contactForm/ContactForm";
 import { useLocation } from "react-router-dom";
 

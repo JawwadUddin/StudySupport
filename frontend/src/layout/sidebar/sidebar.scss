@@ -15,6 +15,10 @@
       font-size: 20px;
       font-weight: bold;
       color: rgb(37, 150, 190);
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
