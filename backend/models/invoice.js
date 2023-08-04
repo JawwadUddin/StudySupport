@@ -20,7 +20,9 @@ class Invoice {
       : [];
     this.students = data.students;
     this.overdueInvoices = data.overdue_invoices;
+    this.openInvoices = data.open_invoices;
     this.overdueBalance = data.overdue_balance;
+    this.openBalance = data.open_balance;
   }
 
   static get all() {
@@ -168,6 +170,21 @@ class Invoice {
           .input("InvoiceID", sql.Int, id)
           .execute("DeleteInvoiceByID");
         resolve("Invoice successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static balanceSummary() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const invoiceData = await pool
+          .request()
+          .execute("SelectBalanceSummary");
+        const invoice = invoiceData.recordset.map((d) => new Invoice(d))[0];
+        resolve(invoice);
       } catch (err) {
         reject(err);
       }

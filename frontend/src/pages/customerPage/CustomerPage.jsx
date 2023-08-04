@@ -13,6 +13,7 @@ const CustomerPage = () => {
   const [query, setQuery] = useState("");
   const [sortColumn, setSortColumn] = useState(""); // Possible values: 'fullName', 'overdueBalance'
   const [sortDirection, setSortDirection] = useState("asc"); // Possible values: 'asc', 'desc', 'none'
+  const [balanceSummary, setBalanceSummary] = useState();
 
   const handleSortClick = (column) => {
     let newSortDirection;
@@ -73,7 +74,18 @@ const CustomerPage = () => {
           throw Error(serverResponse.message);
         }
       }
+      async function fetchBalanceSummary() {
+        const serverResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/invoice/balanceSummary`
+        );
+        if (serverResponse.message === "OK") {
+          setBalanceSummary(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
       fetchData();
+      fetchBalanceSummary();
     } catch (error) {
       console.log(error);
     }
@@ -99,6 +111,41 @@ const CustomerPage = () => {
           />
         </div>
         <div className="container">
+          <div className="balanceSummary">
+            <div className="item" style={{ backgroundColor: "#ff8000" }}>
+              <div className="amount">
+                £
+                {Number(
+                  balanceSummary ? balanceSummary.overdueBalance : 0
+                ).toFixed(2)}
+              </div>
+              <div className="text">
+                {balanceSummary?.overdueInvoices} OVERDUE INVOICES
+              </div>
+            </div>
+            <div className="item" style={{ backgroundColor: "#0077C5" }}>
+              <div className="amount">
+                £
+                {Number(
+                  balanceSummary ? balanceSummary.openBalance : 0
+                ).toFixed(2)}
+              </div>
+              <div className="text">
+                {balanceSummary?.overdueBalance} OPEN INVOICES
+              </div>
+            </div>
+            <div className="item" style={{ backgroundColor: "#BABEC5" }}>
+              <div className="amount">
+                £
+                {Number(
+                  balanceSummary
+                    ? balanceSummary.openBalance - balanceSummary.overdueBalance
+                    : 0
+                ).toFixed(2)}
+              </div>
+              <div className="text">NOT DUE YET</div>
+            </div>
+          </div>
           <table>
             <thead>
               <tr>
@@ -122,6 +169,7 @@ const CustomerPage = () => {
                 >
                   OVERDUE BALANCE {getSortIcon("overdueBalance")}
                 </th>
+                <th>OPEN BALANCE</th>
               </tr>
             </thead>
             <tbody>
@@ -154,6 +202,7 @@ const CustomerPage = () => {
                                 students,
                                 overdueBalance,
                                 mobile,
+                                openBalance,
                               } = obj;
 
                               // Create a new object with the extracted keys
@@ -163,6 +212,7 @@ const CustomerPage = () => {
                                 students,
                                 overdueBalance,
                                 mobile,
+                                openBalance,
                               };
                             }),
                           },
@@ -188,6 +238,7 @@ const CustomerPage = () => {
                         ) : null}
                       </td>
                       <td>£{Number(customer.overdueBalance).toFixed(2)}</td>
+                      <td>£{Number(customer.openBalance).toFixed(2)}</td>
                     </tr>
                   );
                 })

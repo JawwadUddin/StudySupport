@@ -3,6 +3,7 @@ const router = express.Router();
 const invoiceController = require("../controllers/invoice");
 
 router.get("/", invoiceController.index);
+router.get("/balanceSummary", invoiceController.balanceSummary);
 router.get("/outstanding", invoiceController.showOutstandingInvoices);
 router.get(
   "/outstanding/:familyID",

@@ -1,6 +1,20 @@
 .customerPageContainer {
   position: relative;
 }
+.customerPageContainer .balanceSummary {
+  display: flex;
+  margin-bottom: 20px;
+}
+.customerPageContainer .balanceSummary .item {
+  width: 25%;
+  padding: 10px;
+  color: white;
+  font-weight: 600;
+  margin-left: 10px;
+}
+.customerPageContainer .balanceSummary .item .amount {
+  font-size: 30px;
+}
 .customerPageContainer table,
 .customerPageContainer th,
 .customerPageContainer td {
