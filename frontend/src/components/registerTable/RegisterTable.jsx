@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CheckIcon from "@mui/icons-material/Check";
 import CachedIcon from "@mui/icons-material/Cached";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 
 const RegisterTable = ({
   updatedSessions,
@@ -58,12 +59,28 @@ const RegisterTable = ({
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [selectedCompensation, setSelectedCompensation] = useState(null);
     const [showField, setShowField] = useState(false);
+    const [fullSession, setFullSession] = useState(true);
 
     return (
       <>
         {showField ? (
           <>
             <div className="student-session-form">
+              <IconButton
+                className="half-session-icon"
+                sx={{ color: fullSession ? "grey" : "#16629f" }}
+                onClick={() => {
+                  if (editMode) {
+                    setFullSession((prev) => !prev);
+                  } else {
+                    console.log("cant edit");
+                  }
+                }}
+                aria-label="delete"
+                color="error"
+              >
+                <HourglassBottomIcon />
+              </IconButton>
               <Autocomplete
                 className="form-input"
                 size="small"
@@ -94,6 +111,7 @@ const RegisterTable = ({
                       attendance: false,
                       student_session_id: "new",
                       compensation_id: null,
+                      full_session: fullSession,
                     },
                   });
                 }}
@@ -108,16 +126,21 @@ const RegisterTable = ({
                 className="form-input"
                 size="small"
                 disablePortal
-                id="combo-box-demo"
+                id="combo-box"
                 options={compensations}
                 value={selectedCompensation}
                 onChange={(e, value) => {
                   setSelectedCompensation(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) =>
-                  `${option.fullName} - ${option.sessionDate}`
-                }
+                getOptionLabel={(option) => option.fullName}
+                renderOption={(props, option) => {
+                  return (
+                    <li {...props} key={option.studentSessionID}>
+                      {option.fullName} - {option.sessionDate}
+                    </li>
+                  );
+                }}
                 renderInput={(params) => (
                   <TextField {...params} label="Compensation" />
                 )}
@@ -136,6 +159,7 @@ const RegisterTable = ({
                       attendance: true,
                       student_session_id: "new",
                       compensation_id: selectedCompensation.studentSessionID,
+                      full_session: true,
                     },
                   });
                 }}
@@ -217,6 +241,10 @@ const RegisterTable = ({
                                 // <div className="compensation-tag"></div>
                                 <CachedIcon className="compensation-tag" />
                               )}
+                              {!student.full_session &&
+                                !student.compensation_id && (
+                                  <HourglassBottomIcon className="half-session-tag" />
+                                )}
                             </div>
                             <div
                               className="student-attendance"
@@ -256,6 +284,21 @@ const RegisterTable = ({
           </div>
         );
       })}
+      <div className="legend">
+        <div>
+          <CachedIcon className="compensation-tag icon" /> Compensation
+        </div>
+        <div>
+          <HourglassBottomIcon className="half-session-tag icon" /> 1 Hour
+          Session
+        </div>
+        <div>
+          <CheckCircleIcon className="present-icon icon" /> Present
+        </div>
+        <div>
+          <CancelIcon className="absent-icon icon" /> Absent
+        </div>
+      </div>
       <div className="formEnd">
         {!editMode ? (
           <Button

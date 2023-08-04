@@ -2,7 +2,7 @@
   flex: 1;
   border-right: solid 1px rgb(198, 197, 197);
   min-height: 100vh;
-  background-color: rgb(219, 242, 242);
+  background-color: rgb(34 41 41);
 
   .top {
     height: 50px;
@@ -15,6 +15,10 @@
       font-size: 20px;
       font-weight: bold;
       color: rgb(37, 150, 190);
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
@@ -36,9 +40,9 @@
 
       span {
         font-size: 14px;
-        font-weight: 600;
-        color: grey;
+        font-weight: 700;
         margin-left: 10px;
+        color: white;
       }
     }
   }

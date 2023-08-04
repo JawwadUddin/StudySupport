@@ -1,1 +1,1 @@
-{"version":3,"sources":["scorePage.scss","scorePage.css"],"names":[],"mappings":"AACE;EACE,YAAA;EACA,wBAAA;ACAJ;ADEE;EACE,sDAAA;EACA,aAAA;EACA,YAAA;ACAJ;ADGI;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,mBAAA;ACDN;ADGM;EACE,gBAAA;EACA,cAAA;ACDR;ADKI;EACE,WAAA;EACA,YAAA;EACA,YAAA;EACA,kBAAA;EACA,kBAAA;EACA,yBAAA;EACA,aAAA;EACA,6BAAA;ACHN","file":"scorePage.css"}
+{"version":3,"sources":["scorePage.scss","scorePage.css"],"names":[],"mappings":"AACE;EACE,WAAA;EACA,YAAA;EACA,YAAA;EACA,kBAAA;EACA,kBAAA;EACA,yBAAA;EACA,aAAA;EACA,6BAAA;ACAJ","file":"scorePage.css"}

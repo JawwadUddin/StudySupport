@@ -26,7 +26,7 @@ const ScoreForm = () => {
   const [dataToSubmit, setDataToSubmit] = useState({
     studentID: studentID,
     testID: "",
-    testDate: "",
+    testDate: new Date().toISOString().split("T")[0],
     scores: [],
     comment: "",
   });
@@ -141,7 +141,7 @@ const ScoreForm = () => {
   };
 
   return (
-    <div className="scoreForm">
+    <div className="scoreForm form">
       <h3>Syllabus Information</h3>
       <Grid container spacing={4}>
         <Grid item xs={12}>

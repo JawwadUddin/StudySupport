@@ -1,0 +1,93 @@
+.customerPageContainer {
+  position: relative;
+
+  .balanceSummary {
+    display: flex;
+    margin-bottom: 20px;
+    .item {
+      width: 25%;
+      padding: 10px;
+      color: white;
+      font-weight: 600;
+      margin-left: 10px;
+      .amount {
+        font-size: 30px;
+      }
+    }
+  }
+
+  table,
+  th,
+  td {
+    padding: 10px 10px;
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+
+    .sortable {
+      cursor: pointer;
+      &:hover {
+        background-color: aliceblue;
+      }
+    }
+
+    thead {
+      tr {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 1;
+      }
+      th {
+        border-bottom: 3px solid;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          font-weight: 600;
+          border-bottom: 1px solid;
+          border-color: grey;
+        }
+        .customerName {
+          font-weight: bold;
+          color: #404040;
+        }
+        .studentNames {
+          font-size: 80%;
+          color: #0075c5;
+        }
+        .overdueInvoice {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+    }
+
+    tr {
+      // height: 100px;
+      text-align: left;
+    }
+  }
+}
+
+.hoverable {
+  cursor: pointer;
+  &:hover {
+    background-color: #afafaf6e;
+  }
+}
+
+.container {
+  height: 900px;
+  overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}

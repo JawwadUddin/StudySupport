@@ -12,6 +12,8 @@ export const validateInputs = ({
     return "This is a required field";
   }
 
+  if (data === null) return null;
+
   if (type && data.toString().length !== 0) {
     switch (type) {
       case "alpha":

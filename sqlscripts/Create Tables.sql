@@ -260,3 +260,78 @@ VALUES
 	(1032, 2, 3, 2),
 	(2033, 1, 1, 2),
 	(2033, 2, 3, 1)
+
+
+
+--INCREMENT 4 TABLES + CHANGES:
+
+ALTER TABLE studentSessions
+ADD full_session BIT
+
+CREATE TABLE level (
+	level_id INT IDENTITY(1,1),
+	level varchar(10),
+	PRIMARY KEY (level_id)
+)
+
+INSERT INTO LEVEL 
+VALUES ('KS2'), ('11+') , ('KS3'), ('GCSE'), ('A-LEVEL')
+
+ALTER TABLE students
+ADD level_id INT
+
+ALTER TABLE students
+ADD CONSTRAINT FK_students_level FOREIGN KEY (level_id) REFERENCES level(level_id)
+
+
+CREATE TABLE rate (
+	rate_id INT IDENTITY(1,1),
+	student_id INT,
+	rate DECIMAL(5,3),
+	rateDate DATE,
+	PRIMARY KEY (rate_id),
+	CONSTRAINT FK_rate_students FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+)
+
+CREATE TABLE invoices (
+	invoice_id INT IDENTITY(20000,1),
+	family_id int,
+	invoice_date date,
+	due_date date,
+	start_date date,
+	amount_due decimal(4,2),
+	PRIMARY KEY(invoice_id),
+	CONSTRAINT FK_invoices_family FOREIGN KEY (family_id) REFERENCES family(family_id)
+)
+
+CREATE TABLE invoicesMisc (
+	invoice_misc_id INT IDENTITY(1,1),
+	invoice_id int,
+	description varchar(50),
+	rate decimal(5,2),
+	PRIMARY KEY (invoice_misc_id),
+	CONSTRAINT FK_invoicesMisc_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id) ON DELETE CASCADE
+)
+
+CREATE TABLE paymentType 
+(
+	payment_type_id INT IDENTITY(1,1) PRIMARY KEY,
+	payment_type VARCHAR(20)
+)
+
+INSERT INTO paymentType (payment_type) VALUES ('Cash'), ('Bank Transfer')
+
+CREATE TABLE payment (
+	payment_id INT IDENTITY(20000,1),
+	family_id int,
+	invoice_id int,
+	payment_date date,
+	amount decimal(5,2),
+	payment_type_id INT,
+	PRIMARY KEY(payment_id),
+	CONSTRAINT FK_payment_family FOREIGN KEY (family_id) REFERENCES family(family_id),
+	CONSTRAINT FK_payment_paymentType FOREIGN KEY (payment_type_id) REFERENCES paymentType(payment_type_id)
+)
+
+
+

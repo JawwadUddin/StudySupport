@@ -1,0 +1,79 @@
+.invoiceForm {
+  margin-bottom: 50px;
+  .paymentStatus {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  h3 {
+    color: #962626;
+  }
+}
+
+.horizontal {
+  border: solid 5px white;
+  width: 100%;
+}
+.pdfView {
+  margin-top: 40px;
+  display: none;
+
+  @media print {
+    @page {
+      size: portrait;
+    }
+  }
+  .page {
+    width: 21cm;
+    min-height: 27.7cm;
+    position: relative;
+    //   padding: 2cm;
+    margin: 0cm auto;
+    // border: 1px #d3d3d3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 140px;
+  }
+}
+
+.watermark {
+  /* Used to position the watermark */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.watermark__inner {
+  /* Center the content */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  /* Absolute position */
+  left: 50%;
+  position: absolute;
+  top: 0px;
+
+  /* Take full size */
+  height: 100%;
+  width: 100%;
+}
+
+.watermark__body {
+  /* Text styles */
+  font-size: 5rem;
+  font-weight: bold;
+
+  /* Rotate the text */
+  transform: rotate(-45deg);
+
+  /* Disable the selection */
+  user-select: none;
+
+  color: rgb(255, 255, 255);
+
+  text-shadow: -1px -1px 0 #3ace3a, 1px -1px 0 #3ace3a, -1px 1px 0 #3ace3a,
+    1px 1px 0 #3ace3a;
+}

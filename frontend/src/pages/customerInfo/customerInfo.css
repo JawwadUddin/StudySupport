@@ -1,0 +1,200 @@
+.gridContainer {
+  display: grid;
+  width: 100%;
+  height: 900px;
+  grid-template-columns: repeat(5, 1fr); /* Three columns of equal width */
+  grid-template-rows: repeat(11, 1fr); /* Three rows of equal height */
+}
+.gridContainer .customerSidebar {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 12;
+}
+.gridContainer .customerMain,
+.gridContainer .customerInfo {
+  grid-column-start: 2;
+  grid-column-end: 6;
+}
+.gridContainer .customerMain {
+  grid-row-start: 1;
+  grid-row-end: 4;
+}
+.gridContainer .customerInfo {
+  grid-row-start: 4;
+  grid-row-end: 12;
+}
+
+.customerSidebar {
+  border-right: 2px solid rgb(155, 154, 154);
+  overflow-y: scroll;
+}
+.customerSidebar .customerSummary {
+  margin-right: 20px;
+  border-bottom: solid 1px grey;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.customerSidebar .customerSummary:hover {
+  background-color: rgba(175, 175, 175, 0.431372549);
+}
+.customerSidebar .customerSummary .customerName {
+  font-weight: bold;
+  color: #404040;
+}
+.customerSidebar .customerSummary .studentNames {
+  font-size: 80%;
+  color: #0075c5;
+}
+.customerSidebar .customerSummary .customerBalance {
+  color: #ef44d1;
+  font-weight: 600;
+}
+
+.customerMainHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  height: 100%;
+  background-color: #f9fafb;
+  border-bottom: 2px solid rgb(155, 154, 154);
+}
+.customerMainHeader .customerMainSum {
+  margin-top: 40px;
+  display: inline-block;
+  margin-left: 100px;
+}
+.customerMainHeader .customerMainSum .openSection,
+.customerMainHeader .customerMainSum .overdueSection {
+  padding-left: 10px;
+}
+.customerMainHeader .customerMainSum .openSection .amount,
+.customerMainHeader .customerMainSum .overdueSection .amount {
+  font-size: 20px;
+}
+.customerMainHeader .customerMainSum .openSection .text,
+.customerMainHeader .customerMainSum .overdueSection .text {
+  color: #6e8ba8;
+  font-size: 14px;
+}
+.customerMainHeader .customerMainSum .openSection {
+  border-left: 5px solid #f2b835;
+  margin-bottom: 20px;
+}
+.customerMainHeader .customerMainSum .overdueSection {
+  border-left: 5px solid #ce5133;
+}
+.customerMainHeader .customerMainInfo {
+  font-weight: 500;
+  color: #333333;
+  font-size: 24px;
+  height: 100%;
+}
+.customerMainHeader .createPaymentBtn {
+  background-color: #4949d9;
+}
+.customerMainHeader .createPaymentBtn:hover {
+  background-color: rgba(73, 73, 217, 0.9333333333);
+}
+.customerMainHeader .createBtn {
+  background-color: rgb(37, 150, 190);
+}
+.customerMainHeader .createBtn:hover {
+  background-color: rgba(37, 150, 190, 0.842);
+}
+
+.search {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.customerInfo {
+  margin-top: 20px;
+  overflow-y: scroll;
+}
+.customerInfo .statusComplete {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.customerInfo .text {
+  font-weight: bold;
+  color: #404040;
+  margin-left: 30px;
+}
+.customerInfo .credit {
+  font-size: 90%;
+  color: #0075c5;
+  margin-left: 30px;
+}
+.customerInfo .overdue {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.customerInfo .iconContainer {
+  position: relative;
+}
+.customerInfo .icon {
+  position: absolute;
+}
+
+.modalContainer {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.712);
+}
+.modalContainer .modal {
+  background-color: white;
+  border: solid 1px red;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+}
+.modalContainer .modal .modalTop {
+  display: flex;
+  justify-content: flex-end;
+}
+.modalContainer .modal .modalWarning {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.modalContainer .modal .modalWarning .warningIcon {
+  font-size: 60px;
+  color: #ff6a00;
+}
+.modalContainer .modal .modalWarning h1 {
+  color: #333333;
+  margin-top: 20px;
+}
+.modalContainer .modal .modalWarning p {
+  color: #6b6c72;
+  width: 90%;
+  margin-top: 40px;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.modalContainer .modalButtons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.customerSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.customerInfo::-webkit-scrollbar {
+  display: none;
+}/*# sourceMappingURL=customerInfo.css.map */

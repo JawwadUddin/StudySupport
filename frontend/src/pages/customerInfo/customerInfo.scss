@@ -1,0 +1,230 @@
+.gridContainer {
+  display: grid;
+  width: 100%;
+  height: 900px;
+  // border: solid 1px red;
+  grid-template-columns: repeat(5, 1fr); /* Three columns of equal width */
+  grid-template-rows: repeat(11, 1fr); /* Three rows of equal height */
+  // grid-gap: 10px;
+
+  .customerSidebar {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 12;
+  }
+
+  .customerMain,
+  .customerInfo {
+    grid-column-start: 2;
+    grid-column-end: 6;
+  }
+
+  .customerMain {
+    grid-row-start: 1;
+    grid-row-end: 4;
+  }
+
+  .customerInfo {
+    grid-row-start: 4;
+    grid-row-end: 12;
+  }
+}
+
+.customerSidebar {
+  border-right: 2px solid rgb(155, 154, 154);
+  overflow-y: scroll;
+
+  .customerSummary {
+    margin-right: 20px;
+    border-bottom: solid 1px grey;
+    padding: 5px 0;
+
+    cursor: pointer;
+    &:hover {
+      background-color: #afafaf6e;
+    }
+
+    .customerName {
+      // font-size: 14px;
+      font-weight: bold;
+      color: #404040;
+    }
+    .studentNames {
+      font-size: 80%;
+      color: #0075c5;
+    }
+    .customerBalance {
+      color: #ef44d1;
+      font-weight: 600;
+    }
+  }
+}
+
+.customerMainHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  height: 100%;
+  background-color: #f9fafb;
+  border-bottom: 2px solid rgb(155, 154, 154);
+
+  .customerMainSum {
+    margin-top: 40px;
+    display: inline-block;
+    margin-left: 100px;
+
+    .openSection,
+    .overdueSection {
+      padding-left: 10px;
+
+      .amount {
+        font-size: 20px;
+      }
+
+      .text {
+        color: #6e8ba8;
+        font-size: 14px;
+      }
+    }
+
+    .openSection {
+      border-left: 5px solid #f2b835;
+      margin-bottom: 20px;
+    }
+
+    .overdueSection {
+      border-left: 5px solid #ce5133;
+    }
+  }
+
+  .customerMainInfo {
+    font-weight: 500;
+    color: #333333;
+    font-size: 24px;
+    height: 100%;
+  }
+
+  .createPaymentBtn {
+    background-color: #4949d9;
+
+    &:hover {
+      background-color: #4949d9ee;
+    }
+  }
+
+  .createBtn {
+    background-color: rgb(37, 150, 190);
+
+    &:hover {
+      background-color: rgba(37, 150, 190, 0.842);
+    }
+  }
+}
+
+.search {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.customerInfo {
+  margin-top: 20px;
+  overflow-y: scroll;
+  // height: 600px;
+  .statusComplete {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .text {
+    font-weight: bold;
+    color: #404040;
+    margin-left: 30px;
+  }
+  .credit {
+    font-size: 90%;
+    color: #0075c5;
+    margin-left: 30px;
+  }
+
+  .overdue {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .iconContainer {
+    position: relative;
+  }
+
+  .icon {
+    position: absolute;
+  }
+}
+
+.modalContainer {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.712);
+
+  .modal {
+    background-color: white;
+    border: solid 1px red;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+
+    .modalTop {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modalWarning {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .warningIcon {
+        font-size: 60px;
+        color: #ff6a00;
+      }
+
+      h1 {
+        color: #333333;
+        margin-top: 20px;
+      }
+
+      p {
+        color: #6b6c72;
+        width: 90%;
+        margin-top: 40px;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .modalButtons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+}
+
+.customerSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.customerInfo::-webkit-scrollbar {
+  display: none;
+}

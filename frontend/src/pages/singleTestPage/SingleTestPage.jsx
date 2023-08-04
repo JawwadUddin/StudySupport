@@ -1,5 +1,4 @@
 import React from "react";
-import "./singleTestPage.css";
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";

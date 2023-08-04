@@ -1,0 +1,79 @@
+.customerPageContainer {
+  position: relative;
+}
+.customerPageContainer .balanceSummary {
+  display: flex;
+  margin-bottom: 20px;
+}
+.customerPageContainer .balanceSummary .item {
+  width: 25%;
+  padding: 10px;
+  color: white;
+  font-weight: 600;
+  margin-left: 10px;
+}
+.customerPageContainer .balanceSummary .item .amount {
+  font-size: 30px;
+}
+.customerPageContainer table,
+.customerPageContainer th,
+.customerPageContainer td {
+  padding: 10px 10px;
+}
+.customerPageContainer table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+.customerPageContainer table .sortable {
+  cursor: pointer;
+}
+.customerPageContainer table .sortable:hover {
+  background-color: aliceblue;
+}
+.customerPageContainer table thead tr {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+.customerPageContainer table thead th {
+  border-bottom: 3px solid;
+}
+.customerPageContainer table tbody tr td {
+  font-weight: 600;
+  border-bottom: 1px solid;
+  border-color: grey;
+}
+.customerPageContainer table tbody tr .customerName {
+  font-weight: bold;
+  color: #404040;
+}
+.customerPageContainer table tbody tr .studentNames {
+  font-size: 80%;
+  color: #0075c5;
+}
+.customerPageContainer table tbody tr .overdueInvoice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.customerPageContainer table tr {
+  text-align: left;
+}
+
+.hoverable {
+  cursor: pointer;
+}
+.hoverable:hover {
+  background-color: rgba(175, 175, 175, 0.431372549);
+}
+
+.container {
+  height: 900px;
+  overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}/*# sourceMappingURL=customerPage.css.map */

@@ -1,5 +1,3 @@
-import React from "react";
-import "./syllabusPage.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../helpers/apiFunctions";

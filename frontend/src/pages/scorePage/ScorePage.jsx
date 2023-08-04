@@ -1,4 +1,3 @@
-import React from "react";
 import "./scorePage.css";
 import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";

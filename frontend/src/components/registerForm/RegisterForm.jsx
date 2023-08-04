@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getData, saveData } from "../../helpers/apiFunctions";
-import "./registerForm.css";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -90,7 +89,7 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className="registerForm">
+    <div className="registerForm form">
       <h3>Register Form</h3>
       <Grid container>
         <Grid item xs={12}>

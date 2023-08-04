@@ -5,7 +5,15 @@
   align-items: center;
   font-size: 14px;
   color: gray;
-  background-color: rgb(219, 242, 242);
+  background-color: rgb(34, 41, 41);
+}
+.navbar .username {
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
 }
 .navbar .wrapper {
   display: flex;
@@ -20,6 +28,7 @@
   border: solid 1px lightgray;
   padding: 3px;
   cursor: pointer;
+  margin-bottom: 0;
 }
 .navbar .wrapper .search input {
   border: none;

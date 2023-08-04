@@ -1,6 +1,4 @@
 import "./App.css";
-import Sidebar from "./layout/sidebar/Sidebar";
-import Navbar from "./layout/navbar/Navbar";
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/dashboardPage/DashboardPage";
 import ContactPage from "./pages/contactPage/ContactPage";
@@ -18,17 +16,32 @@ import SyllabusPage from "./pages/syllabusPage/SyllabusPage";
 import NewSyllabusPage from "./pages/newSyllabusPage/NewSyllabusPage";
 import TopicPage from "./pages/topicPage/TopicPage";
 import RegisterPage from "./pages/registerPage/RegisterPage";
-import RegisterPageOld from "./pages/registerPage/registerPageOld/registerPageOld";
 import NewRegisterPage from "./pages/newRegisterPage/NewRegisterPage";
+import SingleInvoicePage from "./pages/singleInvoicePage/SingleInvoicePage";
+import NewInvoicePage from "./pages/newInvoicePage/newInvoicePage";
+import NewPaymentPage from "./pages/newPaymentPage/NewPaymentPage";
+import SinglePaymentPage from "./pages/singlePaymentPage/SinglePaymentPage";
+import TransactionPage from "./pages/transactionPage/TransactionPage";
+import CustomerPage from "./pages/customerPage/CustomerPage";
+import CustomerInfo from "./pages/customerInfo/CustomerInfo";
+import LoginPage from "./pages/loginPage/LoginPage";
+import Wrapper from "./Wrapper";
+import { RequireAuth } from "react-auth-kit";
 
 function App() {
   return (
     <div className="App">
-      <Sidebar />
-      <div className="mainContainer">
-        <Navbar />
-        <Routes>
-          <Route path="/*" element={<DashboardPage />} />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path=""
+          element={
+            <RequireAuth loginPath={"/login"}>
+              <Wrapper />
+            </RequireAuth>
+          }
+        >
+          <Route path="" element={<DashboardPage />} />
           <Route path="/contacts">
             <Route path="" element={<ContactPage />} />
             <Route path=":contactID" element={<SingleContactPage />} />
@@ -70,8 +83,28 @@ function App() {
             <Route path="" element={<RegisterPage />} />
             <Route path="new" element={<NewRegisterPage />} />
           </Route>
-        </Routes>
-      </div>
+          <Route path="customers">
+            <Route path="" element={<CustomerPage />} />
+            <Route path="detail" element={<CustomerInfo />} />
+            <Route path="detail/:customerID" element={<CustomerInfo />} />
+          </Route>
+          <Route path="transactions">
+            <Route path="" element={<TransactionPage />} />
+          </Route>
+          <Route path="invoices">
+            <Route path="" element={<TransactionPage />} />
+            <Route path="new" element={<NewInvoicePage />} />
+            <Route path=":invoiceID" element={<SingleInvoicePage />} />
+          </Route>
+          <Route path="payments">
+            <Route path="new" element={<NewPaymentPage />} />
+            <Route
+              path=":familyID/:paymentDate"
+              element={<SinglePaymentPage />}
+            />
+          </Route>
+        </Route>
+      </Routes>
     </div>
   );
 }

@@ -1,6 +1,4 @@
-import React from "react";
 import SyllabusForm from "../../components/syllabusForm/SyllabusForm";
-import "./newSyllabusPage.css";
 
 const NewSyllabusPage = () => {
   return (

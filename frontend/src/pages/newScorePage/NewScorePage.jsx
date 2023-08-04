@@ -1,5 +1,3 @@
-import React from "react";
-import "./newScorePage.css";
 import ScoreForm from "../../components/scoreForm/ScoreForm";
 
 const NewScorePage = () => {

@@ -1,0 +1,74 @@
+.invoiceForm {
+  margin-bottom: 50px;
+}
+.invoiceForm .paymentStatus {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.invoiceForm h3 {
+  color: #962626;
+}
+
+.horizontal {
+  border: solid 5px white;
+  width: 100%;
+}
+
+.pdfView {
+  margin-top: 40px;
+  display: none;
+}
+@media print {
+  @page {
+    .pdfView {
+      size: portrait;
+    }
+  }
+}
+.pdfView .page {
+  width: 21cm;
+  min-height: 27.7cm;
+  position: relative;
+  margin: 0cm auto;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 140px;
+}
+
+.watermark {
+  /* Used to position the watermark */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.watermark__inner {
+  /* Center the content */
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  /* Absolute position */
+  left: 50%;
+  position: absolute;
+  top: 0px;
+  /* Take full size */
+  height: 100%;
+  width: 100%;
+}
+
+.watermark__body {
+  /* Text styles */
+  font-size: 5rem;
+  font-weight: bold;
+  /* Rotate the text */
+  transform: rotate(-45deg);
+  /* Disable the selection */
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  color: rgb(255, 255, 255);
+  text-shadow: -1px -1px 0 #3ace3a, 1px -1px 0 #3ace3a, -1px 1px 0 #3ace3a, 1px 1px 0 #3ace3a;
+}/*# sourceMappingURL=invoiceForm.css.map */

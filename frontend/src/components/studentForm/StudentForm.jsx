@@ -1,4 +1,3 @@
-import "./studentForm.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getData, saveData, updateData } from "../../helpers/apiFunctions";
@@ -29,6 +28,7 @@ const StudentForm = ({ idFamily }) => {
     school: "",
     medicalInfo: "",
     notes: "",
+    levelID: "",
   });
   const [formErrors, setFormErrors] = useState({});
 
@@ -75,6 +75,12 @@ const StudentForm = ({ idFamily }) => {
       updateData = {
         ...dataToSubmit,
         schoolYear: e.target.value,
+      };
+    }
+    if (type === "levelID") {
+      updateData = {
+        ...dataToSubmit,
+        levelID: e.target.value,
       };
     }
     setDataToSubmit((prev) => updateData);
@@ -167,6 +173,10 @@ const StudentForm = ({ idFamily }) => {
       data: inputData.schoolYear,
       required: true,
     });
+    _errors.levelID = validateInputs({
+      data: inputData.levelID,
+      required: true,
+    });
     cleanErrorObject(_errors);
     setFormErrors(_errors);
     let errorCount = Object.keys(_errors).length;
@@ -174,7 +184,7 @@ const StudentForm = ({ idFamily }) => {
   };
 
   return (
-    <div className="studentForm">
+    <div className="studentForm form">
       <h3>Student Information</h3>
 
       <Grid container spacing={3}>
@@ -269,6 +279,23 @@ const StudentForm = ({ idFamily }) => {
               <MenuItem value={11}>11</MenuItem>
               <MenuItem value={12}>12</MenuItem>
               <MenuItem value={13}>13</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <FormControl sx={{ minWidth: 200 }}>
+            <InputLabel>Level</InputLabel>
+            <Select
+              error={!!formErrors.levelID}
+              id="level"
+              value={dataToSubmit.levelID}
+              onChange={(e) => handleChange(e, "levelID")}
+            >
+              <MenuItem value={1}>KS2</MenuItem>
+              <MenuItem value={2}>11+</MenuItem>
+              <MenuItem value={3}>KS3</MenuItem>
+              <MenuItem value={4}>GCSE</MenuItem>
+              <MenuItem value={5}>A-LEVEL</MenuItem>
             </Select>
           </FormControl>
         </Grid>
