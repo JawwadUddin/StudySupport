@@ -29,11 +29,12 @@ const CustomerInfo = () => {
           (customer) => customer.familyID == customerID
         );
         if (customer) {
-          let { fullName, mobile, overdueBalance } = customer;
+          let { fullName, mobile, overdueBalance, openBalance } = customer;
           setCustomerDetail({
             fullName,
             mobile,
             overdueBalance,
+            openBalance,
           });
         }
       }
@@ -236,7 +237,9 @@ const CustomerInfo = () => {
                 </div>
                 <div className="customerMainSum">
                   <div className="openSection">
-                    <div className="amount"></div>
+                    <div className="amount">
+                      £{Number(customerDetail.openBalance).toFixed(2)}
+                    </div>
                     <div className="text">OPEN</div>
                   </div>
                   <div className="overdueSection">
