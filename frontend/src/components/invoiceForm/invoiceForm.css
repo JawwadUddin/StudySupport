@@ -17,6 +17,7 @@
 
 .pdfView {
   margin-top: 40px;
+  display: none;
 }
 @media print {
   @page {

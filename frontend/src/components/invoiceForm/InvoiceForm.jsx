@@ -894,14 +894,25 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                   </Button>
                 </>
               ) : (
-                <Button
-                  onClick={() => setEditMode(true)}
-                  variant="contained"
-                  color="secondary"
-                  className="editBtn"
-                >
-                  Edit
-                </Button>
+                <>
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    className="editBtn"
+                    onClick={handlePrint}
+                  >
+                    PRINT
+                  </Button>
+
+                  <Button
+                    onClick={() => setEditMode(true)}
+                    variant="contained"
+                    color="secondary"
+                    className="editBtn"
+                  >
+                    Edit
+                  </Button>
+                </>
               )}
             </>
           ) : (
@@ -927,20 +938,20 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       </div>
       {invoiceInfo && !editMode && (
         <>
-          <div className="horizontal"></div>
+          {/* <div className="horizontal"></div> */}
+          {/* <Button
+            variant="contained"
+            color="warning"
+            style={{
+              margin: "0 auto",
+              display: "block",
+              marginBottom: "20px",
+            }}
+            onClick={handlePrint}
+          >
+            PRINT
+          </Button> */}
           <div className="pdfView">
-            <Button
-              variant="contained"
-              color="warning"
-              style={{
-                margin: "0 auto",
-                display: "block",
-                marginBottom: "20px",
-              }}
-              onClick={handlePrint}
-            >
-              PRINT
-            </Button>
             <div
               size="A4"
               // style={styles.page}
