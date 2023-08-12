@@ -25,6 +25,7 @@ const PaymentForm = ({
   paymentType,
 }) => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   const [editMode, setEditMode] = useState(true);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -216,26 +217,30 @@ const PaymentForm = ({
         return;
       }
       async function submitData() {
-        let serverResponse;
+        try {
+          let serverResponse;
 
-        if (paymentInfo) {
-          console.log(dataToSubmit);
-          serverResponse = await updateData(
-            `${process.env.REACT_APP_API_URL}/api/payment/update`,
-            dataToSubmit
-          );
-        } else {
-          serverResponse = await saveData(
-            `${process.env.REACT_APP_API_URL}/api/payment`,
-            dataToSubmit
-          );
-        }
-        if (serverResponse.message === "OK") {
-          navigate(-1, {
-            replace: true,
-          });
-        } else {
-          throw Error(serverResponse.message);
+          if (paymentInfo) {
+            console.log(dataToSubmit);
+            serverResponse = await updateData(
+              `${process.env.REACT_APP_API_URL}/api/payment/update`,
+              dataToSubmit
+            );
+          } else {
+            serverResponse = await saveData(
+              `${process.env.REACT_APP_API_URL}/api/payment`,
+              dataToSubmit
+            );
+          }
+          if (serverResponse.message === "OK") {
+            navigate(-1, {
+              replace: true,
+            });
+          } else {
+            throw Error(serverResponse.message);
+          }
+        } catch (error) {
+          setErrorMessage(error.message);
         }
       }
       submitData();
@@ -469,6 +474,7 @@ const PaymentForm = ({
           </div>
         </>
       )}
+      {errorMessage && <h3 className="error">{errorMessage}</h3>}
       <div className="formEnd">
         {paymentInfo ? (
           <>

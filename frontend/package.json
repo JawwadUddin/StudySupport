@@ -9,6 +9,7 @@
     "@mui/material": "^5.10.10",
     "@mui/x-data-grid": "^5.17.8",
     "dotenv": "^16.0.3",
+    "jspdf": "^2.5.1",
     "react": "^18.1.0",
     "react-auth-kit": "^2.12.3",
     "react-dom": "^18.1.0",

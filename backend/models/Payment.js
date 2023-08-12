@@ -64,7 +64,7 @@ class Payment {
           .execute("InsertPayments");
         resolve("Successfully created payments");
       } catch (err) {
-        reject("Error creating payments: " + err.message);
+        reject(err.message);
       }
     });
   }
