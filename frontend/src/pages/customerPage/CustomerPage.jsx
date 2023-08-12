@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./customerPage.css";
 import { getData } from "../../helpers/apiFunctions";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import ErrorIcon from "@mui/icons-material/Error";
 
@@ -13,6 +12,7 @@ const CustomerPage = () => {
   const [query, setQuery] = useState("");
   const [sortColumn, setSortColumn] = useState(""); // Possible values: 'fullName', 'overdueBalance'
   const [sortDirection, setSortDirection] = useState("asc"); // Possible values: 'asc', 'desc', 'none'
+  const [filterOverdue, setFilterOverdue] = useState(false);
   const [balanceSummary, setBalanceSummary] = useState();
 
   const handleSortClick = (column) => {
@@ -25,9 +25,16 @@ const CustomerPage = () => {
       newSortDirection = "asc";
     }
 
-    let sortedData = [...customers];
+    let sorted = [];
+
+    if (filterOverdue) {
+      sorted = [...sortedData];
+    } else {
+      sorted = [...customers];
+    }
+
     if (newSortDirection !== "none") {
-      sortedData.sort((a, b) => {
+      sorted.sort((a, b) => {
         if (column === "fullName") {
           return newSortDirection === "asc"
             ? a.fullName.localeCompare(b.fullName)
@@ -45,10 +52,21 @@ const CustomerPage = () => {
       });
     }
 
-    setSortedData(sortedData);
+    setSortedData(sorted);
     setSortColumn(column);
     setSortDirection(newSortDirection);
   };
+
+  useEffect(() => {
+    let filteredData = [...customers];
+    if (filterOverdue) {
+      setSortedData(
+        filteredData.filter((item) => Number(item.overdueBalance) > 0)
+      );
+      return;
+    }
+    setSortedData(filteredData);
+  }, [filterOverdue]);
 
   const getSortIcon = (column) => {
     if (sortColumn === column) {
@@ -112,7 +130,11 @@ const CustomerPage = () => {
         </div>
         <div className="container">
           <div className="balanceSummary">
-            <div className="item" style={{ backgroundColor: "#ff8000" }}>
+            <div
+              className="item hoverable"
+              onClick={() => setFilterOverdue((prev) => !prev)}
+              style={{ backgroundColor: "#ff8000" }}
+            >
               <div className="amount">
                 £
                 {Number(
@@ -123,7 +145,12 @@ const CustomerPage = () => {
                 {balanceSummary?.overdueInvoices} OVERDUE INVOICES
               </div>
             </div>
-            <div className="item" style={{ backgroundColor: "#0077C5" }}>
+            <div
+              className="item"
+              style={{
+                backgroundColor: filterOverdue ? "#0077C580" : "#0077C5",
+              }}
+            >
               <div className="amount">
                 £
                 {Number(
@@ -131,10 +158,15 @@ const CustomerPage = () => {
                 ).toFixed(2)}
               </div>
               <div className="text">
-                {balanceSummary?.overdueBalance} OPEN INVOICES
+                {balanceSummary?.openInvoices} OPEN INVOICES
               </div>
             </div>
-            <div className="item" style={{ backgroundColor: "#BABEC5" }}>
+            <div
+              className="item"
+              style={{
+                backgroundColor: filterOverdue ? "#BABEC5BF" : "#BABEC5",
+              }}
+            >
               <div className="amount">
                 £
                 {Number(
