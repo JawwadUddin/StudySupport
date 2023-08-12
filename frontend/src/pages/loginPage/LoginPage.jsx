@@ -31,7 +31,7 @@ const LoginPage = () => {
           if (
             signIn({
               token: serverResponse.results.data,
-              expiresIn: 60,
+              expiresIn: 300,
               tokenType: "Bearer",
               authState: { user: username },
             })
@@ -79,7 +79,7 @@ const LoginPage = () => {
             {loading ? (
               <CircularProgress />
             ) : (
-              <button onClick={(e) => handleSubmit(e)}>Submit</button>
+              <button onClick={(e) => handleSubmit(e)}>LOGIN</button>
             )}
           </div>
         </form>
