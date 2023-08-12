@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
+import TextField from "@mui/material/TextField";
 
 const CustomerInfo = () => {
   const [customerInfo, setCustomerInfo] = useState([]);
@@ -174,9 +175,31 @@ const CustomerInfo = () => {
       <div className="listContainer">
         <div className="gridContainer">
           <div className="customerSidebar">
+            <div className="search">
+              <TextField
+                className="text"
+                id="standard-basic"
+                sx={{ mt: 2 }}
+                size="small"
+                variant="outlined"
+                label="Name"
+                value={query}
+                onChange={({ target: { value } }) =>
+                  setQuery(value.toLowerCase())
+                }
+              />
+            </div>
             <div className="customerSidebarContent">
               {customers.length !== 0
-                ? customers.map((customer) => {
+                ? (query
+                    ? customers.filter((customer) =>
+                        (customer.fullName + customer.students)
+                          .toString()
+                          .toLowerCase()
+                          .includes(query)
+                      )
+                    : customers
+                  ).map((customer) => {
                     return (
                       <div
                         key={customer.familyID}
