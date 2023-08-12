@@ -107,7 +107,9 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       },
     },
     account: {
-      padding: "100px 0 50px 50px",
+      position: "absolute",
+      left: "50px",
+      bottom: "50px",
     },
   };
 
