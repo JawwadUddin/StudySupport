@@ -26,6 +26,7 @@ import logo from "./studysupportlogo.png";
 
 const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
   const [familyDropdown, setFamilyDropdown] = useState([]);
@@ -403,38 +404,42 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         return;
       }
       async function submitData() {
-        let serverResponse;
-        let JSONRateInfo = [];
-        sessions &&
-          sessions.map((item) => {
-            return JSONRateInfo.push(...item.rateInfo);
-          });
+        try {
+          let serverResponse;
+          let JSONRateInfo = [];
+          sessions &&
+            sessions.map((item) => {
+              return JSONRateInfo.push(...item.rateInfo);
+            });
 
-        if (invoiceInfo) {
-          console.log(invoiceInfo);
-          serverResponse = await updateData(
-            `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
-            { ...dataToSubmit, JSONRateInfo }
-          );
-        } else {
-          serverResponse = await saveData(
-            `${process.env.REACT_APP_API_URL}/api/invoice`,
-            { ...dataToSubmit, JSONRateInfo }
-          );
-        }
-        if (serverResponse.message === "OK") {
           if (invoiceInfo) {
-            navigate(-1, {
-              replace: true,
-            });
+            console.log(invoiceInfo);
+            serverResponse = await updateData(
+              `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
+              { ...dataToSubmit, JSONRateInfo }
+            );
           } else {
-            const { newInvoiceID } = serverResponse.results.data;
-            navigate(`/invoices/${newInvoiceID}`, {
-              replace: true,
-            });
+            serverResponse = await saveData(
+              `${process.env.REACT_APP_API_URL}/api/invoice`,
+              { ...dataToSubmit, JSONRateInfo }
+            );
           }
-        } else {
-          throw Error(serverResponse.message);
+          if (serverResponse.message === "OK") {
+            if (invoiceInfo) {
+              navigate(-1, {
+                replace: true,
+              });
+            } else {
+              const { newInvoiceID } = serverResponse.results.data;
+              navigate(`/invoices/${newInvoiceID}`, {
+                replace: true,
+              });
+            }
+          } else {
+            throw Error(serverResponse.message);
+          }
+        } catch (error) {
+          setErrorMessage(error.message);
         }
       }
       submitData();
@@ -874,6 +879,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             </>
           )}
         </div>
+        {errorMessage && <h3 className="error">{errorMessage}</h3>}
         <div className="formEnd">
           {invoiceInfo ? (
             <>

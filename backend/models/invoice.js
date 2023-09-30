@@ -127,7 +127,7 @@ class Invoice {
         const newInvoice = invoiceData.output.InvoiceID;
         resolve({ newInvoiceID: newInvoice });
       } catch (err) {
-        reject("Error creating invoice: " + err.message);
+        reject(err.message);
       }
     });
   }
