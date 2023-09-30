@@ -8,7 +8,7 @@ const InfoTable = ({ data, type }) => {
   switch (type) {
     case "contact":
       output = [
-        { rowLabel: "Full Name", value: data.fullName },
+        { rowLabel: "Full Name", value: data.firstName + " " + data.lastName },
         {
           rowLabel: "Address",
           value: data.address + ", " + data.postCode,
@@ -24,7 +24,7 @@ const InfoTable = ({ data, type }) => {
       break;
     case "student":
       output = [
-        { rowLabel: "Full Name", value: data.fullName },
+        { rowLabel: "Full Name", value: data.firstName + " " + data.lastName },
         { rowLabel: "DOB", value: data.DOB },
         { rowLabel: "School Year", value: data.schoolYear },
         { rowLabel: "Level", value: level[data.levelID] },

@@ -17,7 +17,8 @@ const ContactForm = () => {
   const familyID = location.state ? location.state.familyID : null;
   const [relationDropdown, setRelationDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     address: "",
     postCode: "",
     mobile: "",
@@ -96,8 +97,15 @@ const ContactForm = () => {
   }
   const validateForm = (inputData) => {
     const _errors = {};
-    _errors.fullName = validateInputs({
-      data: inputData.fullName,
+    _errors.firstName = validateInputs({
+      data: inputData.firstName,
+      type: "alpha",
+      minLength: 2,
+      maxLength: 20,
+      required: true,
+    });
+    _errors.lastName = validateInputs({
+      data: inputData.lastName,
       type: "alpha",
       minLength: 2,
       maxLength: 20,
@@ -187,14 +195,28 @@ const ContactForm = () => {
         <Grid item xs={12} sm={4}>
           <TextField
             required
-            error={!!formErrors.fullName}
-            helperText={formErrors.fullName}
-            id="fullName"
-            name="fullName"
-            label="Full Name"
+            error={!!formErrors.firstName}
+            helperText={formErrors.firstName}
+            id="firstName"
+            name="firstName"
+            label="First Name"
             fullWidth
             variant="outlined"
-            value={dataToSubmit.fullName}
+            value={dataToSubmit.firstName}
+            onChange={addData}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            required
+            error={!!formErrors.lastName}
+            helperText={formErrors.lastName}
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            fullWidth
+            variant="outlined"
+            value={dataToSubmit.lastName}
             onChange={addData}
           />
         </Grid>

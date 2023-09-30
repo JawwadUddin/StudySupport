@@ -19,7 +19,8 @@ import { useNavigate } from "react-router-dom";
 
 const PaymentForm = ({
   familyID,
-  fullName,
+  firstName,
+  lastName,
   paymentDate,
   paymentInfo,
   paymentType,
@@ -61,7 +62,7 @@ const PaymentForm = ({
         }, 0)
       );
 
-      setFamilyDropdown([{ id: familyID, fullName: fullName }]);
+      setFamilyDropdown([{ id: familyID, firstName: firstName, lastName: lastName }]);
     } else {
       try {
         async function fetchData() {
@@ -320,7 +321,7 @@ const PaymentForm = ({
               {familyDropdown.map((item) => {
                 return (
                   <MenuItem key={item.id} value={item.id}>
-                    {item.fullName}
+                    {item.firstName + ' ' + item.lastName}
                   </MenuItem>
                 );
               })}

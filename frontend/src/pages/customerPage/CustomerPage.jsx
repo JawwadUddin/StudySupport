@@ -208,7 +208,7 @@ const CustomerPage = () => {
               {sortedData.length !== 0 ? (
                 (query
                   ? sortedData.filter((customer) =>
-                      (customer.fullName + customer.students)
+                      (customer.firstName + customer.lastName + customer.students)
                         .toString()
                         .toLowerCase()
                         .includes(query)
@@ -221,38 +221,36 @@ const CustomerPage = () => {
                       onClick={() =>
                         navigate(`/customers/detail/${customer.familyID}`, {
                           state: {
-                            customerDetail: {
-                              customerID: customer.familyID,
-                              customerName: customer.fullName,
-                              customerMobile: customer.mobile,
-                            },
-                            customers: sortedData.map((obj) => {
-                              // Extract the desired keys from each object
-                              const {
-                                familyID,
-                                fullName,
-                                students,
-                                overdueBalance,
-                                mobile,
-                                openBalance,
-                              } = obj;
+                            customers: sortedData
+                            // sortedData.map((obj) => {
+                            //   // Extract the desired keys from each object
+                            //   const {
+                            //     familyID,
+                            //     firstName,
+                            //     lastName,
+                            //     students,
+                            //     overdueBalance,
+                            //     mobile,
+                            //     openBalance,
+                            //   } = obj;
 
-                              // Create a new object with the extracted keys
-                              return {
-                                familyID,
-                                fullName,
-                                students,
-                                overdueBalance,
-                                mobile,
-                                openBalance,
-                              };
-                            }),
+                            //   // Create a new object with the extracted keys
+                            //   return {
+                            //     familyID,
+                            //     firstName,
+                            //     lastName,
+                            //     students,
+                            //     overdueBalance,
+                            //     mobile,
+                            //     openBalance,
+                            //   };
+                            // }),
                           },
                         })
                       }
                     >
                       <td>
-                        <div className="customerName">{customer.fullName}</div>
+                        <div className="customerName">{customer.firstName + ' ' + customer.lastName}</div>
                         <div className="studentNames">
                           Ref: {customer.students}
                         </div>

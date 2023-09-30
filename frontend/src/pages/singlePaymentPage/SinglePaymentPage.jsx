@@ -9,7 +9,7 @@ const SinglePaymentPage = () => {
   const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(true);
   const {
-    state: { fullName },
+    state: { firstName, lastName },
   } = useLocation();
   const formattedPaymentDate = paymentDate.split("-").reverse().join("-");
 
@@ -43,7 +43,8 @@ const SinglePaymentPage = () => {
             {payment ? (
               <PaymentForm
                 familyID={familyID}
-                fullName={fullName}
+                firstName={firstName}
+                lastName={lastName}
                 paymentDate={paymentDate}
                 paymentInfo={payment.payment}
                 paymentType={payment.paymentType}

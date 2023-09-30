@@ -5,7 +5,8 @@ class Invoice {
   constructor(data) {
     this.id = data.invoice_id;
     this.familyID = data.family_id;
-    this.fullName = data.full_name;
+    this.firstName = data.first_name; 
+    this.lastName = data.last_name; 
     this.address = data.address;
     this.postCode = data.post_code;
     this.mobile = data.mobile;

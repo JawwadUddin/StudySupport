@@ -5,7 +5,8 @@ class Student {
   constructor(data) {
     this.id = data.student_id;
     this.familyID = data.family_id;
-    this.fullName = data.full_name;
+    this.firstName = data.first_name;
+    this.lastName = data.last_name;
     this.DOB = data.DOB;
     this.schoolYear = data.school_year;
     this.school = data.school_name;
@@ -66,7 +67,8 @@ class Student {
         const studentData = await pool
           .request()
           .input("FamilyID", sql.Int, student.familyID)
-          .input("FullName", sql.VarChar, student.fullName)
+          .input("FirstName", sql.VarChar, student.firstName)
+          .input("LastName", sql.VarChar, student.lastName)
           .input("DOB", sql.VarChar, student.DOB)
           .input("SchoolYear", sql.Int, student.schoolYear)
           .input("School", sql.VarChar, student.school)
@@ -91,7 +93,8 @@ class Student {
           .request()
           .input("StudentID", sql.Int, id)
           .input("FamilyID", sql.Int, student.familyID)
-          .input("FullName", sql.VarChar, student.fullName)
+          .input("FirstName", sql.VarChar, student.firstName)
+          .input("LastName", sql.VarChar, student.lastName)
           .input("DOB", sql.VarChar, student.DOB)
           .input("SchoolYear", sql.Int, student.schoolYear)
           .input("School", sql.VarChar, student.school)

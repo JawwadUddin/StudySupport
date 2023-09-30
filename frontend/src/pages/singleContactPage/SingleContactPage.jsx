@@ -97,7 +97,7 @@ const SingleContactPage = () => {
                         <ListItemText
                           key={index}
                           sx={{ mb: 2, p: 1 }}
-                          primary={student.fullName}
+                          primary={student.firstName + ' ' + student.lastName}
                           secondary={"Year " + student.schoolYear}
                           onClick={() => navigate(`/students/${student.id}`)}
                           className="studentList"

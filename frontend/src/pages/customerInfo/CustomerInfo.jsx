@@ -30,9 +30,10 @@ const CustomerInfo = () => {
           (customer) => customer.familyID == customerID
         );
         if (customer) {
-          let { fullName, mobile, overdueBalance, openBalance } = customer;
+          let { firstName, lastName, mobile, overdueBalance, openBalance } = customer;
           setCustomerDetail({
-            fullName,
+            firstName,
+            lastName,
             mobile,
             overdueBalance,
             openBalance,
@@ -193,7 +194,7 @@ const CustomerInfo = () => {
               {customers.length !== 0
                 ? (query
                     ? customers.filter((customer) =>
-                        (customer.fullName + customer.students)
+                        (customer.firstName + customer.lastName + customer.students)
                           .toString()
                           .toLowerCase()
                           .includes(query)
@@ -208,7 +209,7 @@ const CustomerInfo = () => {
                           navigate(`/customers/detail/${customer.familyID}`)
                         }
                       >
-                        <div className="customerName">{customer.fullName}</div>
+                        <div className="customerName">{customer.firstName + ' ' + customer.lastName}</div>
                         <div className="studentNames">
                           Ref: {customer.students}
                         </div>
@@ -226,7 +227,7 @@ const CustomerInfo = () => {
               <div className="customerMainInfo">
                 {customerDetail ? (
                   <>
-                    <h1>{customerDetail.fullName}</h1>
+                    <h1>{customerDetail.firstName + ' ' + customerDetail.lastName}</h1>
                     <span>{customerDetail.mobile}</span>
                   </>
                 ) : null}
@@ -338,7 +339,7 @@ const CustomerInfo = () => {
                                       .join("-")}`,
                                     {
                                       state: {
-                                        fullName: customerDetail.fullName,
+                                        firstName: customerDetail.firstName, lastName: customerDetail.lastName
                                       },
                                     }
                                   );

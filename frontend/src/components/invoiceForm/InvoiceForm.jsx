@@ -32,7 +32,8 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: familyID || "",
-    fullName: "",
+    firstName: "",
+    lastName: "",
     address: "",
     postCode: "",
     mobile: "",
@@ -124,7 +125,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       );
       setSessionsAmountDue(invoiceInfo.amountDue - amountDueMisc);
       setFamilyDropdown([
-        { id: dataToSubmit.familyID, fullName: dataToSubmit.fullName },
+        { id: dataToSubmit.familyID, firstName: dataToSubmit.firstName, lastName: dataToSubmit.lastName },
       ]);
     } else {
       try {
@@ -210,11 +211,12 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         );
         if (serverResponse.message === "OK") {
           console.log("Obtaining contact details");
-          let { fullName, address, postCode, mobile, email } =
+          let { firstName, lastName, address, postCode, mobile, email } =
             serverResponse.results.data;
           setDataToSubmit((prev) => ({
             ...prev,
-            fullName: fullName,
+            firstName: firstName,
+            lastName: lastName,
             address: address,
             postCode: postCode,
             mobile: mobile,
@@ -568,7 +570,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 {familyDropdown.map((item) => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
-                      {item.fullName}
+                      {item.firstName + ' ' + item.lastName}
                     </MenuItem>
                   );
                 })}
@@ -687,7 +689,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                     ) || 0;
                   return (
                     <TableRow key={student.student_id}>
-                      <TableCell>{student.full_name}</TableCell>
+                      <TableCell>{student.firstName + ' ' + student.lastName}</TableCell>
                       <TableCell>
                         {student.sessions ? (
                           student.sessions.map((studentSession) => {
@@ -985,7 +987,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               <div style={styles.invoice}>
                 <div style={styles.invoice.recipient}>
                   <span style={{ fontWeight: "bold" }}>INVOICE TO</span> <br />
-                  {dataToSubmit.fullName} <br /> {dataToSubmit.address} <br />{" "}
+                  {dataToSubmit.firstName + ' ' + dataToSubmit.lastName} <br /> {dataToSubmit.address} <br />{" "}
                   {dataToSubmit.postCode}
                 </div>
                 <div style={styles.invoice.dates}>
