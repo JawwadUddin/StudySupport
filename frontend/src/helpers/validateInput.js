@@ -22,7 +22,7 @@ export const validateInputs = ({
         }
         break;
       case "alphaNumeric":
-        if (!validator.isAlphanumeric(data, "en-GB", { ignore: " -" })) {
+        if (!validator.isAlphanumeric(data, "en-GB", { ignore: " -," })) {
           return "Please enter Alphanumeric characters only";
         }
         break;
