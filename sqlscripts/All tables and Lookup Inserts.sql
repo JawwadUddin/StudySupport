@@ -854,8 +854,6 @@ INSERT [dbo].[relation] ([relation_id], [relation_to_child]) VALUES (8, N'aunt')
 GO
 INSERT [dbo].[relation] ([relation_id], [relation_to_child]) VALUES (11, N'cousin')
 GO
-INSERT [dbo].[relation] ([relation_id], [relation_to_child]) VALUES (12, N'updateRelationTest')
-GO
 SET IDENTITY_INSERT [dbo].[relation] OFF
 GO
 SET IDENTITY_INSERT [dbo].[sessionSlots] ON 

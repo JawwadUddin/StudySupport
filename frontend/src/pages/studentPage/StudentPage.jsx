@@ -16,7 +16,6 @@ const StudentPage = () => {
   const [deleteID, setDeleteID] = useState(null);
   const [deleteText, setDeleteText] = useState("");
   const [query, setQuery] = useState("");
-  const [columnToQuery, setColumnToQuery] = useState("fullName");
 
   const navigate = useNavigate();
 
@@ -100,23 +99,12 @@ const StudentPage = () => {
             value={query}
             onChange={({ target: { value } }) => setQuery(value.toLowerCase())}
           />
-          <Select
-            id="select-search"
-            value={columnToQuery}
-            size="small"
-            label="Search column"
-            onChange={({ target: { value } }) => setColumnToQuery(value)}
-          >
-            <MenuItem value="fullName">Full Name</MenuItem>
-            <MenuItem value="schoolYear">Year</MenuItem>
-            <MenuItem value="DOB">DOB</MenuItem>
-          </Select>
         </div>
         <Table
           data={
             query
               ? students.filter((student) =>
-                  student[columnToQuery]
+                  (student.firstName + student.lastName + student.schoolYear)
                     .toString()
                     .toLowerCase()
                     .includes(query)

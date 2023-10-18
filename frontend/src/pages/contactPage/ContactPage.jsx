@@ -16,7 +16,6 @@ const ContactPage = () => {
   const [deleteID, setDeleteID] = useState(null);
   const [deleteText, setDeleteText] = useState("");
   const [query, setQuery] = useState("");
-  const [columnToQuery, setColumnToQuery] = useState("fullName");
 
   const navigate = useNavigate();
 
@@ -100,23 +99,12 @@ const ContactPage = () => {
             value={query}
             onChange={({ target: { value } }) => setQuery(value.toLowerCase())}
           />
-          <Select
-            id="select-search"
-            value={columnToQuery}
-            size="small"
-            label="Search column"
-            onChange={({ target: { value } }) => setColumnToQuery(value)}
-          >
-            <MenuItem value="fullName">Full Name</MenuItem>
-            <MenuItem value="address">Address</MenuItem>
-            <MenuItem value="mobile">Contact Number</MenuItem>
-          </Select>
         </div>
         <Table
           data={
             query
               ? contacts.filter((contact) =>
-                  contact[columnToQuery].toLowerCase().includes(query)
+                  (contact.firstName + contact.lastName + contact.address + contact.mobile).toLowerCase().includes(query)
                 )
               : contacts
           }
