@@ -21,7 +21,8 @@ const StudentForm = ({ idFamily }) => {
   );
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     familyID: familyID,
     DOB: "",
     schoolYear: "",
@@ -149,8 +150,15 @@ const StudentForm = ({ idFamily }) => {
   }
   const validateForm = (inputData) => {
     const _errors = {};
-    _errors.fullName = validateInputs({
-      data: inputData.fullName,
+    _errors.firstName = validateInputs({
+      data: inputData.firstName,
+      type: "alpha",
+      minLength: 2,
+      maxLength: 20,
+      required: true,
+    });
+    _errors.lastName = validateInputs({
+      data: inputData.lastName,
       type: "alpha",
       minLength: 2,
       maxLength: 20,
@@ -166,7 +174,7 @@ const StudentForm = ({ idFamily }) => {
     });
     _errors.school = validateInputs({
       data: inputData.school,
-      type: "alpha",
+      type: "alphaNumeric",
       required: false,
     });
     _errors.schoolYear = validateInputs({
@@ -188,17 +196,31 @@ const StudentForm = ({ idFamily }) => {
       <h3>Student Information</h3>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={8} md={5}>
+        <Grid item xs={12} sm={8} md={4}>
           <TextField
             required
-            error={!!formErrors.fullName}
-            helperText={formErrors.fullName}
-            id="fullName"
-            name="fullName"
-            label="Full Name"
+            error={!!formErrors.firstName}
+            helperText={formErrors.firstName}
+            id="firstName"
+            name="firstName"
+            label="First Name"
             fullWidth
             variant="outlined"
-            value={dataToSubmit.fullName}
+            value={dataToSubmit.firstName}
+            onChange={addData}
+          />
+        </Grid>
+        <Grid item xs={12} sm={8} md={4}>
+          <TextField
+            required
+            error={!!formErrors.lastName}
+            helperText={formErrors.lastName}
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            fullWidth
+            variant="outlined"
+            value={dataToSubmit.lastName}
             onChange={addData}
           />
         </Grid>
@@ -233,7 +255,7 @@ const StudentForm = ({ idFamily }) => {
               {familyDropdown.map((item) => {
                 return (
                   <MenuItem key={item.id} value={item.id}>
-                    {item.fullName}
+                    {item.firstName + ' ' + item.lastName}
                   </MenuItem>
                 );
               })}

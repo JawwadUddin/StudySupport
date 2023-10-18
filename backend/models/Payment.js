@@ -83,7 +83,7 @@ class Payment {
             sql.VarChar,
             JSON.stringify(data.outstandingTransactions)
           )
-          .input("Credit", sql.Decimal(5, 2), data.credit)
+          .input("Credit", sql.Decimal(6, 2), data.credit)
           .execute("UpdatePayments");
         resolve("Successfully udpated payments");
       } catch (err) {

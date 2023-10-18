@@ -26,12 +26,14 @@ import logo from "./studysupportlogo.png";
 
 const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: familyID || "",
-    fullName: "",
+    firstName: "",
+    lastName: "",
     address: "",
     postCode: "",
     mobile: "",
@@ -123,7 +125,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       );
       setSessionsAmountDue(invoiceInfo.amountDue - amountDueMisc);
       setFamilyDropdown([
-        { id: dataToSubmit.familyID, fullName: dataToSubmit.fullName },
+        { id: dataToSubmit.familyID, firstName: dataToSubmit.firstName, lastName: dataToSubmit.lastName },
       ]);
     } else {
       try {
@@ -209,11 +211,12 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         );
         if (serverResponse.message === "OK") {
           console.log("Obtaining contact details");
-          let { fullName, address, postCode, mobile, email } =
+          let { firstName, lastName, address, postCode, mobile, email } =
             serverResponse.results.data;
           setDataToSubmit((prev) => ({
             ...prev,
-            fullName: fullName,
+            firstName: firstName,
+            lastName: lastName,
             address: address,
             postCode: postCode,
             mobile: mobile,
@@ -403,38 +406,42 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         return;
       }
       async function submitData() {
-        let serverResponse;
-        let JSONRateInfo = [];
-        sessions &&
-          sessions.map((item) => {
-            return JSONRateInfo.push(...item.rateInfo);
-          });
+        try {
+          let serverResponse;
+          let JSONRateInfo = [];
+          sessions &&
+            sessions.map((item) => {
+              return JSONRateInfo.push(...item.rateInfo);
+            });
 
-        if (invoiceInfo) {
-          console.log(invoiceInfo);
-          serverResponse = await updateData(
-            `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
-            { ...dataToSubmit, JSONRateInfo }
-          );
-        } else {
-          serverResponse = await saveData(
-            `${process.env.REACT_APP_API_URL}/api/invoice`,
-            { ...dataToSubmit, JSONRateInfo }
-          );
-        }
-        if (serverResponse.message === "OK") {
           if (invoiceInfo) {
-            navigate(-1, {
-              replace: true,
-            });
+            console.log(invoiceInfo);
+            serverResponse = await updateData(
+              `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
+              { ...dataToSubmit, JSONRateInfo }
+            );
           } else {
-            const { newInvoiceID } = serverResponse.results.data;
-            navigate(`/invoices/${newInvoiceID}`, {
-              replace: true,
-            });
+            serverResponse = await saveData(
+              `${process.env.REACT_APP_API_URL}/api/invoice`,
+              { ...dataToSubmit, JSONRateInfo }
+            );
           }
-        } else {
-          throw Error(serverResponse.message);
+          if (serverResponse.message === "OK") {
+            if (invoiceInfo) {
+              navigate(-1, {
+                replace: true,
+              });
+            } else {
+              const { newInvoiceID } = serverResponse.results.data;
+              navigate(`/invoices/${newInvoiceID}`, {
+                replace: true,
+              });
+            }
+          } else {
+            throw Error(serverResponse.message);
+          }
+        } catch (error) {
+          setErrorMessage(error.message);
         }
       }
       submitData();
@@ -563,7 +570,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 {familyDropdown.map((item) => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
-                      {item.fullName}
+                      {item.firstName + ' ' + item.lastName}
                     </MenuItem>
                   );
                 })}
@@ -682,7 +689,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                     ) || 0;
                   return (
                     <TableRow key={student.student_id}>
-                      <TableCell>{student.full_name}</TableCell>
+                      <TableCell>{student.firstName + ' ' + student.lastName}</TableCell>
                       <TableCell>
                         {student.sessions ? (
                           student.sessions.map((studentSession) => {
@@ -874,6 +881,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             </>
           )}
         </div>
+        {errorMessage && <h3 className="error">{errorMessage}</h3>}
         <div className="formEnd">
           {invoiceInfo ? (
             <>
@@ -979,7 +987,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               <div style={styles.invoice}>
                 <div style={styles.invoice.recipient}>
                   <span style={{ fontWeight: "bold" }}>INVOICE TO</span> <br />
-                  {dataToSubmit.fullName} <br /> {dataToSubmit.address} <br />{" "}
+                  {dataToSubmit.firstName + ' ' + dataToSubmit.lastName} <br /> {dataToSubmit.address} <br />{" "}
                   {dataToSubmit.postCode}
                 </div>
                 <div style={styles.invoice.dates}>

@@ -5,7 +5,8 @@ const Student = require("./Student");
 class Family {
   constructor(data) {
     this.id = data.family_id;
-    this.fullName = data.full_name;
+    this.firstName = data.first_name;
+    this.lastName = data.last_name;
     this.address = data.address;
     this.postCode = data.post_code;
     this.mobile = data.mobile;
@@ -84,7 +85,8 @@ class Family {
         const pool = await dbConnect();
         const familyData = await pool
           .request()
-          .input("FullName", sql.VarChar, family.fullName)
+          .input("FirstName", sql.VarChar, family.firstName)
+          .input("LastName", sql.VarChar, family.lastName)
           .input("Address", sql.VarChar, family.address)
           .input("PostCode", sql.VarChar, family.postCode)
           .input("Mobile", sql.VarChar, family.mobile)
@@ -112,7 +114,8 @@ class Family {
         const familyData = await pool
           .request()
           .input("FamilyID", sql.Int, id)
-          .input("FullName", sql.VarChar, family.fullName)
+          .input("FirstName", sql.VarChar, family.firstName)
+          .input("LastName", sql.VarChar, family.lastName)
           .input("Address", sql.VarChar, family.address)
           .input("PostCode", sql.VarChar, family.postCode)
           .input("Mobile", sql.VarChar, family.mobile)
