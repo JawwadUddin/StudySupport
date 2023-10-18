@@ -1057,6 +1057,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                             (studentSessions.full_session ? 2 : 1),
                           0
                         ) || 0;
+                        if (QTY === 0) return;
                       return (
                         <tr key={student.student_id}>
                           <td
@@ -1066,7 +1067,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                               paddingLeft: "30px",
                             }}
                           >
-                            Sessions - ({student.full_name})
+                            Sessions - {student.full_name}
                           </td>
                           <td>{QTY}</td>
                           <td>
