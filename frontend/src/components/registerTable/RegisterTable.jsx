@@ -92,7 +92,7 @@ const RegisterTable = ({
                   setSelectedStudent(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) => option.fullName}
+                getOptionLabel={(option) => option.firstName + " " + option.lastName}
                 renderInput={(params) => (
                   <TextField {...params} label="Student" />
                 )}
@@ -107,7 +107,8 @@ const RegisterTable = ({
                     sessionTable,
                     student: {
                       student_id: selectedStudent.id,
-                      full_name: selectedStudent.fullName,
+                      firstName: selectedStudent.firstName,
+                      lastName: selectedStudent.lastName,
                       attendance: false,
                       student_session_id: "new",
                       compensation_id: null,
@@ -133,11 +134,11 @@ const RegisterTable = ({
                   setSelectedCompensation(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) => option.fullName}
+                getOptionLabel={(option) => option.firstName + " " + option.lastName}
                 renderOption={(props, option) => {
                   return (
                     <li {...props} key={option.studentSessionID}>
-                      {option.fullName} - {option.sessionDate}
+                      {option.firstName + " " + option.lastName} - {option.sessionDate}
                     </li>
                   );
                 }}
@@ -155,7 +156,8 @@ const RegisterTable = ({
                     sessionTable,
                     student: {
                       student_id: selectedCompensation.studentID,
-                      full_name: selectedCompensation.fullName,
+                      firstName: selectedCompensation.firstName,
+                      lastName: selectedCompensation.lastName,
                       attendance: true,
                       student_session_id: "new",
                       compensation_id: selectedCompensation.studentSessionID,
@@ -236,7 +238,7 @@ const RegisterTable = ({
                                 </IconButton>
                               ) : null}
 
-                              {student.full_name}
+                              {student.firstName + " " + student.lastName}
                               {student.compensation_id && (
                                 // <div className="compensation-tag"></div>
                                 <CachedIcon className="compensation-tag" />

@@ -5,7 +5,8 @@ class Compensation {
   constructor(data) {
     this.studentSessionID = data.student_session_id;
     this.studentID = data.student_id;
-    this.fullName = data.full_name;
+    this.firstName = data.firstName;
+    this.lastName = data.lastName;
     this.sessionDate = data.session_date;
     this.sessionTime = data.session_time;
   }
