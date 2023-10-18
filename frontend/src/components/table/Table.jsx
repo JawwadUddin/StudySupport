@@ -12,7 +12,10 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
     case "contact":
       columns = [
         { field: "id", headerName: "ID", width: "10" },
-        { field: "fullName", headerName: "Full name", width: 200 },
+        { field: "fullName", headerName: "Full name", width: 200, valueGetter: (params) => {
+          return `${params.row.firstName || ''} ${params.row.lastName || ''}`;
+        }, 
+        },
         {
           field: "address",
           headerName: "Address",
@@ -68,7 +71,10 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
     case "student":
       columns = [
         { field: "id", headerName: "ID", width: 100 },
-        { field: "fullName", headerName: "Full name", width: 200 },
+        { field: "fullName", headerName: "Full name", width: 200, valueGetter: (params) => {
+          return `${params.row.firstName || ''} ${params.row.lastName || ''}`;
+        }, 
+        },
         {
           field: "schoolYear",
           headerName: "Year",
