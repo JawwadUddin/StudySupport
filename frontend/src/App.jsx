@@ -21,7 +21,7 @@ import SingleInvoicePage from "./pages/singleInvoicePage/SingleInvoicePage";
 import NewInvoicePage from "./pages/newInvoicePage/newInvoicePage";
 import NewPaymentPage from "./pages/newPaymentPage/NewPaymentPage";
 import SinglePaymentPage from "./pages/singlePaymentPage/SinglePaymentPage";
-import TransactionPage from "./pages/transactionPage/TransactionPage";
+// import TransactionPage from "./pages/transactionPage/TransactionPage";
 import CustomerPage from "./pages/customerPage/CustomerPage";
 import CustomerInfo from "./pages/customerInfo/CustomerInfo";
 import LoginPage from "./pages/loginPage/LoginPage";
@@ -88,11 +88,11 @@ function App() {
             <Route path="detail" element={<CustomerInfo />} />
             <Route path="detail/:customerID" element={<CustomerInfo />} />
           </Route>
-          <Route path="transactions">
+          {/* <Route path="transactions">
             <Route path="" element={<TransactionPage />} />
-          </Route>
+          </Route> */}
           <Route path="invoices">
-            <Route path="" element={<TransactionPage />} />
+            {/* <Route path="" element={<TransactionPage />} /> */}
             <Route path="new" element={<NewInvoicePage />} />
             <Route path=":invoiceID" element={<SingleInvoicePage />} />
           </Route>
