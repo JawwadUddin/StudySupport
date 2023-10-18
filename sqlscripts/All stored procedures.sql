@@ -196,7 +196,7 @@ CREATE PROCEDURE [portal].[InsertInvoice]
 AS
 BEGIN
 
-IF EXISTS (SELECT * FROM invoices WHERE MONTH(start_date) = MONTH(@StartDate))
+IF EXISTS (SELECT * FROM invoices WHERE family_id = @FamilyID AND MONTH(start_date) = MONTH(@StartDate))
 	THROW 50001, 'An invoice that has a start date of this month has already been made: either select a new start date or update the existing invoice', 1
 
 DECLARE @InsertedInvoiceID AS TABLE (ID INT);
@@ -777,7 +777,7 @@ BEGIN
 
 DECLARE @RegisterDate Date = (SELECT session_date from sessionDates where session_date_id = @RegisterDateID)
 
-select ss.student_session_id, ss.student_id, first_name, last_name, FORMAT(session_date, 'dd/MM/yyyy') AS session_date, session_time from studentSessions ss
+select ss.student_session_id, ss.student_id, first_name as firstName, last_name as lastName, FORMAT(session_date, 'dd/MM/yyyy') AS session_date, session_time from studentSessions ss
 inner join sessionDates sd
 on ss.session_date_id = sd.session_date_id
 inner join students st
@@ -1029,7 +1029,7 @@ SELECT
 			SELECT session_table,
 			students = (
 			ISNULL(
-				(SELECT s.student_id, s.student_session_id, attendance, compensation_id, full_name, full_session 
+				(SELECT s.student_id, s.student_session_id, attendance, compensation_id, first_name as firstName, last_name as lastName, full_session 
 				FROM studentSessions s
 				INNER JOIN students st on s.student_id = st.student_id
 					WHERE s.session_date_id = d.session_date_id 
