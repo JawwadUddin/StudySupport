@@ -138,17 +138,17 @@ const ContactForm = () => {
       type: "alpha",
       minLength: 2,
       maxLength: 20,
-      required: true,
+      required: false,
     });
     _errors.ecMobile = validateInputs({
       data: inputData.ecMobile,
       type: "int",
       length: 11,
-      required: true,
+      required: false,
     });
     _errors.ecRelation = validateInputs({
       data: inputData.ecRelation,
-      required: true,
+      required: false,
     });
     _errors.ecAddress = validateInputs({
       data: inputData.ecAddress,
@@ -282,7 +282,7 @@ const ContactForm = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <TextField
-            required
+            // required
             error={!!formErrors.ecFullName}
             helperText={formErrors.ecFullName}
             id="fullNameEC"
@@ -296,7 +296,7 @@ const ContactForm = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            required
+            // required
             error={!!formErrors.ecMobile}
             helperText={formErrors.ecMobile}
             id="mobileEC"
