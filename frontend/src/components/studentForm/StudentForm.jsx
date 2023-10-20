@@ -170,7 +170,7 @@ const StudentForm = ({ idFamily }) => {
     });
     _errors.DOB = validateInputs({
       data: inputData.DOB,
-      required: true,
+      // required: true,
     });
     _errors.school = validateInputs({
       data: inputData.school,
@@ -228,7 +228,7 @@ const StudentForm = ({ idFamily }) => {
           <TextField
             error={!!formErrors.DOB}
             helperText={formErrors.DOB}
-            required
+            // required
             id="date"
             label="Birthday"
             type="date"
