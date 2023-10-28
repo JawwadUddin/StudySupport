@@ -7,6 +7,7 @@ class Compensation {
     this.studentID = data.student_id;
     this.firstName = data.firstName;
     this.lastName = data.lastName;
+    this.schoolYear = data.schoolYear;
     this.sessionDate = data.session_date;
     this.sessionTime = data.session_time;
   }

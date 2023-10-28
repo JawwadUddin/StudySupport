@@ -92,7 +92,7 @@ const RegisterTable = ({
                   setSelectedStudent(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) => option.firstName + " " + option.lastName}
+                getOptionLabel={(option) => option.firstName + " " + option.lastName + " - Yr " + option.schoolYear}
                 renderInput={(params) => (
                   <TextField {...params} label="Student" />
                 )}
@@ -109,6 +109,7 @@ const RegisterTable = ({
                       student_id: selectedStudent.id,
                       firstName: selectedStudent.firstName,
                       lastName: selectedStudent.lastName,
+                      schoolYear: selectedStudent.schoolYear,
                       attendance: false,
                       student_session_id: "new",
                       compensation_id: null,
@@ -138,7 +139,7 @@ const RegisterTable = ({
                 renderOption={(props, option) => {
                   return (
                     <li {...props} key={option.studentSessionID}>
-                      {option.firstName + " " + option.lastName} - {option.sessionDate}
+                      {option.firstName + " " + option.lastName + " - Yr " + option.schoolYear} - {option.sessionDate}
                     </li>
                   );
                 }}
@@ -158,6 +159,7 @@ const RegisterTable = ({
                       student_id: selectedCompensation.studentID,
                       firstName: selectedCompensation.firstName,
                       lastName: selectedCompensation.lastName,
+                      schoolYear: selectedCompensation.schoolYear,
                       attendance: true,
                       student_session_id: "new",
                       compensation_id: selectedCompensation.studentSessionID,
@@ -238,7 +240,7 @@ const RegisterTable = ({
                                 </IconButton>
                               ) : null}
 
-                              {student.firstName + " " + student.lastName}
+                              {student.firstName + " " + student.lastName + " - Yr " + student.schoolYear}
                               {student.compensation_id && (
                                 // <div className="compensation-tag"></div>
                                 <CachedIcon className="compensation-tag" />
