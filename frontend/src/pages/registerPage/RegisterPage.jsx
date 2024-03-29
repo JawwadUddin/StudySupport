@@ -70,7 +70,6 @@ const RegisterPage = () => {
 
   function findRegister(sessionDateID) {
     if (sessionDateID === "") return;
-    setSessionDateID(sessionDateID);
     setEditMode(false);
     setChanges({
       add: [],
@@ -285,7 +284,7 @@ const RegisterPage = () => {
               id="relation"
               multiline
               value={sessionDateID}
-              onChange={(e) => findRegister(e.target.value)}
+              onChange={(e) => setSessionDateID(e.target.value)}
             >
               {sessionDate.map((item) => {
                 return (
