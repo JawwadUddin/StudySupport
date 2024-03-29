@@ -40,6 +40,16 @@ const RegisterTable = ({
         } else {
           throw Error(serverStudentResponse.message);
         }
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      async function fetchCompensations() {
         const serverCompensationResponse = await getData(
           `${process.env.REACT_APP_API_URL}/api/compensations/${sessionDateID}`
         );
@@ -49,11 +59,11 @@ const RegisterTable = ({
           throw Error(serverCompensationResponse.message);
         }
       }
-      fetchData();
+    fetchCompensations()
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [sessionDateID])
 
   const NewStudentSession = ({ sessionTime, sessionTable }) => {
     const [selectedStudent, setSelectedStudent] = useState(null);
