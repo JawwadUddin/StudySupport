@@ -54,6 +54,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const componentPrintRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentPrintRef.current,
+    documentTitle: `${invoiceInfo.id}-${invoiceInfo.familyID}-${invoiceInfo.firstName + ' ' + invoiceInfo.lastName}`
   });
 
   const styles = {
