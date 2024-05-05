@@ -1068,7 +1068,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                               paddingLeft: "30px",
                             }}
                           >
-                            Sessions - {student.full_name}
+                            Sessions - {student.firstName + ' ' + student.lastName}
                           </td>
                           <td>{QTY}</td>
                           <td>
