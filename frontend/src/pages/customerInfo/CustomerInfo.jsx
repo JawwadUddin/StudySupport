@@ -30,13 +30,14 @@ const CustomerInfo = () => {
           (customer) => customer.familyID == customerID
         );
         if (customer) {
-          let { firstName, lastName, mobile, overdueBalance, openBalance } = customer;
+          let { firstName, lastName, mobile, overdueBalance, openBalance, students } = customer;
           setCustomerDetail({
             firstName,
             lastName,
             mobile,
             overdueBalance,
             openBalance,
+            students
           });
         }
       }
@@ -200,10 +201,10 @@ const CustomerInfo = () => {
                           .includes(query)
                       )
                     : customers
-                  ).map((customer) => {
+                  ).map((customer, index) => {
                     return (
                       <div
-                        key={customer.familyID}
+                        key={index}
                         className="customerSummary"
                         onClick={() =>
                           navigate(`/customers/detail/${customer.familyID}`)
@@ -228,6 +229,7 @@ const CustomerInfo = () => {
                 {customerDetail ? (
                   <>
                     <h1>{customerDetail.firstName + ' ' + customerDetail.lastName}</h1>
+                    <p style={{marginBottom: "10px"}}>{customerDetail.students}</p>
                     <span>{customerDetail.mobile}</span>
                   </>
                 ) : null}
@@ -290,9 +292,9 @@ const CustomerInfo = () => {
               </thead>
               <tbody>
                 {customerInfo.length !== 0
-                  ? customerInfo.map((customer) => {
+                  ? customerInfo.map((customer, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td>
                             {customer.date.split("-").reverse().join("/")}
                           </td>

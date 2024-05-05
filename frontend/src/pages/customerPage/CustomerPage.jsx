@@ -214,9 +214,10 @@ const CustomerPage = () => {
                         .includes(query)
                     )
                   : sortedData
-                ).map((customer) => {
+                ).map((customer, index) => {
                   return (
                     <tr
+                    key={index}
                       className="hoverable"
                       onClick={() =>
                         navigate(`/customers/detail/${customer.familyID}`, {
