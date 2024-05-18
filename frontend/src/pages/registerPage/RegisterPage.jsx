@@ -20,6 +20,7 @@ const RegisterPage = () => {
     remove: [],
   });
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const newSessionDateID = location.state
@@ -98,17 +99,22 @@ const RegisterPage = () => {
   function handleSubmit() {
     try {
       async function updateRegister() {
+        setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 1000));
         const serverResponse = await updateData(
           `${process.env.REACT_APP_API_URL}/api/register/`,
           changes
         );
         if (serverResponse.message === "OK") {
+          setLoading(false)
           findRegister(sessionDateID);
         } else {
+          setLoading(false)
           throw Error(serverResponse.message);
         }
       }
       updateRegister();
+
     } catch (error) {
       console.log(error);
     }
@@ -305,6 +311,7 @@ const RegisterPage = () => {
             cancelChanges={cancelChanges}
             handleSubmit={handleSubmit}
             sessionDateID={sessionDateID}
+            loading={loading}
           />
         ) : (
           <h3 style={{ marginTop: "20px", fontSize: "16px", color: "red" }}>

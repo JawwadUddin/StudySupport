@@ -148,12 +148,12 @@ const CustomerInfo = () => {
     }
   }
 
-  function openDeleteModel(id) {
+  function openDeleteModal(id) {
     setOpenModal(true);
     setDeleteID(id);
   }
 
-  function cancelDeleteModel() {
+  function cancelDeleteModal() {
     setOpenModal(false);
     setDeleteID(null);
   }
@@ -354,7 +354,7 @@ const CustomerInfo = () => {
                             </IconButton>
                             {customer.type === "Invoice" ? (
                               <IconButton
-                                onClick={() => openDeleteModel(customer.id)}
+                                onClick={() => openDeleteModal(customer.id)}
                                 aria-label="delete"
                                 color="error"
                               >
@@ -376,7 +376,7 @@ const CustomerInfo = () => {
           <div className="modal">
             <div className="modalTop">
               <IconButton
-                onClick={() => cancelDeleteModel()}
+                onClick={() => cancelDeleteModal()}
                 aria-label="delete"
                 color="primary"
                 className="modalExit"
@@ -397,7 +397,7 @@ const CustomerInfo = () => {
               <Button
                 variant="outlined"
                 size="large"
-                onClick={() => cancelDeleteModel()}
+                onClick={() => cancelDeleteModal()}
               >
                 Cancel
               </Button>

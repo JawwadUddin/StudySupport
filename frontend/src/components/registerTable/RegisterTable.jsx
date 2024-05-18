@@ -345,7 +345,6 @@ const RegisterTable = ({
             color="error"
             className="deleteBtn"
             onClick={() => openDeleteModal()}>Delete Register</Button>
-        
           {!editMode ? (
             <Button
               onClick={() => setEditMode(true)}
