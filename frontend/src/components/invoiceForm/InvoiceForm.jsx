@@ -510,10 +510,15 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       required: true,
     });
     let message = null;
+
     if (sessions) {
       for (let i = 0; i < sessions.length; i++) {
         if (!sessions[i].rateInfo || sessions[i].rateInfo[0].rate === "") {
           message = "This is a required field";
+          break;
+        }
+        if (isNaN(sessions[i].rateInfo[0].rate)) {
+          message = "Rate must be a number"
           break;
         }
       }
@@ -721,7 +726,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                           required
                           id="rate"
                           label="Rate"
-                          type="number"
                           value={
                             student.rateInfo ? student.rateInfo[0].rate : ""
                           }
