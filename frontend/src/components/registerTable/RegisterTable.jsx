@@ -5,12 +5,15 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { getData } from "../../helpers/apiFunctions";
+import { getData, deleteData } from "../../helpers/apiFunctions";
 import IconButton from "@mui/material/IconButton";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CheckIcon from "@mui/icons-material/Check";
 import CachedIcon from "@mui/icons-material/Cached";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import ClearIcon from "@mui/icons-material/Clear";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+
 
 const RegisterTable = ({
   updatedSessions,
@@ -20,10 +23,12 @@ const RegisterTable = ({
   cancelChanges,
   handleSubmit,
   sessionDateID,
+  loading
 }) => {
   const [register, setRegister] = useState([]);
   const [students, setStudents] = useState([]);
   const [compensations, setCompensations] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     setRegister([...updatedSessions]);
@@ -64,6 +69,28 @@ const RegisterTable = ({
       console.log(error);
     }
   }, [sessionDateID])
+
+    function openDeleteModal() {
+    setOpenModal(true);
+    console.log(sessionDateID)
+  }
+
+  function cancelDeleteModal() {
+    setOpenModal(false);
+    console.log("cancel delete")
+  }
+
+  function handleDeleteRegister() {
+    //run delete request
+    async function removeData() {
+      await deleteData(
+        `${process.env.REACT_APP_API_URL}/api/register/${sessionDateID}`
+      );
+    }
+    removeData();
+    window.location.reload(false);
+    setOpenModal(false);
+  }
 
   const NewStudentSession = ({ sessionTime, sessionTable }) => {
     const [selectedStudent, setSelectedStudent] = useState(null);
@@ -313,36 +340,84 @@ const RegisterTable = ({
           <CancelIcon className="absent-icon icon" /> Absent
         </div>
       </div>
-      <div className="formEnd">
-        {!editMode ? (
-          <Button
-            onClick={() => setEditMode(true)}
-            variant="outlined"
-            color="secondary"
-            className="editBtn"
-          >
-            Edit Register
-          </Button>
-        ) : (
-          <>
+      <div className="formEnd" style={{position: 'relative'}}>
+        <Button variant="outlined"
+            color="error"
+            className="deleteBtn"
+            onClick={() => openDeleteModal()}>Delete Register</Button>
+        
+          {!editMode ? (
             <Button
-              onClick={() => cancelChanges()}
+              onClick={() => setEditMode(true)}
               variant="outlined"
-              color="warning"
-              className="cancelBtn"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => handleSubmit()}
-              variant="contained"
               color="secondary"
-              className="submitBtn"
+              className="editBtn"
             >
-              Confirm Changes
+              Edit Register
             </Button>
-          </>
-        )}
+          ) : (
+            <>
+              <Button
+                onClick={() => cancelChanges()}
+                variant="outlined"
+                color="warning"
+                className="cancelBtn"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => handleSubmit()}
+                variant="contained"
+                disabled={loading}
+                color="secondary"
+                className="submitBtn"
+              >
+                Confirm Changes
+              </Button>
+            </>
+          )}
+        
+        {openModal && (
+        <div className="modalContainerRegister">
+          <div className="modal">
+            <div className="modalTop">
+              <IconButton
+                onClick={() => cancelDeleteModal()}
+                aria-label="delete"
+                color="primary"
+                className="modalExit"
+              >
+                <ClearIcon />
+              </IconButton>
+            </div>
+            <div className="modalWarning">
+              <ErrorOutlineIcon className="warningIcon" />
+              <h1>Delete register?</h1>
+              <p>
+                This erases the register forever. You can’t undo this. <br />{" "}
+                <br /> Any invoices already generated from this register will be updated.
+              </p>
+            </div>
+            <div className="modalButtons">
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={() => cancelDeleteModal()}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                size="large"
+                color="error"
+                onClick={() => handleDeleteRegister()}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
