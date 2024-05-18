@@ -294,6 +294,9 @@ const PaymentForm = ({
     if (amountReceived === 0 || amountReceived === "") {
       message = "This is a required field";
     }
+    if (isNaN(amountReceived)) {
+      message = "Amount received must be a number"
+    }
     _errors.amountReceived = message;
 
     cleanErrorObject(_errors);
@@ -390,7 +393,6 @@ const PaymentForm = ({
             required
             id="amountReceived"
             label="Amount Received"
-            type="number"
             name="amountReceived"
             value={amountReceived}
             onChange={(e) => setAmountReceived(e.target.value)}

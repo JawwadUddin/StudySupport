@@ -54,6 +54,22 @@ class Register {
       }
     });
   }
+
+  static findByIDAndDelete(id) {
+    console.log("deleting session id " + id);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const studentData = await pool
+          .request()
+          .input("SessionDateID", sql.Int, id)
+          .execute("DeleteRegisterByID");
+        resolve("Register successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 }
 
 module.exports = Register;
