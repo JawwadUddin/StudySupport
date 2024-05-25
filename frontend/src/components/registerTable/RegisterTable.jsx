@@ -244,7 +244,10 @@ const RegisterTable = ({
       {register.map((session, index) => {
         return (
           <div key={index}>
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "40px", marginBottom: "20px", position: "relative"}}>
             <h2 className="session-time">{session.session_time}</h2>
+            <div className="session-count">{session.tables.map(table => table.students.reduce((acc, cur) => acc + cur.attendance, 0)).reduce((acc, cur) => acc + cur, 0)}</div>
+            </div>
             <div className="tables-container">
               {session.tables.map((table, index) => {
                 return (
