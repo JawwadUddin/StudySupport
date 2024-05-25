@@ -63,7 +63,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
     },
     company: {
       display: "flex",
-      marginBottom: "30px",
+      marginBottom: "10px",
       padding: "50px 50px 0px 50px",
       companyLogo: {
         width: "100px",
@@ -71,11 +71,13 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       },
       companyAddress: {
         marginLeft: "20px",
+        fontSize: '13px'
       },
     },
     invoice: {
       padding: "0 50px",
-      marginTop: "20px",
+      marginTop: "10px",
+      fontSize: "13px",
       display: "flex",
       justifyContent: "space-between",
       recipient: {},
@@ -88,6 +90,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       borderCollapse: "collapse",
       padding: "5px",
       position: "relative",
+      fontSize: "13px",
       header: {
         border: "none",
         backgroundColor: "rgb(207 233 235)",
@@ -95,24 +98,32 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
     },
     horizontal: {
       border: "none",
-      borderTop: "3px dotted rgb(191 178 178)",
-      margin: "30px 50px",
+      borderTop: "2px dotted rgb(191 178 178)",
+      margin: "30px 50px 10px",
     },
     summary: {
       padding: "0 50px",
       display: "flex",
       message: {
         flex: 2,
-        fontSize: "14px",
+        fontSize: "12px",
       },
       balance: {
         flex: 1,
+        fontSize: "16px", 
       },
+    },
+    sessions: {
+      padding: "0 50px",
+      display: "flex",
+      gap: "40px",
+      marginTop: "20px"
     },
     account: {
       position: "absolute",
       left: "50px",
       bottom: "50px",
+      fontSize: "13px"
     },
   };
 
@@ -159,6 +170,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         if (serverResponse.message === "OK") {
           console.log("I have run to get the sessions");
           setSessions(serverResponse.results.data);
+          console.log(serverResponse.results.data)
         } else {
           throw Error(serverResponse.message);
         }
@@ -969,14 +981,13 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
           <div className="pdfView">
             <div
               size="A4"
-              // style={styles.page}
               ref={componentPrintRef}
               className="page"
             >
               <div style={styles.company}>
                 <img style={styles.company.companyLogo} src={logo} alt="" />
                 <div style={styles.company.companyAddress}>
-                  <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "16px" }}>
                     Study Support
                   </span>
                   <br />
@@ -985,7 +996,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 </div>
               </div>
 
-              <h1 style={{ color: "rgb(48 177 178)", padding: "0 50px" }}>
+              <h1 style={{ color: "rgb(48 177 178)", padding: "0 50px", fontWeight: '500', fontSize: '28px' }}>
                 INVOICE
               </h1>
 
@@ -1026,12 +1037,12 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
 
               <div
                 style={{
-                  border: "solid 2px rgb(48 177 178)",
-                  margin: "40px 50px 20px 50px",
+                  border: "solid 0.5px rgb(48 177 178)",
+                  margin: "20px 50px 10px",
                 }}
               ></div>
 
-              <div style={{ marginBottom: "40px", padding: "0 50px" }}>
+              <div style={{ marginBottom: "30px", padding: "0 50px", fontSize: "13px" }}>
                 <span style={{ fontWeight: "bold" }}>START DATE</span> <br />
                 {dataToSubmit.startDate.split("-").reverse().join("/")}
               </div>
@@ -1047,7 +1058,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
 
                 <tr style={styles.details.header}>
                   <th style={{ width: "50%", padding: "5px 30px" }}>
-                    ACTIVTIY
+                    ACTIVITY
                   </th>
                   <th style={{ width: "20%" }}>QTY</th>
                   <th style={{ width: "15%" }}>RATE</th>
@@ -1068,7 +1079,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                           <td
                             style={{
                               paddingTop: "10px",
-                              paddingBottom: "10px",
                               paddingLeft: "30px",
                             }}
                           >
@@ -1090,11 +1100,10 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 {dataToSubmit.JSONInvoiceMisc
                   ? dataToSubmit.JSONInvoiceMisc?.map((invoiceMisc, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td
                             style={{
                               paddingTop: "10px",
-                              paddingBottom: "10px",
                               paddingLeft: "30px",
                             }}
                           >
@@ -1120,12 +1129,12 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                     {dataToSubmit.amountPaid !== 0 ? (
                       <tr>
                         <td style={{ fontWeight: "bold" }}>PAYMENT</td>
-                        <td>{dataToSubmit.amountPaid}</td>
+                        <td>{Number(dataToSubmit.amountPaid).toFixed(2)}</td>
                       </tr>
                     ) : null}
                     <tr>
                       <td style={{ fontWeight: "bold" }}>BALANCE DUE</td>
-                      <td style={{ fontSize: "30px", fontWeight: "bold" }}>
+                      <td style={{ fontSize: "20px", fontWeight: "bold" }}>
                         £
                         {Number(
                           dataToSubmit.amountDue - dataToSubmit.amountPaid
@@ -1134,6 +1143,34 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                     </tr>
                   </table>
                 </div>
+              </div>
+
+              <div style={styles.sessions}>
+                {sessions && sessions.map(student => {
+                  return (
+                    <div style={{ fontSize: "13px"}}>
+                    <p style={{marginBottom: "5px"}}>{student.firstName + ' ' + student.lastName}</p>
+                    {student.sessions ? (
+                          student.sessions.map((studentSession) => {
+                            return (
+                              <div key={studentSession.student_session_id}>
+                                {studentSession.session_date + " - S" + studentSession.session_slot_id}
+                                {!studentSession.full_session && " - (1 hour)"}
+                                <span>
+                                  {!studentSession.attendance && " - absent"}
+                                </span>
+                                <br />
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <p>
+                            No Sessions
+                          </p>
+                        )}
+                    </div>
+                  )
+                })}
               </div>
 
               <div style={styles.account}>
