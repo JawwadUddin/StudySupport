@@ -8,8 +8,8 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'backend/*'
-      - 'sqlscripts/*'
+      - 'backend/**'
+      - 'sqlscripts/**'
   workflow_dispatch:
   
 defaults:
