@@ -8,8 +8,8 @@ on:
     branches:
       - main
     paths-ignore:
-        - 'frontend/*'
-        - 'sqlscripts/*'
+        - 'frontend/**'
+        - 'sqlscripts/**'
   workflow_dispatch:
   
 defaults:
