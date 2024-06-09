@@ -34,6 +34,7 @@ const PaymentForm = ({
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: familyID || "",
     paymentDate: new Date().toISOString().split("T")[0],
+    newPaymentDate: new Date().toISOString().split("T")[0],
     paymentType: "",
     outstandingTransactions: [],
     credit: 0,
@@ -51,6 +52,7 @@ const PaymentForm = ({
       setDataToSubmit({
         familyID: familyID,
         paymentDate: paymentDate.split("-").reverse().join("-"),
+        newPaymentDate: paymentDate.split("-").reverse().join("-"),
         paymentType: paymentType,
         outstandingTransactions: paymentInfo,
         credit: updatedCredit,
@@ -222,7 +224,6 @@ const PaymentForm = ({
           let serverResponse;
 
           if (paymentInfo) {
-            console.log(dataToSubmit);
             serverResponse = await updateData(
               `${process.env.REACT_APP_API_URL}/api/payment/update`,
               dataToSubmit
@@ -258,6 +259,7 @@ const PaymentForm = ({
     setDataToSubmit({
       familyID: familyID,
       paymentDate: paymentDate.split("-").reverse().join("-"),
+      newPaymentDate: paymentDate.split("-").reverse().join("-"),
       outstandingTransactions: paymentInfo,
       credit: updatedCredit,
     });
@@ -343,11 +345,11 @@ const PaymentForm = ({
             error={!!formErrors.paymentDate}
             helperText={formErrors.paymentDate}
             required
-            id="paymentDate"
+            id="newPaymentDate"
             label="Payment Date"
             type="date"
-            name="paymentDate"
-            value={dataToSubmit.paymentDate}
+            name="newPaymentDate"
+            value={dataToSubmit.newPaymentDate}
             onChange={addData}
             sx={{ backgroundColor: "white" }}
             InputLabelProps={{
