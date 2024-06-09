@@ -50,6 +50,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const [description, setDescription] = useState("");
   const [sessionsAmountDue, setSessionsAmountDue] = useState(0);
   const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [invoiceSummary, setInvoiceSummary] = useState([]);
   const componentPrintRef = useRef();
   const handlePrint = useReactToPrint({
@@ -421,6 +422,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       }
       async function submitData() {
         try {
+          setLoading(true);
           let serverResponse;
           let JSONRateInfo = [];
           sessions &&
@@ -429,7 +431,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             });
 
           if (invoiceInfo) {
-            console.log(invoiceInfo);
             serverResponse = await updateData(
               `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
               { ...dataToSubmit, JSONRateInfo }
@@ -441,6 +442,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             );
           }
           if (serverResponse.message === "OK") {
+            setLoading(false);
             if (invoiceInfo) {
               navigate(-1, {
                 replace: true,
@@ -452,6 +454,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               });
             }
           } else {
+            setLoading(false);
             throw Error(serverResponse.message);
           }
         } catch (error) {
@@ -919,6 +922,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                   </Button>
                   <Button
                     onClick={handleSubmit}
+                    disabled={loading}
                     variant="contained"
                     className="submitBtn"
                   >
@@ -959,6 +963,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               </Button>
               <Button
                 onClick={handleSubmit}
+                disabled={loading}
                 variant="contained"
                 className="submitBtn"
               >

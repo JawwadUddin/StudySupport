@@ -29,6 +29,7 @@ const PaymentForm = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [editMode, setEditMode] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [loadingSave, setLoadingSave] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
@@ -221,8 +222,8 @@ const PaymentForm = ({
       }
       async function submitData() {
         try {
+          setLoadingSave(true);
           let serverResponse;
-
           if (paymentInfo) {
             serverResponse = await updateData(
               `${process.env.REACT_APP_API_URL}/api/payment/update`,
@@ -235,10 +236,12 @@ const PaymentForm = ({
             );
           }
           if (serverResponse.message === "OK") {
+            setLoadingSave(false);
             navigate(-1, {
               replace: true,
             });
           } else {
+            setLoadingSave(false);
             throw Error(serverResponse.message);
           }
         } catch (error) {
@@ -495,6 +498,7 @@ const PaymentForm = ({
                 </Button>
                 <Button
                   onClick={handleSubmit}
+                  disabled={loadingSave}
                   variant="contained"
                   className="submitBtn"
                 >
@@ -524,6 +528,7 @@ const PaymentForm = ({
             </Button>
             <Button
               onClick={handleSubmit}
+              disabled={loadingSave}
               variant="contained"
               className="submitBtn"
             >
