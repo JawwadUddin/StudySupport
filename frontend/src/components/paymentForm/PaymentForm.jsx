@@ -29,11 +29,13 @@ const PaymentForm = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [editMode, setEditMode] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [loadingSave, setLoadingSave] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [familyDropdown, setFamilyDropdown] = useState([]);
   const [dataToSubmit, setDataToSubmit] = useState({
     familyID: familyID || "",
     paymentDate: new Date().toISOString().split("T")[0],
+    newPaymentDate: new Date().toISOString().split("T")[0],
     paymentType: "",
     outstandingTransactions: [],
     credit: 0,
@@ -51,6 +53,7 @@ const PaymentForm = ({
       setDataToSubmit({
         familyID: familyID,
         paymentDate: paymentDate.split("-").reverse().join("-"),
+        newPaymentDate: paymentDate.split("-").reverse().join("-"),
         paymentType: paymentType,
         outstandingTransactions: paymentInfo,
         credit: updatedCredit,
@@ -219,10 +222,9 @@ const PaymentForm = ({
       }
       async function submitData() {
         try {
+          setLoadingSave(true);
           let serverResponse;
-
           if (paymentInfo) {
-            console.log(dataToSubmit);
             serverResponse = await updateData(
               `${process.env.REACT_APP_API_URL}/api/payment/update`,
               dataToSubmit
@@ -234,10 +236,12 @@ const PaymentForm = ({
             );
           }
           if (serverResponse.message === "OK") {
+            setLoadingSave(false);
             navigate(-1, {
               replace: true,
             });
           } else {
+            setLoadingSave(false);
             throw Error(serverResponse.message);
           }
         } catch (error) {
@@ -258,6 +262,7 @@ const PaymentForm = ({
     setDataToSubmit({
       familyID: familyID,
       paymentDate: paymentDate.split("-").reverse().join("-"),
+      newPaymentDate: paymentDate.split("-").reverse().join("-"),
       outstandingTransactions: paymentInfo,
       credit: updatedCredit,
     });
@@ -343,11 +348,11 @@ const PaymentForm = ({
             error={!!formErrors.paymentDate}
             helperText={formErrors.paymentDate}
             required
-            id="paymentDate"
+            id="newPaymentDate"
             label="Payment Date"
             type="date"
-            name="paymentDate"
-            value={dataToSubmit.paymentDate}
+            name="newPaymentDate"
+            value={dataToSubmit.newPaymentDate}
             onChange={addData}
             sx={{ backgroundColor: "white" }}
             InputLabelProps={{
@@ -493,6 +498,7 @@ const PaymentForm = ({
                 </Button>
                 <Button
                   onClick={handleSubmit}
+                  disabled={loadingSave}
                   variant="contained"
                   className="submitBtn"
                 >
@@ -522,6 +528,7 @@ const PaymentForm = ({
             </Button>
             <Button
               onClick={handleSubmit}
+              disabled={loadingSave}
               variant="contained"
               className="submitBtn"
             >

@@ -53,7 +53,7 @@ class Payment {
         const paymentData = await pool
           .request()
           .input("FamilyID", sql.Int, data.familyID)
-          .input("PaymentDate", sql.Date, data.paymentDate)
+          .input("PaymentDate", sql.Date, data.newPaymentDate)
           .input("PaymentType", sql.VarChar, data.paymentType)
           .input(
             "JSONTransactionInfo",
@@ -77,6 +77,7 @@ class Payment {
           .request()
           .input("FamilyID", sql.Int, data.familyID)
           .input("PaymentDate", sql.Date, data.paymentDate)
+          .input("NewPaymentDate", sql.Date, data.newPaymentDate)
           .input("PaymentType", sql.VarChar, data.paymentType)
           .input(
             "JSONTransactionInfo",

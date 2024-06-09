@@ -50,6 +50,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const [description, setDescription] = useState("");
   const [sessionsAmountDue, setSessionsAmountDue] = useState(0);
   const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [invoiceSummary, setInvoiceSummary] = useState([]);
   const componentPrintRef = useRef();
   const handlePrint = useReactToPrint({
@@ -168,7 +169,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
           `${process.env.REACT_APP_API_URL}/api/invoice/sessions/${dataToSubmit.familyID}/${dataToSubmit.startDate}`
         );
         if (serverResponse.message === "OK") {
-          console.log("I have run to get the sessions");
           setSessions(serverResponse.results.data);
           console.log(serverResponse.results.data)
         } else {
@@ -195,14 +195,16 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
     try {
       function updateAmountDue() {
         let amountDue = 0;
-        console.log("updating the sessionsAmount");
         sessions.map((student) => {
           let QTY =
-            student.sessions?.reduce(
-              (accumulator, studentSessions) =>
-                accumulator + (studentSessions.full_session ? 2 : 1),
-              0
-            ) || 0;
+                    student.sessions?.reduce(
+                      (accumulator, studentSessions) => {
+                        if (!studentSessions.compensation_id) return accumulator + (studentSessions.full_session ? 2 : 1);
+                        return accumulator
+                      }
+                      ,
+                      0
+                    ) || 0;
           amountDue += QTY * (student.rateInfo ? student.rateInfo[0].rate : 0);
         });
         setSessionsAmountDue(amountDue);
@@ -420,6 +422,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       }
       async function submitData() {
         try {
+          setLoading(true);
           let serverResponse;
           let JSONRateInfo = [];
           sessions &&
@@ -428,7 +431,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             });
 
           if (invoiceInfo) {
-            console.log(invoiceInfo);
             serverResponse = await updateData(
               `${process.env.REACT_APP_API_URL}/api/invoice/${invoiceInfo.id}`,
               { ...dataToSubmit, JSONRateInfo }
@@ -440,6 +442,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             );
           }
           if (serverResponse.message === "OK") {
+            setLoading(false);
             if (invoiceInfo) {
               navigate(-1, {
                 replace: true,
@@ -451,6 +454,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               });
             }
           } else {
+            setLoading(false);
             throw Error(serverResponse.message);
           }
         } catch (error) {
@@ -701,8 +705,11 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               ? sessions.map((student) => {
                   let QTY =
                     student.sessions?.reduce(
-                      (accumulator, studentSessions) =>
-                        accumulator + (studentSessions.full_session ? 2 : 1),
+                      (accumulator, studentSessions) => {
+                        if (!studentSessions.compensation_id) return accumulator + (studentSessions.full_session ? 2 : 1);
+                        return accumulator
+                      }
+                      ,
                       0
                     ) || 0;
                   return (
@@ -718,7 +725,8 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                                   ? "(2 hours)"
                                   : "(1 hour)"}{" "}
                                 <span>
-                                  {!studentSession.attendance && " - absent"}
+                                  {!studentSession.attendance && " - Absent"}
+                                  {studentSession.compensation_id && ' - Compensation'}
                                 </span>
                                 <br />
                               </div>
@@ -914,6 +922,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                   </Button>
                   <Button
                     onClick={handleSubmit}
+                    disabled={loading}
                     variant="contained"
                     className="submitBtn"
                   >
@@ -954,6 +963,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               </Button>
               <Button
                 onClick={handleSubmit}
+                disabled={loading}
                 variant="contained"
                 className="submitBtn"
               >
@@ -1066,13 +1076,15 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 </tr>
                 {sessions
                   ? sessions.map((student) => {
-                      let QTY =
-                        student.sessions?.reduce(
-                          (accumulator, studentSessions) =>
-                            accumulator +
-                            (studentSessions.full_session ? 2 : 1),
-                          0
-                        ) || 0;
+                    let QTY =
+                    student.sessions?.reduce(
+                      (accumulator, studentSessions) => {
+                        if (!studentSessions.compensation_id) return accumulator + (studentSessions.full_session ? 2 : 1);
+                        return accumulator
+                      }
+                      ,
+                      0
+                    ) || 0;
                         if (QTY === 0) return;
                       return (
                         <tr key={student.student_id}>
@@ -1148,7 +1160,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               <div style={styles.sessions}>
                 {sessions && sessions.map(student => {
                   return (
-                    <div style={{ fontSize: "13px"}}>
+                    <div key={student.student_id} style={{ fontSize: "13px"}}>
                     <p style={{marginBottom: "5px"}}>{student.firstName + ' ' + student.lastName}</p>
                     {student.sessions ? (
                           student.sessions.map((studentSession) => {
@@ -1157,7 +1169,8 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                                 {studentSession.session_date + " - S" + studentSession.session_slot_id}
                                 {!studentSession.full_session && " - (1 hour)"}
                                 <span>
-                                  {!studentSession.attendance && " - absent"}
+                                  {!studentSession.attendance && " - Absent"}
+                                  {studentSession.compensation_id && ' - Compensation'}
                                 </span>
                                 <br />
                               </div>
