@@ -138,6 +138,13 @@ const RegisterForm = () => {
               labelId="demo-simple-select-label"
               id="relation"
               multiline
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 300,
+                  },
+                },
+              }}
               value={sessionDateID}
               onChange={(e) => {
                 setSessionDateID(e.target.value);

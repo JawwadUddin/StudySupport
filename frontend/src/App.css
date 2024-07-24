@@ -145,58 +145,65 @@ h4 {
 }
 
 .modalContainer {
-  /* position: absolute; */
+  position: fixed; /* or absolute, based on the use case */
   z-index: 1;
   height: 100%;
   width: 100%;
   top: 0;
+  left: 0; /* Ensure full coverage */
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.712);
+}
 
-  .modal {
-    background-color: white;
-    border: solid 1px red;
-    border-radius: 12px;
-    box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.2);
-    padding: 16px;
+.modal {
+  background-color: white;
+  border: solid 1px red;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+}
 
-    .modalTop {
-      display: flex;
-      justify-content: flex-end;
-    }
+.modalTop {
+  display: flex;
+  justify-content: flex-end;
+}
 
-    .modalWarning {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      .warningIcon {
-        font-size: 60px;
-        color: #ff6a00;
-      }
+.modalWarning {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-      h1 {
-        color: #333333;
-        margin-top: 20px;
-      }
+.warningIcon {
+  font-size: 60px;
+  color: #ff6a00;
+}
 
-      p {
-        color: #6b6c72;
-        width: 90%;
-        margin-top: 40px;
-        font-size: 1.2rem;
-        font-weight: 500;
-      }
-    }
-  }
+.modalWarning h1 {
+  color: #333333;
+  margin-top: 20px;
+}
 
-  .modalButtons {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 50px;
-    margin-bottom: 30px;
-  }
+.modalWarning p {
+  color: #6b6c72;
+  width: 90%;
+  margin-top: 40px;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.dropDown {
+  max-height: 300px;
+  overflow-y: scroll;
 }
