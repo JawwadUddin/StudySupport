@@ -26,6 +26,7 @@ const compensationRoutes = require("./routes/compensation");
 const invoiceRoutes = require("./routes/invoice");
 const paymentRoutes = require("./routes/payment");
 const customerRoutes = require("./routes/customer");
+const transactionRoutes = require("./routes/transaction");
 
 server.use("/api/family", familyRoutes);
 server.use("/api/student", studentRoutes);
@@ -42,6 +43,7 @@ server.use("/api/compensations", compensationRoutes);
 server.use("/api/invoice", invoiceRoutes);
 server.use("/api/payment", paymentRoutes);
 server.use("/api/customer", customerRoutes);
+server.use("/api/transaction", transactionRoutes);
 
 server.get("/", (req, res) => {
   res
