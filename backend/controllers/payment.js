@@ -45,4 +45,16 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, create, update };
+async function showMonthlyPaymentSummary(req, res) {
+  try {
+    const paymentSummary = await Payment.monthlyPaymentSummary();
+    res
+      .status(200)
+      .json(success("OK", { data: paymentSummary }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
+module.exports = { index, show, create, update, showMonthlyPaymentSummary };

@@ -92,6 +92,20 @@ class Payment {
       }
     });
   }
+
+  static monthlyPaymentSummary() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const paymentSummary = await pool
+          .request()
+          .execute("SelectMonthlyPaymentSummary");
+        resolve(paymentSummary.recordset);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 }
 
 module.exports = Payment;
