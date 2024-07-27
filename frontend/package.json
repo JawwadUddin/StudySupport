@@ -7,8 +7,10 @@
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.10",
+    "@mui/x-charts": "^7.11.1",
     "@mui/x-data-grid": "^5.17.8",
     "dotenv": "^16.0.3",
+    "file-saver": "^2.0.5",
     "jspdf": "^2.5.1",
     "react": "^18.1.0",
     "react-auth-kit": "^2.12.3",
@@ -17,7 +19,8 @@
     "react-scripts": "5.0.1",
     "react-to-print": "^2.14.10",
     "uuid": "^9.0.0",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

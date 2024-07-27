@@ -288,6 +288,13 @@ const RegisterPage = () => {
             <Select
               labelId="demo-simple-select-label"
               id="relation"
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 500,
+                  },
+                },
+              }}
               multiline
               value={sessionDateID}
               onChange={(e) => setSessionDateID(e.target.value)}

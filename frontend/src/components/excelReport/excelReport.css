@@ -1,0 +1,7 @@
+.createBtn {
+  background-color: #2596be !important;
+}
+
+.createBtn:hover {
+  background-color: rgba(37, 150, 190, 0.842) !important;
+}
