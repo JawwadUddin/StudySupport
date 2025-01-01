@@ -55,8 +55,12 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
   const componentPrintRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentPrintRef.current,
-    documentTitle: `${invoiceInfo?.id}-${invoiceInfo?.familyID}-${invoiceInfo?.firstName + ' ' + invoiceInfo?.lastName}`
+    documentTitle: `${invoiceInfo?.id}-${invoiceInfo?.familyID}-${
+      invoiceInfo?.firstName + " " + invoiceInfo?.lastName
+    }`,
   });
+
+  console.log({ sessions });
 
   const styles = {
     page: {
@@ -72,7 +76,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       },
       companyAddress: {
         marginLeft: "20px",
-        fontSize: '13px'
+        fontSize: "13px",
       },
     },
     invoice: {
@@ -111,20 +115,20 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       },
       balance: {
         flex: 1,
-        fontSize: "16px", 
+        fontSize: "16px",
       },
     },
     sessions: {
       padding: "0 50px",
       display: "flex",
       gap: "40px",
-      marginTop: "20px"
+      marginTop: "20px",
     },
     account: {
       position: "absolute",
       left: "50px",
       bottom: "50px",
-      fontSize: "13px"
+      fontSize: "13px",
     },
   };
 
@@ -138,7 +142,11 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       );
       setSessionsAmountDue(invoiceInfo.amountDue - amountDueMisc);
       setFamilyDropdown([
-        { id: dataToSubmit.familyID, firstName: dataToSubmit.firstName, lastName: dataToSubmit.lastName },
+        {
+          id: dataToSubmit.familyID,
+          firstName: dataToSubmit.firstName,
+          lastName: dataToSubmit.lastName,
+        },
       ]);
     } else {
       try {
@@ -170,7 +178,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         );
         if (serverResponse.message === "OK") {
           setSessions(serverResponse.results.data);
-          console.log(serverResponse.results.data)
+          console.log(serverResponse.results.data);
         } else {
           throw Error(serverResponse.message);
         }
@@ -197,14 +205,11 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         let amountDue = 0;
         sessions.map((student) => {
           let QTY =
-                    student.sessions?.reduce(
-                      (accumulator, studentSessions) => {
-                        if (!studentSessions.compensation_id) return accumulator + (studentSessions.full_session ? 2 : 1);
-                        return accumulator
-                      }
-                      ,
-                      0
-                    ) || 0;
+            student.sessions?.reduce((accumulator, studentSessions) => {
+              if (!studentSessions.compensation_id)
+                return accumulator + (studentSessions.full_session ? 2 : 1);
+              return accumulator;
+            }, 0) || 0;
           amountDue += QTY * (student.rateInfo ? student.rateInfo[0].rate : 0);
         });
         setSessionsAmountDue(amountDue);
@@ -534,7 +539,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
           break;
         }
         if (isNaN(sessions[i].rateInfo[0].rate)) {
-          message = "Rate must be a number"
+          message = "Rate must be a number";
           break;
         }
       }
@@ -592,7 +597,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 {familyDropdown.map((item) => {
                   return (
                     <MenuItem key={item.id} value={item.id}>
-                      {item.firstName + ' ' + item.lastName}
+                      {item.firstName + " " + item.lastName}
                     </MenuItem>
                   );
                 })}
@@ -704,17 +709,18 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             {sessions
               ? sessions.map((student) => {
                   let QTY =
-                    student.sessions?.reduce(
-                      (accumulator, studentSessions) => {
-                        if (!studentSessions.compensation_id) return accumulator + (studentSessions.full_session ? 2 : 1);
-                        return accumulator
-                      }
-                      ,
-                      0
-                    ) || 0;
+                    student.sessions?.reduce((accumulator, studentSessions) => {
+                      if (!studentSessions.compensation_id)
+                        return (
+                          accumulator + (studentSessions.full_session ? 2 : 1)
+                        );
+                      return accumulator;
+                    }, 0) || 0;
                   return (
                     <TableRow key={student.student_id}>
-                      <TableCell>{student.firstName + ' ' + student.lastName}</TableCell>
+                      <TableCell>
+                        {student.firstName + " " + student.lastName}
+                      </TableCell>
                       <TableCell>
                         {student.sessions ? (
                           student.sessions.map((studentSession) => {
@@ -726,7 +732,8 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                                   : "(1 hour)"}{" "}
                                 <span>
                                   {!studentSession.attendance && " - Absent"}
-                                  {studentSession.compensation_id && ' - Compensation'}
+                                  {studentSession.compensation_id &&
+                                    " - Compensation"}
                                 </span>
                                 <br />
                               </div>
@@ -989,11 +996,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             PRINT
           </Button> */}
           <div className="pdfView">
-            <div
-              size="A4"
-              ref={componentPrintRef}
-              className="page"
-            >
+            <div size="A4" ref={componentPrintRef} className="page">
               <div style={styles.company}>
                 <img style={styles.company.companyLogo} src={logo} alt="" />
                 <div style={styles.company.companyAddress}>
@@ -1006,14 +1009,23 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 </div>
               </div>
 
-              <h1 style={{ color: "rgb(48 177 178)", padding: "0 50px", fontWeight: '500', fontSize: '28px' }}>
+              <h1
+                style={{
+                  color: "rgb(48 177 178)",
+                  padding: "0 50px",
+                  fontWeight: "500",
+                  fontSize: "28px",
+                }}
+              >
                 INVOICE
               </h1>
 
               <div style={styles.invoice}>
                 <div style={styles.invoice.recipient}>
                   <span style={{ fontWeight: "bold" }}>INVOICE TO</span> <br />
-                  {dataToSubmit.firstName + ' ' + dataToSubmit.lastName} <br /> {dataToSubmit.address} <br />{" "}
+                  {dataToSubmit.firstName +
+                    " " +
+                    dataToSubmit.lastName} <br /> {dataToSubmit.address} <br />{" "}
                   {dataToSubmit.postCode}
                 </div>
                 <div style={styles.invoice.dates}>
@@ -1052,7 +1064,13 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 }}
               ></div>
 
-              <div style={{ marginBottom: "30px", padding: "0 50px", fontSize: "13px" }}>
+              <div
+                style={{
+                  marginBottom: "30px",
+                  padding: "0 50px",
+                  fontSize: "13px",
+                }}
+              >
                 <span style={{ fontWeight: "bold" }}>START DATE</span> <br />
                 {dataToSubmit.startDate.split("-").reverse().join("/")}
               </div>
@@ -1076,16 +1094,19 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                 </tr>
                 {sessions
                   ? sessions.map((student) => {
-                    let QTY =
-                    student.sessions?.reduce(
-                      (accumulator, studentSessions) => {
-                        if (!studentSessions.compensation_id) return accumulator + (studentSessions.full_session ? 2 : 1);
-                        return accumulator
-                      }
-                      ,
-                      0
-                    ) || 0;
-                        if (QTY === 0) return;
+                      let QTY =
+                        student.sessions?.reduce(
+                          (accumulator, studentSessions) => {
+                            if (!studentSessions.compensation_id)
+                              return (
+                                accumulator +
+                                (studentSessions.full_session ? 2 : 1)
+                              );
+                            return accumulator;
+                          },
+                          0
+                        ) || 0;
+                      if (QTY === 0) return;
                       return (
                         <tr key={student.student_id}>
                           <td
@@ -1094,7 +1115,8 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                               paddingLeft: "30px",
                             }}
                           >
-                            Sessions - {student.firstName + ' ' + student.lastName}
+                            Sessions -{" "}
+                            {student.firstName + " " + student.lastName}
                           </td>
                           <td>{QTY}</td>
                           <td>
@@ -1158,32 +1180,41 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               </div>
 
               <div style={styles.sessions}>
-                {sessions && sessions.map(student => {
-                  return (
-                    <div key={student.student_id} style={{ fontSize: "13px"}}>
-                    <p style={{marginBottom: "5px"}}>{student.firstName + ' ' + student.lastName}</p>
-                    {student.sessions ? (
-                          student.sessions.map((studentSession) => {
-                            return (
-                              <div key={studentSession.student_session_id}>
-                                {studentSession.session_date + " - S" + studentSession.session_slot_id}
-                                {!studentSession.full_session && " - (1 hour)"}
-                                <span>
-                                  {!studentSession.attendance && " - Absent"}
-                                  {studentSession.compensation_id && ' - Compensation'}
-                                </span>
-                                <br />
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <p>
-                            No Sessions
-                          </p>
-                        )}
-                    </div>
-                  )
-                })}
+                {sessions &&
+                  sessions.map((student) => {
+                    return (
+                      <>
+                        {student.sessions
+                          ? student.sessions.map((studentSession) => {
+                              return (
+                                <div
+                                  key={student.student_id}
+                                  style={{ fontSize: "13px" }}
+                                >
+                                  <p style={{ marginBottom: "5px" }}>
+                                    {student.firstName + " " + student.lastName}
+                                  </p>
+                                  <div key={studentSession.student_session_id}>
+                                    {studentSession.session_date +
+                                      " - S" +
+                                      studentSession.session_slot_id}
+                                    {!studentSession.full_session &&
+                                      " - (1 hour)"}
+                                    <span>
+                                      {!studentSession.attendance &&
+                                        " - Absent"}
+                                      {studentSession.compensation_id &&
+                                        " - Compensation"}
+                                    </span>
+                                    <br />
+                                  </div>
+                                </div>
+                              );
+                            })
+                          : null}
+                      </>
+                    );
+                  })}
               </div>
 
               <div style={styles.account}>
