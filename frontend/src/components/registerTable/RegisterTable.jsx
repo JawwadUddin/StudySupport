@@ -14,7 +14,6 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import ClearIcon from "@mui/icons-material/Clear";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-
 const RegisterTable = ({
   updatedSessions,
   updateRegisterState,
@@ -23,12 +22,21 @@ const RegisterTable = ({
   cancelChanges,
   handleSubmit,
   sessionDateID,
-  loading
+  loading,
 }) => {
   const [register, setRegister] = useState([]);
   const [students, setStudents] = useState([]);
   const [compensations, setCompensations] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+
+  const compensationIDsInRegister = register.flatMap((session) =>
+    session.tables.flatMap(
+      (table) =>
+        table.students
+          .filter((student) => student.compensation_id !== null) // Exclude null compensation_ids
+          .map((student) => student.compensation_id) // Extract the compensation_id
+    )
+  );
 
   useEffect(() => {
     setRegister([...updatedSessions]);
@@ -64,13 +72,13 @@ const RegisterTable = ({
           throw Error(serverCompensationResponse.message);
         }
       }
-    fetchCompensations()
+      fetchCompensations();
     } catch (error) {
       console.log(error);
     }
-  }, [sessionDateID])
+  }, [sessionDateID]);
 
-    function openDeleteModal() {
+  function openDeleteModal() {
     setOpenModal(true);
   }
 
@@ -95,6 +103,15 @@ const RegisterTable = ({
     const [selectedCompensation, setSelectedCompensation] = useState(null);
     const [showField, setShowField] = useState(false);
     const [fullSession, setFullSession] = useState(true);
+
+    const session = register.find(
+      (session) => session.session_time === sessionTime
+    );
+    const studentsInCurrentSession = session
+      ? session.tables.flatMap((table) =>
+          table.students.map((student) => student.student_id)
+        )
+      : [];
 
     return (
       <>
@@ -121,13 +138,21 @@ const RegisterTable = ({
                 size="small"
                 disablePortal
                 id="combo-box-demo"
-                options={students}
+                options={students.filter(
+                  (student) => !studentsInCurrentSession.includes(student.id)
+                )}
                 value={selectedStudent}
                 onChange={(e, value) => {
                   setSelectedStudent(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) => option.firstName + " " + option.lastName + " - Yr " + option.schoolYear}
+                getOptionLabel={(option) =>
+                  option.firstName +
+                  " " +
+                  option.lastName +
+                  " - Yr " +
+                  option.schoolYear
+                }
                 renderInput={(params) => (
                   <TextField {...params} label="Student" />
                 )}
@@ -136,6 +161,10 @@ const RegisterTable = ({
                 className="form-tick-icon"
                 onClick={() => {
                   if (selectedStudent === null) return;
+                  if (studentsInCurrentSession.includes(selectedStudent.id)) {
+                    console.log("Student is already in the current session.");
+                    return;
+                  }
                   updateRegisterState({
                     type: "add-session",
                     sessionTime,
@@ -164,17 +193,30 @@ const RegisterTable = ({
                 size="small"
                 disablePortal
                 id="combo-box"
-                options={compensations}
+                options={compensations.filter(
+                  (student) =>
+                    !studentsInCurrentSession.includes(student.studentID) &&
+                    !compensationIDsInRegister.includes(
+                      student.studentSessionID
+                    )
+                )}
                 value={selectedCompensation}
                 onChange={(e, value) => {
                   setSelectedCompensation(value);
                 }}
                 sx={{ width: 300 }}
-                getOptionLabel={(option) => option.firstName + " " + option.lastName}
+                getOptionLabel={(option) =>
+                  option.firstName + " " + option.lastName
+                }
                 renderOption={(props, option) => {
                   return (
                     <li {...props} key={option.studentSessionID}>
-                      {option.firstName + " " + option.lastName + " - Yr " + option.schoolYear} - {option.sessionDate}
+                      {option.firstName +
+                        " " +
+                        option.lastName +
+                        " - Yr " +
+                        option.schoolYear}{" "}
+                      - {option.sessionDate}
                     </li>
                   );
                 }}
@@ -186,6 +228,19 @@ const RegisterTable = ({
                 className="form-tick-icon"
                 onClick={() => {
                   if (selectedCompensation === null) return;
+                  if (
+                    studentsInCurrentSession.includes(
+                      selectedCompensation.studentID
+                    ) ||
+                    compensationIDsInRegister.includes(
+                      selectedCompensation.studentSessionID
+                    )
+                  ) {
+                    console.log(
+                      "Compensation is already in the current register."
+                    );
+                    return;
+                  }
                   updateRegisterState({
                     type: "add-session",
                     sessionTime,
@@ -242,14 +297,29 @@ const RegisterTable = ({
       {register.map((session, index) => {
         return (
           <div key={index}>
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "40px", marginBottom: "20px", position: "relative"}}>
-            <h2 className="session-time">{session.session_time}</h2>
-            <div className="session-count">{session.tables.map(table => table.students.reduce((acc, cur)   => {
-              if (cur.attendance) {
-                return cur.full_session ? acc + 1 : acc + 0.5
-              }
-              return acc
-            }, 0)).reduce((acc, cur) => acc + cur, 0)}</div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "40px",
+                marginBottom: "20px",
+                position: "relative",
+              }}
+            >
+              <h2 className="session-time">{session.session_time}</h2>
+              <div className="session-count">
+                {session.tables
+                  .map((table) =>
+                    table.students.reduce((acc, cur) => {
+                      if (cur.attendance) {
+                        return cur.full_session ? acc + 1 : acc + 0.5;
+                      }
+                      return acc;
+                    }, 0)
+                  )
+                  .reduce((acc, cur) => acc + cur, 0)}
+              </div>
             </div>
             <div className="tables-container">
               {session.tables.map((table, index) => {
@@ -283,7 +353,11 @@ const RegisterTable = ({
                                 </IconButton>
                               ) : null}
 
-                              {student.firstName + " " + student.lastName + " - Yr " + student.schoolYear}
+                              {student.firstName +
+                                " " +
+                                student.lastName +
+                                " - Yr " +
+                                student.schoolYear}
                               {student.compensation_id && (
                                 // <div className="compensation-tag"></div>
                                 <CachedIcon className="compensation-tag" />
@@ -346,83 +420,88 @@ const RegisterTable = ({
           <CancelIcon className="absent-icon icon" /> Absent
         </div>
       </div>
-      <div className="formEnd" style={{position: 'relative'}}>
-        <Button variant="outlined"
-            color="error"
-            className="deleteBtn"
-            onClick={() => openDeleteModal()}>Delete Register</Button>
-          {!editMode ? (
+      <div className="formEnd" style={{ position: "relative" }}>
+        <Button
+          variant="outlined"
+          color="error"
+          className="deleteBtn"
+          onClick={() => openDeleteModal()}
+        >
+          Delete Register
+        </Button>
+        {!editMode ? (
+          <Button
+            onClick={() => setEditMode(true)}
+            variant="outlined"
+            color="secondary"
+            className="editBtn"
+          >
+            Edit Register
+          </Button>
+        ) : (
+          <>
             <Button
-              onClick={() => setEditMode(true)}
+              onClick={() => cancelChanges()}
               variant="outlined"
-              color="secondary"
-              className="editBtn"
+              color="warning"
+              className="cancelBtn"
             >
-              Edit Register
+              Cancel
             </Button>
-          ) : (
-            <>
-              <Button
-                onClick={() => cancelChanges()}
-                variant="outlined"
-                color="warning"
-                className="cancelBtn"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => handleSubmit()}
-                variant="contained"
-                disabled={loading}
-                color="secondary"
-                className="submitBtn"
-              >
-                Confirm Changes
-              </Button>
-            </>
-          )}
-        
+            <Button
+              onClick={() => handleSubmit()}
+              variant="contained"
+              disabled={loading}
+              color="secondary"
+              className="submitBtn"
+            >
+              Confirm Changes
+            </Button>
+          </>
+        )}
+
         {openModal && (
-        <div className="modalContainerRegister">
-          <div className="modal">
-            <div className="modalTop">
-              <IconButton
-                onClick={() => cancelDeleteModal()}
-                aria-label="delete"
-                color="primary"
-                className="modalExit"
-              >
-                <ClearIcon />
-              </IconButton>
-            </div>
-            <div className="modalWarning">
-              <ErrorOutlineIcon className="warningIcon" />
-              <h1>Delete register?</h1>
-              <p>
-                This erases the register forever. You can’t undo this. <br />{" "}
-                <br /> Any invoices already generated from this register will be updated.
-              </p>
-            </div>
-            <div className="modalButtons">
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => cancelDeleteModal()}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                size="large"
-                color="error"
-                onClick={() => handleDeleteRegister()}
-              >
-                Delete
-              </Button>
+          <div className="modalContainerRegister">
+            <div className="modal">
+              <div className="modalTop">
+                <IconButton
+                  onClick={() => cancelDeleteModal()}
+                  aria-label="delete"
+                  color="primary"
+                  className="modalExit"
+                >
+                  <ClearIcon />
+                </IconButton>
+              </div>
+              <div className="modalWarning">
+                <ErrorOutlineIcon className="warningIcon" />
+                <h1>Delete register?</h1>
+                <p>
+                  This erases the register forever. You can’t undo this. <br />{" "}
+                  <br /> Any invoices already generated from this register will
+                  be updated.
+                </p>
+              </div>
+              <div className="modalButtons">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  onClick={() => cancelDeleteModal()}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="error"
+                  onClick={() => handleDeleteRegister()}
+                >
+                  Delete
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   );
