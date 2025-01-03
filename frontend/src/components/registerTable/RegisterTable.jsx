@@ -13,6 +13,7 @@ import CachedIcon from "@mui/icons-material/Cached";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import ClearIcon from "@mui/icons-material/Clear";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ExcelRegister from "../excelRegister/ExcelRegister";
 
 const RegisterTable = ({
   updatedSessions,
@@ -23,6 +24,7 @@ const RegisterTable = ({
   handleSubmit,
   sessionDateID,
   loading,
+  sessionDate,
 }) => {
   const [register, setRegister] = useState([]);
   const [students, setStudents] = useState([]);
@@ -421,6 +423,7 @@ const RegisterTable = ({
         </div>
       </div>
       <div className="formEnd" style={{ position: "relative" }}>
+        <ExcelRegister register={register} sessionDate={sessionDate} />
         <Button
           variant="outlined"
           color="error"
