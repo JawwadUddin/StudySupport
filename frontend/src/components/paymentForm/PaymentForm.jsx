@@ -42,7 +42,6 @@ const PaymentForm = ({
     outstandingTransactions: [],
     credit: 0,
   });
-  console.log(dataToSubmit.outstandingTransactions);
   const [formErrors, setFormErrors] = useState({});
   const [amountReceived, setAmountReceived] = useState(0);
 
