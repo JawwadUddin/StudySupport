@@ -23,6 +23,8 @@ const CustomerInfo = () => {
   const [openModal, setOpenModal] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
 
+  const location = useLocation();
+
   useEffect(() => {
     try {
       if (customers.length !== 0 && customerID) {
@@ -30,14 +32,21 @@ const CustomerInfo = () => {
           (customer) => customer.familyID == customerID
         );
         if (customer) {
-          let { firstName, lastName, mobile, overdueBalance, openBalance, students } = customer;
+          let {
+            firstName,
+            lastName,
+            mobile,
+            overdueBalance,
+            openBalance,
+            students,
+          } = customer;
           setCustomerDetail({
             firstName,
             lastName,
             mobile,
             overdueBalance,
             openBalance,
-            students
+            students,
           });
         }
       }
@@ -57,7 +66,7 @@ const CustomerInfo = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [customerID, customers]);
+  }, [customerID, customers, location]);
 
   useEffect(() => {
     try {
@@ -195,7 +204,11 @@ const CustomerInfo = () => {
               {customers.length !== 0
                 ? (query
                     ? customers.filter((customer) =>
-                        (customer.firstName + customer.lastName + customer.students)
+                        (
+                          customer.firstName +
+                          customer.lastName +
+                          customer.students
+                        )
                           .toString()
                           .toLowerCase()
                           .includes(query)
@@ -210,7 +223,9 @@ const CustomerInfo = () => {
                           navigate(`/customers/detail/${customer.familyID}`)
                         }
                       >
-                        <div className="customerName">{customer.firstName + ' ' + customer.lastName}</div>
+                        <div className="customerName">
+                          {customer.firstName + " " + customer.lastName}
+                        </div>
                         <div className="studentNames">
                           Ref: {customer.students}
                         </div>
@@ -228,8 +243,12 @@ const CustomerInfo = () => {
               <div className="customerMainInfo">
                 {customerDetail ? (
                   <>
-                    <h1>{customerDetail.firstName + ' ' + customerDetail.lastName}</h1>
-                    <p style={{marginBottom: "10px"}}>{customerDetail.students}</p>
+                    <h1>
+                      {customerDetail.firstName + " " + customerDetail.lastName}
+                    </h1>
+                    <p style={{ marginBottom: "10px" }}>
+                      {customerDetail.students}
+                    </p>
                     <span>{customerDetail.mobile}</span>
                   </>
                 ) : null}
@@ -341,7 +360,8 @@ const CustomerInfo = () => {
                                       .join("-")}`,
                                     {
                                       state: {
-                                        firstName: customerDetail.firstName, lastName: customerDetail.lastName
+                                        firstName: customerDetail.firstName,
+                                        lastName: customerDetail.lastName,
                                       },
                                     }
                                   );
