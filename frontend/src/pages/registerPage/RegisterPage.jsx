@@ -100,21 +100,20 @@ const RegisterPage = () => {
     try {
       async function updateRegister() {
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const serverResponse = await updateData(
           `${process.env.REACT_APP_API_URL}/api/register/`,
           changes
         );
         if (serverResponse.message === "OK") {
-          setLoading(false)
+          setLoading(false);
           findRegister(sessionDateID);
         } else {
-          setLoading(false)
+          setLoading(false);
           throw Error(serverResponse.message);
         }
       }
       updateRegister();
-
     } catch (error) {
       console.log(error);
     }
@@ -318,6 +317,10 @@ const RegisterPage = () => {
             cancelChanges={cancelChanges}
             handleSubmit={handleSubmit}
             sessionDateID={sessionDateID}
+            sessionDate={
+              sessionDate.find((session) => session.id === sessionDateID)
+                .sessionDate
+            }
             loading={loading}
           />
         ) : (
