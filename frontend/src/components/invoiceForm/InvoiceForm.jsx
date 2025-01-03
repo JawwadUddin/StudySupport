@@ -60,8 +60,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
     }`,
   });
 
-  console.log({ sessions });
-
   const styles = {
     page: {
       border: "solid 1px red",
@@ -982,19 +980,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
       </div>
       {invoiceInfo && !editMode && (
         <>
-          {/* <div className="horizontal"></div> */}
-          {/* <Button
-            variant="contained"
-            color="warning"
-            style={{
-              margin: "0 auto",
-              display: "block",
-              marginBottom: "20px",
-            }}
-            onClick={handlePrint}
-          >
-            PRINT
-          </Button> */}
           <div className="pdfView">
             <div size="A4" ref={componentPrintRef} className="page">
               <div style={styles.company}>
@@ -1184,34 +1169,33 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                   sessions.map((student) => {
                     return (
                       <>
-                        {student.sessions
-                          ? student.sessions.map((studentSession) => {
+                        {student.sessions ? (
+                          <div
+                            key={student.student_id}
+                            style={{ fontSize: "13px" }}
+                          >
+                            <p style={{ marginBottom: "5px" }}>
+                              {student.firstName + " " + student.lastName}
+                            </p>
+                            {student.sessions.map((studentSession) => {
                               return (
-                                <div
-                                  key={student.student_id}
-                                  style={{ fontSize: "13px" }}
-                                >
-                                  <p style={{ marginBottom: "5px" }}>
-                                    {student.firstName + " " + student.lastName}
-                                  </p>
-                                  <div key={studentSession.student_session_id}>
-                                    {studentSession.session_date +
-                                      " - S" +
-                                      studentSession.session_slot_id}
-                                    {!studentSession.full_session &&
-                                      " - (1 hour)"}
-                                    <span>
-                                      {!studentSession.attendance &&
-                                        " - Absent"}
-                                      {studentSession.compensation_id &&
-                                        " - Compensation"}
-                                    </span>
-                                    <br />
-                                  </div>
+                                <div key={studentSession.student_session_id}>
+                                  {studentSession.session_date +
+                                    " - S" +
+                                    studentSession.session_slot_id}
+                                  {!studentSession.full_session &&
+                                    " - (1 hour)"}
+                                  <span>
+                                    {!studentSession.attendance && " - Absent"}
+                                    {studentSession.compensation_id &&
+                                      " - Compensation"}
+                                  </span>
+                                  <br />
                                 </div>
                               );
-                            })
-                          : null}
+                            })}
+                          </div>
+                        ) : null}
                       </>
                     );
                   })}
