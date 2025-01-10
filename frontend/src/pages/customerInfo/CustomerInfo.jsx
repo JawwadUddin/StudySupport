@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "./customerInfo.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,15 +15,30 @@ import TextField from "@mui/material/TextField";
 const CustomerInfo = () => {
   const [customerInfo, setCustomerInfo] = useState([]);
   const [query, setQuery] = useState("");
-  const { state } = useLocation();
   let { customerID } = useParams();
   const navigate = useNavigate();
   const [customerDetail, setCustomerDetail] = useState("");
-  const [customers, setCustomers] = useState(state?.customers || "");
+  const [customers, setCustomers] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
 
-  const location = useLocation();
+  useEffect(() => {
+    try {
+      async function fetchData() {
+        const serverResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/invoice/outstanding`
+        );
+        if (serverResponse.message === "OK") {
+          setCustomers(serverResponse.results.data);
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -66,7 +81,7 @@ const CustomerInfo = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [customerID, customers, location]);
+  }, [customerID, customers]);
 
   useEffect(() => {
     try {
@@ -175,7 +190,7 @@ const CustomerInfo = () => {
       );
     }
     removeData();
-    window.location.reload(false);
+
     setOpenModal(false);
     setDeleteID(null);
   }

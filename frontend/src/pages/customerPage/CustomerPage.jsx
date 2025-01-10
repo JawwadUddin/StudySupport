@@ -208,7 +208,11 @@ const CustomerPage = () => {
               {sortedData.length !== 0 ? (
                 (query
                   ? sortedData.filter((customer) =>
-                      (customer.firstName + customer.lastName + customer.students)
+                      (
+                        customer.firstName +
+                        customer.lastName +
+                        customer.students
+                      )
                         .toString()
                         .toLowerCase()
                         .includes(query)
@@ -217,41 +221,16 @@ const CustomerPage = () => {
                 ).map((customer, index) => {
                   return (
                     <tr
-                    key={index}
+                      key={index}
                       className="hoverable"
                       onClick={() =>
-                        navigate(`/customers/detail/${customer.familyID}`, {
-                          state: {
-                            customers: sortedData
-                            // sortedData.map((obj) => {
-                            //   // Extract the desired keys from each object
-                            //   const {
-                            //     familyID,
-                            //     firstName,
-                            //     lastName,
-                            //     students,
-                            //     overdueBalance,
-                            //     mobile,
-                            //     openBalance,
-                            //   } = obj;
-
-                            //   // Create a new object with the extracted keys
-                            //   return {
-                            //     familyID,
-                            //     firstName,
-                            //     lastName,
-                            //     students,
-                            //     overdueBalance,
-                            //     mobile,
-                            //     openBalance,
-                            //   };
-                            // }),
-                          },
-                        })
+                        navigate(`/customers/detail/${customer.familyID}`)
                       }
                     >
                       <td>
-                        <div className="customerName">{customer.firstName + ' ' + customer.lastName}</div>
+                        <div className="customerName">
+                          {customer.firstName + " " + customer.lastName}
+                        </div>
                         <div className="studentNames">
                           Ref: {customer.students}
                         </div>
