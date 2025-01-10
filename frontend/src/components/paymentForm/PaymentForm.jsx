@@ -42,6 +42,14 @@ const PaymentForm = ({
     outstandingTransactions: [],
     credit: 0,
   });
+  const [familyContactInfo, setFamilyContactInfo] = useState({
+    firstName: "",
+    lastName: "",
+    address: "",
+    postCode: "",
+    mobile: "",
+    email: "",
+  });
   const [formErrors, setFormErrors] = useState({});
   const [amountReceived, setAmountReceived] = useState(0);
 
@@ -195,6 +203,39 @@ const PaymentForm = ({
       setLoading(false);
     }
   }, [dataToSubmit.familyID]);
+
+  useEffect(() => {
+    try {
+      async function fetchContactInfo() {
+        const serverResponse = await getData(
+          `${process.env.REACT_APP_API_URL}/api/family/${dataToSubmit.familyID}`
+        );
+        if (serverResponse.message === "OK") {
+          console.log("Obtaining contact details");
+          let { firstName, lastName, address, postCode, mobile, email } =
+            serverResponse.results.data;
+          setFamilyContactInfo((prev) => ({
+            ...prev,
+            firstName: firstName,
+            lastName: lastName,
+            address: address,
+            postCode: postCode,
+            mobile: mobile,
+            email: email,
+          }));
+        } else {
+          throw Error(serverResponse.message);
+        }
+      }
+      if (dataToSubmit.familyID) {
+        fetchContactInfo();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dataToSubmit.familyID]);
+
+  console.log(familyContactInfo);
 
   useEffect(() => {
     if (initialLoad) {
@@ -662,7 +703,7 @@ const PaymentForm = ({
                 <span style={{ fontWeight: "bold" }}>RECEIEVED FROM</span>{" "}
                 <br />
                 {firstName + " " + lastName} <br />
-                {/* {dataToSubmit.address} <br /> {dataToSubmit.postCode} */}
+                {familyContactInfo.address} <br /> {familyContactInfo.postCode}
               </div>
 
               <div style={styles.invoice.dates}>
