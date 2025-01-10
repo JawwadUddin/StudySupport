@@ -24,31 +24,21 @@ const ExcelRegister = ({ register, sessionDate }) => {
       // const workbook = XLSX.utils.book_new();
       const workbook = XLSX.utils.book_new();
       const data = [];
-      const maxTablesPerRow = 5;
+      const maxTablesPerRow = 8;
       const gapBetweenRows = 2;
-      const gapBetweenCols = 1;
-      const tableColumnSize = 3;
+      const gapBetweenCols = 0;
+      const tableColumnSize = 4;
       // Array to store merge configurations
       const merges = [];
 
-      // Add the session date at the top with bold and larger font
-      const sessionDateRowIndex = data.length;
-      data.push([{ v: sessionDate, t: "s" }]); // Add session date as a single cell
-      merges.push({
-        s: { r: sessionDateRowIndex, c: 0 }, // Start of merge (row and column)
-        e: {
-          r: sessionDateRowIndex,
-          c:
-            (gapBetweenCols + tableColumnSize) * maxTablesPerRow -
-            gapBetweenCols,
-        }, // End of merge (arbitrary large number for span)
-      });
-
-      // Style for session date
-      data[sessionDateRowIndex][0].s = {
-        alignment: { horizontal: "center", vertical: "center" },
-        font: { bold: true, sz: 16 }, // Bold and larger font size
-      };
+      data.push([{ v: "Study Support", t: "s" }]);
+      data.push([]);
+      data.push([{ v: "Attendance Register", t: "s" }]);
+      data.push([]);
+      data.push([
+        { v: "Date", t: "s" },
+        { v: sessionDate, t: "s" },
+      ]);
 
       // Add a blank row after the session date
       data.push([]);
@@ -68,15 +58,18 @@ const ExcelRegister = ({ register, sessionDate }) => {
 
         // Style for session time
         data[sessionRowIndex][0].s = {
-          font: { bold: true, color: { rgb: "9c27b0" } },
+          font: { bold: true },
           alignment: { horizontal: "center", vertical: "center" },
         };
+        data.push([]);
+
         let sessionRowStart = data.length;
 
         // To track current column index within a row for tables
         let currentColumn = 0;
-
         session.tables.forEach((table, index) => {
+          let childNo = 1;
+
           // Ensure there's enough space in the data array for this row
           if (!data[sessionRowStart]) {
             data[sessionRowStart] = [];
@@ -84,10 +77,10 @@ const ExcelRegister = ({ register, sessionDate }) => {
 
           // Add the table header at the current column
           data[sessionRowStart][currentColumn] = {
-            v: table.session_table,
+            v: "Table " + table.session_table,
             t: "s",
             s: {
-              font: { bold: true, color: { rgb: "FF0000" } },
+              font: { bold: true },
               alignment: { horizontal: "center", vertical: "center" },
             },
           };
@@ -95,7 +88,7 @@ const ExcelRegister = ({ register, sessionDate }) => {
           // Add a merge configuration for the table header
           merges.push({
             s: { r: sessionRowStart, c: currentColumn }, // Start row and column
-            e: { r: sessionRowStart, c: currentColumn + 2 }, // End row and column
+            e: { r: sessionRowStart, c: currentColumn + 1 }, // End row and column
           });
 
           // Add student names underneath the table header
@@ -103,15 +96,44 @@ const ExcelRegister = ({ register, sessionDate }) => {
             // Ensure the row exists
             if (!data[sessionRowStart + studentIndex + 1]) {
               data[sessionRowStart + studentIndex + 1] = [];
+              data[sessionRowStart + studentIndex + 1][currentColumn] = {
+                v: "Tutor ",
+                t: "s",
+              };
+              data[sessionRowStart + studentIndex + 1][currentColumn + 1] = {
+                v: "Mo ",
+                t: "s",
+              };
             }
-            data[sessionRowStart + studentIndex + 1][currentColumn] = {
-              v: "Yr" + student.schoolYear,
+            if (!data[sessionRowStart + studentIndex + 2]) {
+              data[sessionRowStart + studentIndex + 2] = [];
+              data[sessionRowStart + studentIndex + 2][currentColumn] = {
+                v: "No",
+                t: "s",
+              };
+              data[sessionRowStart + studentIndex + 2][currentColumn + 2] = {
+                v: "ATT",
+                t: "s",
+              };
+              data[sessionRowStart + studentIndex + 2][currentColumn + 3] = {
+                v: "INV",
+                t: "s",
+              };
+            }
+            if (!data[sessionRowStart + studentIndex + 3]) {
+              data[sessionRowStart + studentIndex + 3] = [];
+            }
+
+            data[sessionRowStart + studentIndex + 3][currentColumn] = {
+              v: "Child " + childNo,
               t: "s",
             };
-            data[sessionRowStart + studentIndex + 1][currentColumn + 1] = {
-              v: student.firstName + " " + student.lastName,
+            data[sessionRowStart + studentIndex + 3][currentColumn + 1] = {
+              v: student.firstName + ` (Yr ${student.schoolYear})`,
               t: "s",
             };
+
+            childNo++;
           });
 
           // Move to the next column for the next table
@@ -141,7 +163,7 @@ const ExcelRegister = ({ register, sessionDate }) => {
         columnWidths.push({ wch: 5 });
         columnWidths.push({ wch: 20 });
         columnWidths.push({ wch: 5 });
-        columnWidths.push({ wch: 10 });
+        columnWidths.push({ wch: 5 });
       }
 
       // Apply column widths to the sheet
