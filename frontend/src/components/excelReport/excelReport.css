@@ -5,3 +5,28 @@
 .createBtn:hover {
   background-color: rgba(37, 150, 190, 0.842) !important;
 }
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.reportDisplaySection {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid #962626;
+}
+
+.reportSection {
+  margin-bottom: 40px;
+}
+
+.reportSectionTitle {
+  color: #962626;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #962626;
+}

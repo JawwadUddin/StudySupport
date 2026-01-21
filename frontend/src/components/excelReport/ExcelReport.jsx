@@ -4,6 +4,7 @@ import { Button, InputLabel, TextField } from "@mui/material";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { getData } from "../../helpers/apiFunctions";
+import ReportTable from "../reportTable/ReportTable";
 
 const ExcelReport = () => {
   const [startDate, setStartDate] = useState("");
@@ -12,6 +13,8 @@ const ExcelReport = () => {
   const [endDateError, setEndDateError] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [reportData, setReportData] = useState(null);
+  const [showReport, setShowReport] = useState(false);
 
   function isValid() {
     if (!startDate) setStartDateError("This is a required field");
@@ -38,16 +41,59 @@ const ExcelReport = () => {
     return buf;
   };
 
+  const handleViewReport = () => {
+    if (isValid()) {
+      setLoading(true);
+      setError("");
+      async function fetchData() {
+        try {
+          const serverResponse = await getData(
+            `${process.env.REACT_APP_API_URL}/api/transaction/${startDate}/${endDate}`,
+          );
+          if (serverResponse.message === "OK") {
+            const { invoices, payments } = serverResponse.results.data;
+            setReportData({ invoices, payments });
+            setShowReport(true);
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setError(serverResponse.message);
+          }
+        } catch (error) {
+          setLoading(false);
+          setError("Failed to fetch report data. Please try again.");
+          console.log(error);
+        }
+      }
+      fetchData();
+    }
+  };
+
   function handleDownload() {
     if (isValid()) {
       try {
         setLoading(true);
         async function fetchData() {
-          const serverResponse = await getData(
-            `${process.env.REACT_APP_API_URL}/api/transaction/${startDate}/${endDate}`
-          );
-          if (serverResponse.message === "OK") {
-            const { invoices, payments } = serverResponse.results.data;
+          // Use cached data if available
+          let invoices, payments;
+
+          if (reportData) {
+            invoices = reportData.invoices;
+            payments = reportData.payments;
+          } else {
+            const serverResponse = await getData(
+              `${process.env.REACT_APP_API_URL}/api/transaction/${startDate}/${endDate}`,
+            );
+            if (serverResponse.message === "OK") {
+              invoices = serverResponse.results.data.invoices;
+              payments = serverResponse.results.data.payments;
+            } else {
+              setLoading(false);
+              throw Error(serverResponse.message);
+            }
+          }
+
+          if (invoices && payments) {
             // Create a new workbook
             const workbook = XLSX.utils.book_new();
 
@@ -168,7 +214,7 @@ const ExcelReport = () => {
             setLoading(false);
           } else {
             setLoading(false);
-            throw Error(serverResponse.message);
+            throw Error("No data available");
           }
         }
         fetchData();
@@ -196,6 +242,8 @@ const ExcelReport = () => {
             onChange={(e) => {
               setStartDate(e.target.value);
               setStartDateError("");
+              setShowReport(false);
+              setReportData(null);
             }}
             sx={{ width: 220, marginTop: "20px", marginBottom: "20px" }}
             InputLabelProps={{
@@ -217,6 +265,8 @@ const ExcelReport = () => {
             onChange={(e) => {
               setEndDate(e.target.value);
               setEndDateError("");
+              setShowReport(false);
+              setReportData(null);
             }}
             sx={{ width: 220, marginTop: "20px", marginBottom: "20px" }}
             InputLabelProps={{
@@ -226,14 +276,52 @@ const ExcelReport = () => {
         </div>
       </div>
       {error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
-      <Button
-        onClick={handleDownload}
-        variant="contained"
-        className="createBtn"
-        disabled={loading}
-      >
-        Download Report
-      </Button>
+      <div className="buttonContainer">
+        <Button
+          onClick={handleViewReport}
+          variant="contained"
+          className="createBtn"
+          disabled={loading}
+        >
+          View Report
+        </Button>
+        <Button
+          onClick={handleDownload}
+          variant="contained"
+          className="createBtn"
+          disabled={loading}
+        >
+          Download Report
+        </Button>
+      </div>
+
+      {showReport && reportData && (
+        <div className="reportDisplaySection">
+          <div className="reportSection">
+            <h3 className="reportSectionTitle">Invoices Report</h3>
+            <ReportTable
+              data={reportData.invoices}
+              type="invoice"
+              total={reportData.invoices.reduce(
+                (sum, invoice) => sum + invoice.amountDue,
+                0,
+              )}
+            />
+          </div>
+
+          <div className="reportSection">
+            <h3 className="reportSectionTitle">Payments Report</h3>
+            <ReportTable
+              data={reportData.payments}
+              type="payment"
+              total={reportData.payments.reduce(
+                (sum, payment) => sum + payment.amountPaid,
+                0,
+              )}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

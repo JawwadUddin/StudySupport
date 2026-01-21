@@ -235,8 +235,6 @@ const PaymentForm = ({
     }
   }, [dataToSubmit.familyID]);
 
-  console.log(familyContactInfo);
-
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);

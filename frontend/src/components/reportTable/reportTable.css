@@ -1,0 +1,85 @@
+.reportTableContainer {
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reportTable {
+  width: 100%;
+  border: 2px solid #962626;
+}
+
+.reportTableHeader {
+  background-color: #962626;
+}
+
+.reportTableHeaderCell {
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 16px;
+}
+
+.reportTableHeaderCell:last-child {
+  border-right: none;
+}
+
+.reportTableRow {
+  transition: background-color 0.2s;
+}
+
+.reportTableRow:hover {
+  background-color: rgba(150, 38, 38, 0.05);
+}
+
+.reportTableRow:nth-of-type(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.reportTableCell {
+  color: black;
+  font-weight: 600;
+  font-size: 13px;
+  border-right: 1px solid #962626;
+  border-bottom: 1px solid #962626;
+  padding: 10px 16px;
+}
+
+.reportTableCell:last-child {
+  border-right: none;
+}
+
+.reportTableTotalRow {
+  background-color: rgba(150, 38, 38, 0.1);
+  font-weight: 700;
+}
+
+.reportTableTotalLabel {
+  text-align: right;
+  color: black;
+  font-weight: 700;
+  font-size: 14px;
+  border-right: 1px solid #962626;
+  border-bottom: 2px solid #962626;
+  padding: 12px 16px;
+}
+
+.reportTableTotalValue {
+  color: #962626;
+  font-weight: 700;
+  font-size: 14px;
+  border-bottom: 2px solid #962626;
+  padding: 12px 16px;
+}
+
+.emptyState {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  font-style: italic;
+  background-color: #f5f5f5;
+  border: 2px solid #962626;
+  border-radius: 4px;
+  margin: 20px 0;
+}
