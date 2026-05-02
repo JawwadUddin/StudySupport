@@ -10,7 +10,9 @@ const Wrapper = () => {
       <Sidebar />
       <div className="mainContainer">
         <Navbar />
-        <Outlet />
+        <div className="pageContent">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

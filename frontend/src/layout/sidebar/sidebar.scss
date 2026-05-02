@@ -1,71 +1,122 @@
+$sidebar-bg: #1a2332;
+$sidebar-width: 240px;
+$brand-height: 64px;
+$accent: rgb(37, 150, 190);
+$accent-glow: rgba(37, 150, 190, 0.15);
+$text-primary: #e1e4e8;
+$text-muted: #8b949e;
+$hover-bg: rgba(255, 255, 255, 0.06);
+$active-bg: rgba(37, 150, 190, 0.12);
+$transition-speed: 0.2s;
+
 .sidebar {
-  flex: 1;
-  border-right: solid 1px rgb(198, 197, 197);
+  width: $sidebar-width;
+  min-width: $sidebar-width;
   min-height: 100vh;
-  background-color: rgb(34 41 41);
+  background-color: $sidebar-bg;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
 
-  .top {
-    height: 50px;
-    border-bottom: solid 1px rgb(198, 197, 197);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.sidebarBrand {
+  height: $brand-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+  transition: background-color $transition-speed;
 
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      color: rgb(37, 150, 190);
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
 
-      &:hover {
-        cursor: pointer;
-      }
+.sidebarLogo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  margin: 2px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color $transition-speed, color $transition-speed;
+  color: $text-muted;
+
+  &:hover {
+    background-color: $hover-bg;
+    color: $text-primary;
+
+    .navIcon {
+      color: $accent;
     }
   }
 
-  .center {
-    li {
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
+  &.active {
+    background-color: $active-bg;
+    color: $text-primary;
 
-      &:hover {
-        background-color: rgb(131, 208, 208);
-      }
+    .navItemHighlight {
+      opacity: 1;
+    }
 
-      .icon {
-        font-size: 18px;
-        color: rgb(37, 150, 190);
-      }
+    .navIcon {
+      color: $accent;
+    }
 
-      span {
-        font-size: 14px;
-        font-weight: 700;
-        margin-left: 10px;
-        color: white;
-      }
+    .navLabel {
+      color: $text-primary;
+      font-weight: 600;
     }
   }
+}
 
-  .bottom {
-    display: flex;
-    align-items: center;
-    margin: 10px;
+.navItemHighlight {
+  position: absolute;
+  left: -8px;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background-color: $accent;
+  opacity: 0;
+  transition: opacity $transition-speed;
+}
 
-    .colorOption {
-      width: 20px;
-      height: 20px;
-      border-radius: 5px;
-      border: solid 1px rgb(37, 150, 190);
-      cursor: pointer;
-      margin: 5px;
+.navIcon {
+  font-size: 20px;
+  color: $text-muted;
+  transition: color $transition-speed;
+  flex-shrink: 0;
+}
 
-      &:nth-child(1) {
-        background-color: white;
-      }
-      &:nth-child(2) {
-        background-color: black;
-      }
-    }
-  }
+.navLabel {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 14px;
+  color: $text-muted;
+  transition: color $transition-speed;
+  white-space: nowrap;
 }

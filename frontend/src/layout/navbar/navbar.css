@@ -1,76 +1,74 @@
 .navbar {
-  height: 50px;
-  border-bottom: solid 1px rgb(198, 197, 197);
+  height: 64px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e8eaed;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  color: gray;
-  background-color: rgb(34, 41, 41);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-.navbar .username {
-  color: white;
-  font-size: 20px;
-  text-align: center;
+
+.navbarInner {
   display: flex;
   align-items: center;
-  margin-right: 20px;
-}
-.navbar .wrapper {
-  display: flex;
-  align-items: center;
-  padding: 20px;
   justify-content: space-between;
   width: 100%;
+  padding: 0 24px;
 }
-.navbar .wrapper .search {
+
+.navbarRight {
   display: flex;
   align-items: center;
-  border: solid 1px lightgray;
-  padding: 3px;
-  cursor: pointer;
-  margin-bottom: 0;
+  gap: 16px;
 }
-.navbar .wrapper .search input {
-  border: none;
-  outline: none;
-  background-color: transparent;
-}
-.navbar .wrapper .search input::-moz-placeholder {
-  font-size: 12px;
-}
-.navbar .wrapper .search input::placeholder {
-  font-size: 12px;
-}
-.navbar .wrapper .items {
-  display: flex;
-}
-.navbar .wrapper .items .item {
+
+.navbarUser {
   display: flex;
   align-items: center;
-  margin-right: 20px;
-  position: relative;
-  cursor: pointer;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #1a2332;
 }
-.navbar .wrapper .items .item .icon {
-  font-size: 20px;
+
+.navbarUserIcon {
+  font-size: 22px !important;
+  color: rgb(37, 150, 190);
 }
-.navbar .wrapper .items .item .avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-.navbar .wrapper .items .item .counter {
-  background-color: red;
-  border-radius: 50%;
-  width: 15px;
-  height: 15px;
-  position: absolute;
-  top: -3px;
-  right: -5px;
-  color: white;
-  font-size: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+.navbarUsername {
+  font-size: 14px;
   font-weight: 600;
-}/*# sourceMappingURL=navbar.css.map */
+  color: #1a2332;
+}
+
+.navbarSignOut {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  background: none;
+  color: #5f6368;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Nunito", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.navbarSignOut:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+.navbarSignOut:hover .navbarSignOutIcon {
+  color: #dc2626;
+}
+
+.navbarSignOutIcon {
+  font-size: 18px !important;
+  color: #5f6368;
+  transition: color 0.2s;
+}

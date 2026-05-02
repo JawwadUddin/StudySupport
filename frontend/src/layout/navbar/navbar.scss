@@ -1,82 +1,84 @@
+$navbar-height: 64px;
+$navbar-bg: #ffffff;
+$border-color: #e8eaed;
+$text-primary: #1a2332;
+$text-muted: #5f6368;
+$accent: rgb(37, 150, 190);
+$transition-speed: 0.2s;
+
 .navbar {
-  height: 50px;
-  border-bottom: solid 1px rgb(198, 197, 197);
+  height: $navbar-height;
+  background-color: $navbar-bg;
+  border-bottom: 1px solid $border-color;
   display: flex;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.navbarRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbarUser {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: $text-primary;
+}
+
+.navbarUserIcon {
+  font-size: 22px !important;
+  color: $accent;
+}
+
+.navbarUsername {
   font-size: 14px;
-  color: gray;
-  background-color: rgb(34 41 41);
+  font-weight: 600;
+  color: $text-primary;
+}
 
-  .username {
-    color: white;
-    font-size: 20px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-  }
-  .wrapper {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    justify-content: space-between;
-    width: 100%;
+.navbarSignOut {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  background: none;
+  color: $text-muted;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Nunito", sans-serif;
+  cursor: pointer;
+  transition: all $transition-speed;
 
-    .search {
-      display: flex;
-      align-items: center;
-      border: solid 1px lightgray;
-      padding: 3px;
-      cursor: pointer;
-      margin-bottom: 0;
+  &:hover {
+    background-color: #fef2f2;
+    border-color: #fca5a5;
+    color: #dc2626;
 
-      input {
-        border: none;
-        outline: none;
-        background-color: transparent;
-
-        &::placeholder {
-          font-size: 12px;
-        }
-      }
-    }
-
-    .items {
-      display: flex;
-
-      .item {
-        display: flex;
-        align-items: center;
-        margin-right: 20px;
-        position: relative;
-        cursor: pointer;
-
-        .icon {
-          font-size: 20px;
-        }
-
-        .avatar {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-        }
-
-        .counter {
-          background-color: red;
-          border-radius: 50%;
-          width: 15px;
-          height: 15px;
-          position: absolute;
-          top: -3px;
-          right: -5px;
-          color: white;
-          font-size: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 600;
-        }
-      }
+    .navbarSignOutIcon {
+      color: #dc2626;
     }
   }
+}
+
+.navbarSignOutIcon {
+  font-size: 18px !important;
+  color: $text-muted;
+  transition: color $transition-speed;
 }
