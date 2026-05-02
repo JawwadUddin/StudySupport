@@ -76,4 +76,232 @@
 
 .container::-webkit-scrollbar {
   display: none;
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes rowReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.modalOverlay {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(16, 24, 40, 0.45);
+  backdrop-filter: blur(4px);
+  animation: overlayIn 0.2s ease-out;
+}
+
+.modalCard {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+  width: 460px;
+  overflow: hidden;
+  animation: cardIn 0.3s ease-out;
+}
+.modalCard.resultsCard {
+  width: 520px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalAccent {
+  height: 4px;
+  background: linear-gradient(90deg, #0075c5, #00a3e0);
+}
+.modalAccent.successAccent {
+  background: linear-gradient(90deg, #16a34a, #22d3ee);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 24px 0;
+}
+
+.modalIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #e8f4fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modalIconWrap.successWrap {
+  background: #dcfce7;
+}
+.modalIconWrap.successWrap .modalIcon {
+  color: #16a34a;
+}
+.modalIconWrap .modalIcon {
+  font-size: 26px;
+  color: #0075c5;
+}
+
+.modalClose {
+  color: #98a2b3 !important;
+}
+.modalClose:hover {
+  color: #344054 !important;
+  background: #f2f4f7 !important;
+}
+
+.modalBody {
+  padding: 16px 24px 0;
+}
+.modalBody h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #101828;
+  margin: 0 0 6px;
+}
+.modalBody p {
+  font-size: 1rem;
+  color: #667085;
+  line-height: 1.5;
+  margin: 0 0 4px;
+}
+.modalBody .bulkError {
+  color: #d92d20;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #fef3f2;
+  border-radius: 8px;
+  border-left: 3px solid #d92d20;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px 24px;
+}
+
+.bulkMonthPicker {
+  margin-top: 20px;
+}
+.bulkMonthPicker label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #344054;
+  margin-bottom: 6px;
+}
+.bulkMonthPicker input[type=month] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  color: #101828;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+.bulkMonthPicker input[type=month]:focus {
+  outline: none;
+  border-color: #0075c5;
+  box-shadow: 0 0 0 3px rgba(0, 117, 197, 0.15);
+}
+
+.resultsTableWrap {
+  margin-top: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+}
+.resultsTableWrap::-webkit-scrollbar {
+  width: 4px;
+}
+.resultsTableWrap::-webkit-scrollbar-thumb {
+  background: #d0d5dd;
+  border-radius: 4px;
+}
+
+.bulkResultsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.bulkResultsTable thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.bulkResultsTable th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #667085;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #f9fafb;
+  border-bottom: 1px solid #eaecf0;
+}
+.bulkResultsTable td {
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #101828;
+  border-bottom: 1px solid #f2f4f7;
+}
+.bulkResultsTable .amountCell {
+  font-variant-numeric: tabular-nums;
+  color: #0075c5;
+  font-weight: 700;
+}
+.bulkResultsTable tbody tr {
+  cursor: pointer;
+  animation: rowReveal 0.3s ease-out both;
+  transition: background 0.15s;
+}
+.bulkResultsTable tbody tr:hover {
+  background: #f0f7ff;
+}
+.bulkResultsTable tbody tr:last-child td {
+  border-bottom: none;
 }/*# sourceMappingURL=customerPage.css.map */

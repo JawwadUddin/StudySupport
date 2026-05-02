@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./customerPage.css";
-import { getData } from "../../helpers/apiFunctions";
+import { getData, saveData } from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import ErrorIcon from "@mui/icons-material/Error";
+import BulkCreateModal from "./BulkCreateModal";
+import BulkResultsModal from "./BulkResultsModal";
 
 const CustomerPage = () => {
   const navigate = useNavigate();
@@ -14,6 +17,17 @@ const CustomerPage = () => {
   const [sortDirection, setSortDirection] = useState("asc"); // Possible values: 'asc', 'desc', 'none'
   const [filterOverdue, setFilterOverdue] = useState(false);
   const [balanceSummary, setBalanceSummary] = useState();
+
+  // Bulk create state
+  const [bulkModalOpen, setBulkModalOpen] = useState(false);
+  const [bulkMonth, setBulkMonth] = useState(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  });
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkError, setBulkError] = useState("");
+  const [bulkResults, setBulkResults] = useState(null);
+  const [resultsModalOpen, setResultsModalOpen] = useState(false);
 
   const handleSortClick = (column) => {
     let newSortDirection;
@@ -109,12 +123,54 @@ const CustomerPage = () => {
     }
   }, []);
 
+  const handleBulkCreate = async () => {
+    if (!bulkMonth) return;
+    setBulkLoading(true);
+    setBulkError("");
+    try {
+      // bulkMonth is "YYYY-MM", convert to first day of month
+      const startDate = `${bulkMonth}-01`;
+      const serverResponse = await saveData(
+        `${process.env.REACT_APP_API_URL}/api/invoice/bulk`,
+        { startDate }
+      );
+      if (serverResponse.message === "OK") {
+        setBulkResults(serverResponse.results.data);
+        setBulkModalOpen(false);
+        setResultsModalOpen(true);
+      } else {
+        setBulkError(serverResponse.message);
+      }
+    } catch (error) {
+      setBulkError(error.message || "An error occurred");
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleCloseBulkModal = () => {
+    setBulkModalOpen(false);
+    setBulkError("");
+  };
+
+  const handleCloseResultsModal = () => {
+    setResultsModalOpen(false);
+    setBulkResults(null);
+  };
+
   return (
     <div className="customerPageContainer">
       <h2 className="title">Customers</h2>
       <div className="listContainer">
         <div className="listHeader">
           <div className="listTitle">All Customers</div>
+          <Button
+            variant="contained"
+            onClick={() => setBulkModalOpen(true)}
+            sx={{ ml: "auto" }}
+          >
+            Bulk Create Invoices
+          </Button>
         </div>
         <div className="search">
           <TextField
@@ -259,6 +315,24 @@ const CustomerPage = () => {
           </table>
         </div>
       </div>
+
+      {bulkModalOpen && (
+        <BulkCreateModal
+          bulkMonth={bulkMonth}
+          onMonthChange={setBulkMonth}
+          onClose={handleCloseBulkModal}
+          onSubmit={handleBulkCreate}
+          bulkLoading={bulkLoading}
+          bulkError={bulkError}
+        />
+      )}
+
+      {resultsModalOpen && (
+        <BulkResultsModal
+          bulkResults={bulkResults}
+          onClose={handleCloseResultsModal}
+        />
+      )}
     </div>
   );
 };
