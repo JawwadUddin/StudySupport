@@ -1,21 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import Table from "../../components/table/Table";
+import "./studentPage.css";
 import { getData, deleteData } from "../../helpers/apiFunctions";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import Button from "@mui/material/Button";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 const StudentPage = () => {
   const [students, setStudents] = useState([]);
   const [refresh, setRefresh] = useState(true);
-  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortDirection, setSortDirection] = useState("asc");
+
+  // Delete state
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
   const [deleteText, setDeleteText] = useState("");
-  const [query, setQuery] = useState("");
 
   const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ const StudentPage = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/student`
+          `${process.env.REACT_APP_API_URL}/api/student`,
         );
         if (serverResponse.message === "OK") {
           setStudents(serverResponse.results.data);
@@ -40,109 +41,295 @@ const StudentPage = () => {
     }
   }, [refresh]);
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
+  const handleSortClick = (column) => {
+    let newDirection;
+    if (sortColumn === column && sortDirection === "asc") {
+      newDirection = "desc";
+    } else if (sortColumn === column && sortDirection === "desc") {
+      newDirection = "none";
+    } else {
+      newDirection = "asc";
+    }
+    setSortColumn(column);
+    setSortDirection(newDirection);
   };
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
+  const getSortIcon = (column) => {
+    if (sortColumn === column) {
+      return sortDirection === "asc"
+        ? "\u25B2"
+        : sortDirection === "desc"
+          ? "\u25BC"
+          : "\u2022";
+    }
+    return "\u2022";
+  };
+
+  const filteredAndSorted = useMemo(() => {
+    let data = [...students];
+
+    if (query) {
+      data = data.filter((s) =>
+        (s.firstName + s.lastName + s.schoolYear)
+          .toString()
+          .toLowerCase()
+          .includes(query),
+      );
+    }
+
+    if (sortColumn && sortDirection !== "none") {
+      data.sort((a, b) => {
+        let valA, valB;
+        switch (sortColumn) {
+          case "name":
+            valA = (a.firstName + " " + a.lastName).toLowerCase();
+            valB = (b.firstName + " " + b.lastName).toLowerCase();
+            return sortDirection === "asc"
+              ? valA.localeCompare(valB)
+              : valB.localeCompare(valA);
+          case "year":
+            valA = Number(a.schoolYear) || 0;
+            valB = Number(b.schoolYear) || 0;
+            return sortDirection === "asc" ? valA - valB : valB - valA;
+          default:
+            return 0;
+        }
+      });
+    }
+
+    return data;
+  }, [students, query, sortColumn, sortDirection]);
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    return dateStr;
+  };
+
+  const handleOpenDelete = (e, id) => {
+    e.stopPropagation();
+    setDeleteID(id);
+    setDeleteOpen(true);
+  };
+
+  const handleCloseDelete = () => {
     setDeleteID(null);
     setDeleteText("");
-    setOpen(false);
+    setDeleteOpen(false);
   };
 
   const handleConfirmDelete = () => {
-    if (deleteText !== "delete") {
-      console.log("Will not delete");
-      return;
-    }
+    if (deleteText !== "delete") return;
     async function removeData() {
       await deleteData(
-        `${process.env.REACT_APP_API_URL}/api/student/${deleteID}`
+        `${process.env.REACT_APP_API_URL}/api/student/${deleteID}`,
       );
       setRefresh(true);
-      handleClose();
+      handleCloseDelete();
     }
     removeData();
   };
 
   return (
     <div className="studentPageContainer">
-      <h2 className="title">Students</h2>
-      <div className="listContainer">
-        <div className="listHeader">
-          <div className="listTitle">All Students</div>
-          <Button
-            onClick={() => navigate("/students/new")}
-            variant="contained"
-            className="createBtn"
-          >
-            Create New Student
-          </Button>
+      <div className="pageHeader">
+        <div className="headerLeft">
+          <h2>Students</h2>
+          <div className="subtitle">Manage all enrolled students</div>
         </div>
-        <div className="search">
+        <Button
+          variant="contained"
+          onClick={() => navigate("/students/new")}
+          sx={{
+            textTransform: "none",
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 600,
+            borderRadius: "8px",
+            boxShadow: "none",
+            "&:hover": { boxShadow: "none" },
+          }}
+        >
+          + New Student
+        </Button>
+      </div>
+
+      <div className="controlsBar">
+        <div className="searchField">
           <TextField
-            className="text"
-            id="standard-basic"
-            sx={{ mr: 2 }}
             size="small"
             variant="outlined"
-            label="Query"
+            label="Search"
             value={query}
             onChange={({ target: { value } }) => setQuery(value.toLowerCase())}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+                fontFamily: "'DM Sans', sans-serif",
+              },
+            }}
           />
         </div>
-        <Table
-          data={
-            query
-              ? students.filter((student) =>
-                  (student.firstName + student.lastName + student.schoolYear)
-                    .toString()
-                    .toLowerCase()
-                    .includes(query)
-                )
-              : students
-          }
-          type="student"
-          setDeleteID={setDeleteID}
-          openModal={handleOpen}
-        />
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <div className="deleteModal">
-              <h3 className="title">To confirm delete, type 'delete' below:</h3>
+      </div>
+
+      <div className="tableWrapper">
+        <div className="tableScroll">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th
+                  className={`sortable ${sortColumn === "name" ? "sortActive" : ""}`}
+                  onClick={() => handleSortClick("name")}
+                >
+                  Name{" "}
+                  <span className="sortIcon">{getSortIcon("name")}</span>
+                </th>
+                <th
+                  className={`sortable ${sortColumn === "year" ? "sortActive" : ""}`}
+                  onClick={() => handleSortClick("year")}
+                >
+                  Year{" "}
+                  <span className="sortIcon">{getSortIcon("year")}</span>
+                </th>
+                <th>Date of Birth</th>
+                <th className="actionsHeader">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAndSorted.length > 0 ? (
+                filteredAndSorted.map((student) => (
+                  <tr
+                    key={student.id}
+                    onClick={() => navigate(`/students/${student.id}`)}
+                  >
+                    <td>{student.id}</td>
+                    <td className="nameCell">
+                      {student.firstName} {student.lastName}
+                    </td>
+                    <td>
+                      {student.schoolYear ? (
+                        <span className="yearBadge">
+                          Year {student.schoolYear}
+                        </span>
+                      ) : (
+                        "\u2014"
+                      )}
+                    </td>
+                    <td>{formatDate(student.DOB)}</td>
+                    <td>
+                      <div className="actionCell">
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/students/${student.id}`);
+                          }}
+                          sx={{
+                            textTransform: "none",
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontWeight: 600,
+                            fontSize: "0.78rem",
+                            borderRadius: "6px",
+                            padding: "3px 12px",
+                          }}
+                        >
+                          View
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="error"
+                          onClick={(e) => handleOpenDelete(e, student.id)}
+                          sx={{
+                            textTransform: "none",
+                            fontFamily: "'DM Sans', sans-serif",
+                            fontWeight: 600,
+                            fontSize: "0.78rem",
+                            borderRadius: "6px",
+                            padding: "3px 12px",
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="emptyState">
+                      <PersonOutlineOutlinedIcon
+                        sx={{ fontSize: 48, opacity: 0.3 }}
+                      />
+                      <p>No students found</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {deleteOpen && (
+        <div className="deleteOverlay" onClick={handleCloseDelete}>
+          <div className="deleteCard" onClick={(e) => e.stopPropagation()}>
+            <div className="deleteAccent" />
+            <div className="deleteBody">
+              <h3>Delete Student</h3>
+              <p>
+                This action cannot be undone. Type <strong>delete</strong> below
+                to confirm.
+              </p>
               <TextField
-                className="text"
-                id="standard-basic"
-                variant="standard"
-                sx={{ mb: 2, mt: 2 }}
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder='Type "delete" to confirm'
                 value={deleteText}
                 onChange={(e) => setDeleteText(e.target.value)}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px",
+                    fontFamily: "'DM Sans', sans-serif",
+                  },
+                }}
               />
+            </div>
+            <div className="deleteActions">
               <Button
                 variant="outlined"
-                color="error"
-                onClick={handleConfirmDelete}
+                onClick={handleCloseDelete}
+                sx={{
+                  textTransform: "none",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: 600,
+                  borderRadius: "8px",
+                }}
               >
-                CONFIRM
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                disabled={deleteText !== "delete"}
+                onClick={handleConfirmDelete}
+                sx={{
+                  textTransform: "none",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontWeight: 600,
+                  borderRadius: "8px",
+                  boxShadow: "none",
+                  "&:hover": { boxShadow: "none" },
+                }}
+              >
+                Delete
               </Button>
             </div>
-          </Box>
-        </Modal>
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
