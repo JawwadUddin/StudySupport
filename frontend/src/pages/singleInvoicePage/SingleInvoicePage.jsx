@@ -29,17 +29,22 @@ const SingleInvoicePage = () => {
   }, []);
 
   return (
-    <div className="singleInvoicePageContainer">
-      <h2 className="title">Invoice No. {invoiceID}</h2>
-      <div className="listContainer backgroundGrey">
+    <div className="invoiceFormPage">
+      <div className="pageHeader">
+        <h2>Invoice No. {invoiceID}</h2>
+        <div className="subtitle">View and manage invoice details</div>
+      </div>
+      <div className="formCard">
         {loading ? (
-          <CircularProgress />
+          <div className="loadingContainer">
+            <CircularProgress />
+          </div>
         ) : (
           <>
             {invoice ? (
               <InvoiceForm invoiceInfo={invoice} />
             ) : (
-              <h2 className="title">Invoice Not Found</h2>
+              <p>Invoice not found</p>
             )}
           </>
         )}

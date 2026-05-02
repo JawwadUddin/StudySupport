@@ -33,11 +33,16 @@ const SinglePaymentPage = () => {
   }, []);
 
   return (
-    <div className="singleInvoicePageContainer">
-      <h2 className="title">Receive Payment</h2>
-      <div className="listContainer backgroundGrey">
+    <div className="paymentFormPage">
+      <div className="pageHeader">
+        <h2>Receive Payment</h2>
+        <div className="subtitle">View and manage payment details</div>
+      </div>
+      <div className="formCard">
         {loading ? (
-          <CircularProgress />
+          <div className="loadingContainer">
+            <CircularProgress />
+          </div>
         ) : (
           <>
             {payment ? (
@@ -50,7 +55,7 @@ const SinglePaymentPage = () => {
                 paymentType={payment.paymentType}
               />
             ) : (
-              <h2 className="title">Invoice Not Found</h2>
+              <p>Payment not found</p>
             )}
           </>
         )}

@@ -1,3 +1,316 @@
-.paymentForm h3 {
-  color: #1a2332;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+/* ── Page-level container (used by SinglePaymentPage / NewPaymentPage) ── */
+.paymentFormPage {
+  --ink: #1a1d26;
+  --ink-muted: #5f6577;
+  --ink-faint: #9ba1b2;
+  --surface: #f4f5f8;
+  --surface-raised: #ffffff;
+  --border: #e2e5ec;
+  --accent: #0075c5;
+  --accent-light: #e6f2fb;
+  --paid: #16a34a;
+  --paid-light: #ecfdf3;
+  --overdue: #e05a33;
+  --overdue-light: #fef0ec;
+
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 28px;
+}
+
+.paymentFormPage .pageHeader {
+  margin-bottom: 24px;
+}
+
+.paymentFormPage .pageHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 2px;
+}
+
+.paymentFormPage .pageHeader .subtitle {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.paymentFormPage .formCard {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.paymentFormPage .loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+/* ── Payment Form Component ── */
+.paymentForm {
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Section headings */
+.paymentForm .formSection {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent, #0075c5);
+  margin-bottom: 18px;
+  margin-top: 28px;
+}
+
+.paymentForm .formSection:first-child {
+  margin-top: 0;
+}
+
+/* Amount received card */
+.paymentForm .amountReceivedCard {
+  background: var(--accent-light, #e6f2fb);
+  border-radius: 10px;
+  padding: 16px 24px;
+  text-align: right;
+}
+
+.paymentForm .amountReceivedCard .amountLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.paymentForm .amountReceivedCard .amountValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent, #0075c5);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Contact info grid */
+.paymentForm .contactGrid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.paymentForm .contactCard {
+  flex: 1;
+  min-width: 180px;
+}
+
+.paymentForm .contactCard .contactLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.paymentForm .contactCard .contactValue {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink, #1a1d26);
+  padding: 10px 14px;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface, #f4f5f8);
+  line-height: 1.5;
+}
+
+/* MUI overrides */
+.paymentForm .MuiTextField-root .MuiOutlinedInput-root,
+.paymentForm .MuiFormControl-root .MuiOutlinedInput-root {
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  background: white;
+}
+
+.paymentForm .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.paymentForm .MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent, #0075c5);
+}
+
+.paymentForm .MuiTextField-root .MuiInputLabel-root,
+.paymentForm .MuiFormControl-root .MuiInputLabel-root {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Form table */
+.paymentForm .formTable {
+  width: 100%;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.paymentForm .formTable .MuiTableCell-head {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--ink, #1a1d26);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--surface, #f4f5f8);
+  border-bottom: 2px solid var(--border, #e2e5ec);
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.paymentForm .formTable .MuiTableCell-body {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink, #1a1d26);
+  border-bottom: 1px solid var(--border, #e2e5ec);
+  padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.paymentForm .formTable .MuiTableRow-root:last-child .MuiTableCell-body {
+  border-bottom: none;
+}
+
+.paymentForm .formTable .MuiTableRow-root:nth-of-type(even) {
+  background: #fafbfc;
+}
+
+.paymentForm .formTable .MuiTableRow-root:hover {
+  background: var(--accent-light, #e6f2fb);
+}
+
+/* Summary section */
+.paymentForm .formSummary {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.paymentForm .formSummary .summaryRow {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  min-width: 320px;
+}
+
+.paymentForm .formSummary .summaryRow .summaryLabel {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-muted, #5f6577);
+  flex: 1;
+  text-align: right;
+  padding-right: 24px;
+}
+
+.paymentForm .formSummary .summaryRow .summaryAmount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink, #1a1d26);
+  min-width: 120px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.paymentForm .formSummary .summaryRow.summaryTotal {
+  border-top: 2px solid var(--border, #e2e5ec);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.paymentForm .formSummary .summaryRow.summaryTotal .summaryAmount {
+  font-size: 1.25rem;
+  color: var(--accent, #0075c5);
+}
+
+/* Error message */
+.paymentForm .errorMessage {
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--overdue-light, #fef0ec);
+  color: var(--overdue, #e05a33);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Form actions */
+.paymentForm .formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border, #e2e5ec);
+}
+
+.paymentForm .formActions .btnPrimary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent, #0075c5);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.paymentForm .formActions .btnPrimary:hover {
+  background: #0063a7;
+}
+
+.paymentForm .formActions .btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paymentForm .formActions .btnSecondary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface-raised, #ffffff);
+  color: var(--ink-muted, #5f6577);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.paymentForm .formActions .btnSecondary:hover {
+  border-color: var(--accent, #0075c5);
+  color: var(--accent, #0075c5);
+}
+
+.paymentForm .formActions .btnWarning {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface-raised, #ffffff);
+  color: var(--ink-muted, #5f6577);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.paymentForm .formActions .btnWarning:hover {
+  border-color: var(--overdue, #e05a33);
+  color: var(--overdue, #e05a33);
 }

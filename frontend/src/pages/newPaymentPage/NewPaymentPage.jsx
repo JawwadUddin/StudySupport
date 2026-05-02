@@ -6,9 +6,12 @@ const NewPaymentPage = () => {
     state: { familyID },
   } = useLocation();
   return (
-    <div className="newPaymentPageContainer">
-      <h2 className="title">New Payment</h2>
-      <div className="formContainer backgroundGrey">
+    <div className="paymentFormPage">
+      <div className="pageHeader">
+        <h2>New Payment</h2>
+        <div className="subtitle">Record a new payment</div>
+      </div>
+      <div className="formCard">
         <PaymentForm familyID={familyID} />
       </div>
     </div>
