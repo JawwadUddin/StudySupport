@@ -22,10 +22,10 @@ const Sidebar = () => {
             <DashboardIcon className="icon" />
             <span>Customers</span>
           </li>
-          {/* <li onClick={() => navigate("transactions")}>
+          <li onClick={() => navigate("invoices")}>
             <DescriptionIcon className="icon" />
-            <span>Transactions</span>
-          </li> */}
+            <span>Invoices</span>
+          </li>
           <li onClick={() => navigate("register")}>
             <AppRegistrationIcon className="icon" />
             <span>Register</span>
