@@ -6,19 +6,26 @@ class Payment {
     this.paymentID = data.payment_id;
     this.familyID = data.family_id;
     this.fullName = data.full_name;
+    this.firstName = data.first_name;
+    this.lastName = data.last_name;
     this.paymentDate = data.payment_date;
     this.id = data.invoice_id;
     this.payment = data.payment;
     this.dueDate = data.due_date;
     this.amountDue = data.amount_due;
     this.amountPaid = data.amount_paid;
+    this.amount = data.amount;
   }
 
-  static get all() {
+  static all(month) {
     return new Promise(async (resolve, reject) => {
       try {
         const pool = await dbConnect();
-        const paymentData = await pool.request().execute("SelectAllPayments");
+        const request = pool.request();
+        if (month) {
+          request.input("Month", sql.Date, month);
+        }
+        const paymentData = await request.execute("SelectAllPayments");
         const payments = paymentData.recordset.map((d) => new Payment(d));
         resolve(payments);
       } catch (err) {

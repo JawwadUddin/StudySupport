@@ -5,11 +5,11 @@
 
 .reportTable {
   width: 100%;
-  border: 2px solid #962626;
+  border: 2px solid #1a2332;
 }
 
 .reportTableHeader {
-  background-color: #962626;
+  background-color: #1a2332;
 }
 
 .reportTableHeaderCell {
@@ -29,7 +29,7 @@
 }
 
 .reportTableRow:hover {
-  background-color: rgba(150, 38, 38, 0.05);
+  background-color: rgba(26, 35, 50, 0.05);
 }
 
 .reportTableRow:nth-of-type(even) {
@@ -40,8 +40,8 @@
   color: black;
   font-weight: 600;
   font-size: 13px;
-  border-right: 1px solid #962626;
-  border-bottom: 1px solid #962626;
+  border-right: 1px solid #1a2332;
+  border-bottom: 1px solid #1a2332;
   padding: 10px 16px;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .reportTableTotalRow {
-  background-color: rgba(150, 38, 38, 0.1);
+  background-color: rgba(26, 35, 50, 0.1);
   font-weight: 700;
 }
 
@@ -59,16 +59,16 @@
   color: black;
   font-weight: 700;
   font-size: 14px;
-  border-right: 1px solid #962626;
-  border-bottom: 2px solid #962626;
+  border-right: 1px solid #1a2332;
+  border-bottom: 2px solid #1a2332;
   padding: 12px 16px;
 }
 
 .reportTableTotalValue {
-  color: #962626;
+  color: #1a2332;
   font-weight: 700;
   font-size: 14px;
-  border-bottom: 2px solid #962626;
+  border-bottom: 2px solid #1a2332;
   padding: 12px 16px;
 }
 
@@ -79,7 +79,7 @@
   font-size: 14px;
   font-style: italic;
   background-color: #f5f5f5;
-  border: 2px solid #962626;
+  border: 2px solid #1a2332;
   border-radius: 4px;
   margin: 20px 0;
 }

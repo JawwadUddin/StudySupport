@@ -15,7 +15,7 @@
 .reportDisplaySection {
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 2px solid #962626;
+  border-top: 2px solid #1a2332;
 }
 
 .reportSection {
@@ -23,10 +23,10 @@
 }
 
 .reportSectionTitle {
-  color: #962626;
+  color: #1a2332;
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #962626;
+  border-bottom: 2px solid #1a2332;
 }

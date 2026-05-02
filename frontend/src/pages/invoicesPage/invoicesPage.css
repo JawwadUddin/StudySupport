@@ -381,19 +381,31 @@
 /* ── Empty state ── */
 .invoicesPageContainer .emptyState {
   text-align: center;
-  padding: 60px 20px;
-  color: var(--ink-faint);
+  padding: 72px 20px;
 }
 
 .invoicesPageContainer .emptyState .emptyIcon {
-  font-size: 48px;
-  margin-bottom: 12px;
-  opacity: 0.4;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .invoicesPageContainer .emptyState p {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.invoicesPageContainer .emptyState .emptyHint {
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: var(--ink-muted);
   margin: 0;
 }
 

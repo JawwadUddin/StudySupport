@@ -3,7 +3,8 @@ const { success, error } = require("../helper/responseApi");
 
 async function index(req, res) {
   try {
-    const payments = await Payment.all;
+    const month = req.query.month || null;
+    const payments = await Payment.all(month);
     res.status(200).json(success("OK", { data: payments }, res.statusCode));
   } catch (err) {
     console.log(err);

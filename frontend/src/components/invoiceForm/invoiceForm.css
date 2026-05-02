@@ -7,7 +7,7 @@
   top: 0;
 }
 .invoiceForm h3 {
-  color: #962626;
+  color: #1a2332;
 }
 
 .horizontal {
@@ -66,9 +66,7 @@
   /* Rotate the text */
   transform: rotate(-45deg);
   /* Disable the selection */
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   color: rgb(255, 255, 255);
   text-shadow: -1px -1px 0 #3ace3a, 1px -1px 0 #3ace3a, -1px 1px 0 #3ace3a, 1px 1px 0 #3ace3a;
-}/*# sourceMappingURL=invoiceForm.css.map */
+}

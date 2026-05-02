@@ -347,9 +347,10 @@ const InvoicesPage = () => {
                   <td colSpan={8}>
                     <div className="emptyState">
                       <div className="emptyIcon">
-                        <DescriptionIcon sx={{ fontSize: 48, opacity: 0.3 }} />
+                        <DescriptionIcon sx={{ fontSize: 28, color: "var(--accent)" }} />
                       </div>
                       <p>No invoices found</p>
+                      <p className="emptyHint">Try selecting a different month or clearing your search</p>
                     </div>
                   </td>
                 </tr>

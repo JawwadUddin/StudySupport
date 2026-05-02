@@ -688,7 +688,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
         <Table
           sx={{
             backgroundColor: "white",
-            outline: "solid 1px #962626",
+            outline: "solid 1px #1a2332",
             "& .MuiTableCell-head": {
               fontWeight: "800",
             },
@@ -738,7 +738,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                             );
                           })
                         ) : (
-                          <h3 style={{ margin: 0, color: "#962626" }}>
+                          <h3 style={{ margin: 0, color: "#1a2332" }}>
                             The student has not booked any sessions this month
                           </h3>
                         )}

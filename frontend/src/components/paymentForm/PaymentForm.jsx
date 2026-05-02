@@ -532,7 +532,7 @@ const PaymentForm = ({
         <Table
           sx={{
             backgroundColor: "white",
-            outline: "solid 1px #962626",
+            outline: "solid 1px #1a2332",
             "& .MuiTableCell-head": {
               fontWeight: "800",
             },
