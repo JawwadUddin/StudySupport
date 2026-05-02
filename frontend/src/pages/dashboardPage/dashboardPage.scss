@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+.dashboardPage {
+  --ink: #1a1d26;
+  --ink-muted: #5f6577;
+  --ink-faint: #9ba1b2;
+  --surface: #f4f5f8;
+  --surface-raised: #ffffff;
+  --border: #e2e5ec;
+  --accent: #0075c5;
+  --accent-light: #e6f2fb;
+
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 28px;
+
+  .pageHeader {
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin: 0 0 2px;
+    }
+
+    .subtitle {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      font-weight: 400;
+    }
+  }
+
+  .dashboardCard {
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+  }
+}

@@ -8,9 +8,9 @@ const SinglePaymentPage = () => {
   const { familyID, paymentDate } = useParams();
   const [payment, setPayment] = useState();
   const [loading, setLoading] = useState(true);
-  const {
-    state: { firstName, lastName },
-  } = useLocation();
+  const location = useLocation();
+  const firstName = location.state?.firstName || "";
+  const lastName = location.state?.lastName || "";
   const formattedPaymentDate = paymentDate.split("-").reverse().join("-");
 
   useEffect(() => {

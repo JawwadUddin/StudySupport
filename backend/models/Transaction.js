@@ -7,6 +7,7 @@ class Transaction {
     this.invoiceDate = data.start_date;
     this.fullName = data.full_name;
     this.amountDue = data.amount_due;
+    this.familyID = data.family_id;
     this.paymentDate = data.payment_date;
     this.amountPaid = data.amount;
     this.paymentType = data.payment_type;

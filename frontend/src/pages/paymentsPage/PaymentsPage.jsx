@@ -132,12 +132,12 @@ const PaymentsPage = () => {
     return new Date(0);
   };
 
-  // Format the paymentDate for navigation (dd/MM/yyyy → yyyy-MM-dd)
+  // Format the paymentDate for navigation (dd/MM/yyyy → dd-MM-yyyy)
   const formatDateForNav = (dateStr) => {
     if (!dateStr) return "";
     const parts = dateStr.split("/");
     if (parts.length === 3) {
-      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+      return `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
     return dateStr;
   };
@@ -269,6 +269,7 @@ const PaymentsPage = () => {
                     onClick={() =>
                       navigate(
                         `/payments/${p.familyID}/${formatDateForNav(p.paymentDate)}`,
+                        { state: { firstName: p.firstName, lastName: p.lastName } },
                       )
                     }
                   >
