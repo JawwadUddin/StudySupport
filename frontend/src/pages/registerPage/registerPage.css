@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+.registerPageContainer {
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 28px;
+}
+
+.registerPageContainer .pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.registerPageContainer .pageHeader .headerLeft h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1d26;
+  letter-spacing: -0.02em;
+  margin: 0 0 2px;
+}
+
+.registerPageContainer .pageHeader .subtitle {
+  font-size: 0.88rem;
+  color: #5f6577;
+  font-weight: 400;
+}
+
+.registerPageContainer .emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9ba1b2;
+}
+
+.registerPageContainer .emptyState p {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}

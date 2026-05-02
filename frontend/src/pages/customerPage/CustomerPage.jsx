@@ -75,7 +75,7 @@ const CustomerPage = () => {
     let filteredData = [...customers];
     if (filterOverdue) {
       setSortedData(
-        filteredData.filter((item) => Number(item.overdueBalance) > 0)
+        filteredData.filter((item) => Number(item.overdueBalance) > 0),
       );
       return;
     }
@@ -87,8 +87,8 @@ const CustomerPage = () => {
       return sortDirection === "asc"
         ? "▲"
         : sortDirection === "desc"
-        ? "▼"
-        : "•";
+          ? "▼"
+          : "•";
     }
     return "•";
   };
@@ -97,7 +97,7 @@ const CustomerPage = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/invoice/outstanding`
+          `${process.env.REACT_APP_API_URL}/api/invoice/outstanding`,
         );
         if (serverResponse.message === "OK") {
           setCustomers(serverResponse.results.data);
@@ -108,7 +108,7 @@ const CustomerPage = () => {
       }
       async function fetchBalanceSummary() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/invoice/balanceSummary`
+          `${process.env.REACT_APP_API_URL}/api/invoice/balanceSummary`,
         );
         if (serverResponse.message === "OK") {
           setBalanceSummary(serverResponse.results.data);
@@ -132,7 +132,7 @@ const CustomerPage = () => {
       const startDate = `${bulkMonth}-01`;
       const serverResponse = await saveData(
         `${process.env.REACT_APP_API_URL}/api/invoice/bulk`,
-        { startDate }
+        { startDate },
       );
       if (serverResponse.message === "OK") {
         setBulkResults(serverResponse.results.data);
@@ -160,18 +160,27 @@ const CustomerPage = () => {
 
   return (
     <div className="customerPageContainer">
-      <h2 className="title">Customers</h2>
-      <div className="listContainer">
-        <div className="listHeader">
-          <div className="listTitle">All Customers</div>
-          <Button
-            variant="contained"
-            onClick={() => setBulkModalOpen(true)}
-            sx={{ ml: "auto" }}
-          >
-            Bulk Create Invoices
-          </Button>
+      <div className="pageHeader">
+        <div className="headerLeft">
+          <h2>Customers</h2>
+          <div className="subtitle">Manage all customer accounts</div>
         </div>
+        <Button
+          variant="contained"
+          onClick={() => setBulkModalOpen(true)}
+          sx={{
+            textTransform: "none",
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 600,
+            borderRadius: "8px",
+            boxShadow: "none",
+            "&:hover": { boxShadow: "none" },
+          }}
+        >
+          Bulk Create Invoices
+        </Button>
+      </div>
+      <div className="listContainer margin-0">
         <div className="search">
           <TextField
             className="text"
@@ -194,7 +203,7 @@ const CustomerPage = () => {
               <div className="amount">
                 £
                 {Number(
-                  balanceSummary ? balanceSummary.overdueBalance : 0
+                  balanceSummary ? balanceSummary.overdueBalance : 0,
                 ).toFixed(2)}
               </div>
               <div className="text">
@@ -210,7 +219,7 @@ const CustomerPage = () => {
               <div className="amount">
                 £
                 {Number(
-                  balanceSummary ? balanceSummary.openBalance : 0
+                  balanceSummary ? balanceSummary.openBalance : 0,
                 ).toFixed(2)}
               </div>
               <div className="text">
@@ -228,7 +237,7 @@ const CustomerPage = () => {
                 {Number(
                   balanceSummary
                     ? balanceSummary.openBalance - balanceSummary.overdueBalance
-                    : 0
+                    : 0,
                 ).toFixed(2)}
               </div>
               <div className="text">NOT DUE YET</div>
@@ -271,7 +280,7 @@ const CustomerPage = () => {
                       )
                         .toString()
                         .toLowerCase()
-                        .includes(query)
+                        .includes(query),
                     )
                   : sortedData
                 ).map((customer, index) => {
