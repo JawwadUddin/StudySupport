@@ -11,6 +11,7 @@ router.get(
 );
 router.get("/:id", invoiceController.show);
 router.get("/sessions/:familyID/:startDate", invoiceController.findSessions);
+router.post("/bulk", invoiceController.bulkCreate);
 router.post("/", invoiceController.create);
 router.patch("/:id", invoiceController.update);
 router.delete("/:id", invoiceController.remove);

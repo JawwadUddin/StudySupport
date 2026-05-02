@@ -72,6 +72,16 @@ async function findOutstandingTransactions(req, res) {
   }
 }
 
+async function bulkCreate(req, res) {
+  const { startDate } = req.body.data;
+  try {
+    const invoices = await Invoice.bulkCreate(startDate);
+    res.status(201).json(success("OK", { data: invoices }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
 async function remove(req, res) {
   const invoiceID = req.params.id;
   try {
@@ -96,6 +106,7 @@ module.exports = {
   show,
   create,
   update,
+  bulkCreate,
   findSessions,
   showOutstandingInvoices,
   findOutstandingTransactions,
