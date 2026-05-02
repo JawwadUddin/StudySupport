@@ -9,6 +9,7 @@ router.get(
   "/outstanding/:familyID",
   invoiceController.findOutstandingTransactions
 );
+router.get("/detailed", invoiceController.showAllDetailed);
 router.get("/:id", invoiceController.show);
 router.get("/sessions/:familyID/:startDate", invoiceController.findSessions);
 router.post("/bulk", invoiceController.bulkCreate);

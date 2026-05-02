@@ -92,6 +92,17 @@ async function remove(req, res) {
   }
 }
 
+async function showAllDetailed(req, res) {
+  try {
+    const month = req.query.month || null;
+    const invoices = await Invoice.allDetailed(month);
+    res.status(200).json(success("OK", { data: invoices }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
 async function balanceSummary(req, res) {
   try {
     const invoice = await Invoice.balanceSummary();
@@ -109,6 +120,7 @@ module.exports = {
   bulkCreate,
   findSessions,
   showOutstandingInvoices,
+  showAllDetailed,
   findOutstandingTransactions,
   remove,
   balanceSummary,

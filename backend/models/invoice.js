@@ -192,6 +192,22 @@ class Invoice {
     });
   }
 
+  static allDetailed(month) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const request = pool.request();
+        if (month) {
+          request.input("Month", sql.Date, month);
+        }
+        const invoiceData = await request.execute("SelectAllInvoicesDetailed");
+        resolve(invoiceData.recordset);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   static balanceSummary() {
     return new Promise(async (resolve, reject) => {
       try {
