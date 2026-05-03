@@ -51,7 +51,7 @@ const PaymentsPage = () => {
         };
       }
       groups[key].totalAmount += Number(p.amount) || 0;
-      groups[key].invoiceCount += 1;
+      if (p.id) groups[key].invoiceCount += 1;
     });
     return Object.values(groups);
   }, [payments]);

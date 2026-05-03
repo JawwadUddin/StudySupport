@@ -4,6 +4,7 @@ AS
 SELECT
 	payment_id,
 	p.family_id,
+	p.invoice_id,
 	f.first_name,
 	f.last_name,
 	FORMAT(payment_date, 'dd/MM/yyyy') as payment_date,
