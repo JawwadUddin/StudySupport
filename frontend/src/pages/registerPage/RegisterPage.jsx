@@ -4,6 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import RegisterTable from "../../components/registerTable/RegisterTable";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./registerPage.css";
@@ -313,7 +314,11 @@ const RegisterPage = () => {
           />
         ) : (
           <div className="emptyState">
-            <p>Select a date above to view the register</p>
+            <div className="emptyIcon">
+              <EventNoteIcon sx={{ fontSize: 28, color: "var(--accent)" }} />
+            </div>
+            <p>No register found</p>
+            <p className="emptyHint">Select a date above to view the register</p>
           </div>
         )}
       </div>
