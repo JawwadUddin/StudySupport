@@ -24,6 +24,20 @@ class SessionDate {
     });
   }
 
+  static countThisMonth() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const result = await pool
+          .request()
+          .execute("SelectSessionCountByMonth");
+        resolve(result.recordset[0].sessionCount);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   static create(registerDate) {
     return new Promise(async (resolve, reject) => {
       try {
