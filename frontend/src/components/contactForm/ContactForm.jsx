@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
+import "./contactForm.css";
 
 const ContactForm = () => {
   const navigate = useNavigate();
@@ -189,9 +189,9 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="contactForm form">
-      <h3>Contact Lead Information</h3>
-      <Grid container spacing={3}>
+    <div className="contactForm">
+      <div className="formSection">Contact Lead Information</div>
+      <Grid container spacing={2.5}>
         <Grid item xs={12} sm={4}>
           <TextField
             required
@@ -249,7 +249,7 @@ const ContactForm = () => {
             inputProps={{ type: "email" }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={5}>
           <TextField
             required
             error={!!formErrors.address}
@@ -263,7 +263,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={3}>
           <TextField
             required
             error={!!formErrors.postCode}
@@ -278,11 +278,11 @@ const ContactForm = () => {
           />
         </Grid>
       </Grid>
-      <h3>Emergency Contact Information</h3>
-      <Grid container spacing={3}>
+
+      <div className="formSection">Emergency Contact</div>
+      <Grid container spacing={2.5}>
         <Grid item xs={12} sm={4}>
           <TextField
-            // required
             error={!!formErrors.ecFullName}
             helperText={formErrors.ecFullName}
             id="fullNameEC"
@@ -296,7 +296,6 @@ const ContactForm = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            // required
             error={!!formErrors.ecMobile}
             helperText={formErrors.ecMobile}
             id="mobileEC"
@@ -310,14 +309,14 @@ const ContactForm = () => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-label">Relation</InputLabel>
+          <FormControl fullWidth>
+            <InputLabel>Relation</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
               id="relation"
               name="ecRelation"
               error={!!formErrors.ecRelation}
               value={dataToSubmit.ecRelation}
+              label="Relation"
               onChange={addData}
             >
               {relationDropdown.map((item) => {
@@ -330,7 +329,7 @@ const ContactForm = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={5}>
           <TextField
             id="addressEC"
             name="ecAddress"
@@ -341,7 +340,7 @@ const ContactForm = () => {
             onChange={addData}
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={3}>
           <TextField
             error={!!formErrors.ecPostCode}
             helperText={formErrors.ecPostCode}
@@ -355,8 +354,9 @@ const ContactForm = () => {
           />
         </Grid>
       </Grid>
-      <h3>Notes</h3>
-      <Grid container spacing={3}>
+
+      <div className="formSection">Notes</div>
+      <Grid container spacing={2.5}>
         <Grid item xs={12}>
           <TextField
             id="notes"
@@ -365,37 +365,25 @@ const ContactForm = () => {
             fullWidth
             variant="outlined"
             multiline
+            minRows={3}
             value={dataToSubmit.notes}
             onChange={addData}
           />
         </Grid>
       </Grid>
-      <div className="formEnd">
-        <Button
-          onClick={() => navigate(-1)}
-          variant="outlined"
-          color="warning"
-          className="cancelBtn"
-        >
+
+      <div className="formActions">
+        <button className="btnSecondary" onClick={() => navigate(-1)}>
           Cancel
-        </Button>
+        </button>
         {contactInfo ? (
-          <Button
-            onClick={handleEdit}
-            variant="contained"
-            color="secondary"
-            className="editBtn"
-          >
+          <button className="btnPrimary" onClick={handleEdit}>
             Edit Contact
-          </Button>
+          </button>
         ) : (
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            className="submitBtn"
-          >
+          <button className="btnPrimary" onClick={handleSubmit}>
             Add Contact
-          </Button>
+          </button>
         )}
       </div>
     </div>

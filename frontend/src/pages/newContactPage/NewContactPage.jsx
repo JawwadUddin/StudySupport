@@ -6,9 +6,16 @@ const NewContactPage = () => {
   const familyID = location.state ? location.state.familyID : "";
 
   return (
-    <div className="newContactPageContainer">
-      <h2 className="title">{familyID ? "Edit Contact" : "New Contact"}</h2>
-      <div className="formContainer">
+    <div className="contactFormPage">
+      <div className="pageHeader">
+        <h2>{familyID ? "Edit Contact" : "New Contact"}</h2>
+        <div className="subtitle">
+          {familyID
+            ? "Update contact information"
+            : "Add a new contact to your records"}
+        </div>
+      </div>
+      <div className="formCard">
         <ContactForm />
       </div>
     </div>

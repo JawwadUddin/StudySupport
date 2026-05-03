@@ -7,9 +7,16 @@ const NewStudentPage = () => {
   const studentID = location.state ? location.state.studentID : "";
 
   return (
-    <div className="newStudentPageContainer">
-      <h2 className="title">{studentID ? "Edit Student" : "New Student"}</h2>
-      <div className="formContainer">
+    <div className="studentFormPage">
+      <div className="pageHeader">
+        <h2>{studentID ? "Edit Student" : "New Student"}</h2>
+        <div className="subtitle">
+          {studentID
+            ? "Update student information"
+            : "Add a new student to your records"}
+        </div>
+      </div>
+      <div className="formCard">
         <StudentForm idFamily={familyID} />
       </div>
     </div>

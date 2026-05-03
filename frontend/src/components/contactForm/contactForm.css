@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+/* ── Page-level container ── */
+.contactFormPage {
+  --ink: #1a1d26;
+  --ink-muted: #5f6577;
+  --ink-faint: #9ba1b2;
+  --surface: #f4f5f8;
+  --surface-raised: #ffffff;
+  --border: #e2e5ec;
+  --accent: #0075c5;
+  --accent-light: #e6f2fb;
+  --overdue: #e05a33;
+
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 28px;
+}
+
+.contactFormPage .pageHeader {
+  margin-bottom: 24px;
+}
+
+.contactFormPage .pageHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 2px;
+}
+
+.contactFormPage .pageHeader .subtitle {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+.contactFormPage .formCard {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+/* ── Contact Form Component ── */
+.contactForm {
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Section headings */
+.contactForm .formSection {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent, #0075c5);
+  margin-bottom: 18px;
+  margin-top: 28px;
+}
+
+.contactForm .formSection:first-child {
+  margin-top: 0;
+}
+
+/* MUI overrides */
+.contactForm .MuiTextField-root .MuiOutlinedInput-root,
+.contactForm .MuiFormControl-root .MuiOutlinedInput-root {
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  background: white;
+}
+
+.contactForm .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.contactForm .MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent, #0075c5);
+}
+
+.contactForm .MuiTextField-root .MuiInputLabel-root,
+.contactForm .MuiFormControl-root .MuiInputLabel-root {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.contactForm .MuiTextField-root .MuiInputLabel-root.Mui-focused,
+.contactForm .MuiFormControl-root .MuiInputLabel-root.Mui-focused {
+  color: var(--accent, #0075c5);
+}
+
+/* Form actions */
+.contactForm .formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border, #e2e5ec);
+}
+
+.contactForm .formActions .btnPrimary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent, #0075c5);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.contactForm .formActions .btnPrimary:hover {
+  background: #0063a7;
+}
+
+.contactForm .formActions .btnSecondary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface-raised, #ffffff);
+  color: var(--ink-muted, #5f6577);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.contactForm .formActions .btnSecondary:hover {
+  border-color: var(--accent, #0075c5);
+  color: var(--accent, #0075c5);
+}
