@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+.registerFormContainer {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Date picker section ── */
+.registerFormContainer .datePickerSection {
+  margin-bottom: 28px;
+}
+
+.registerFormContainer .sectionLabel {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5f6577;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+
+/* ── Option cards ── */
+.registerFormContainer .optionCards {
+  display: flex;
+  gap: 20px;
+}
+
+.registerFormContainer .optionCard {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #e2e5ec;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.registerFormContainer .optionCard:hover {
+  border-color: #c5cad6;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.registerFormContainer .cardAccent {
+  height: 4px;
+}
+
+.registerFormContainer .cardAccent.blankAccent {
+  background: linear-gradient(90deg, #5f6577, #9ba1b2);
+}
+
+.registerFormContainer .cardAccent.templateAccent {
+  background: linear-gradient(90deg, #0075c5, #00a3e0);
+}
+
+.registerFormContainer .cardContent {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.registerFormContainer .cardContent h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1d26;
+  margin: 0 0 8px;
+}
+
+.registerFormContainer .cardContent p {
+  font-size: 0.9rem;
+  color: #5f6577;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}

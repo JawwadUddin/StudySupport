@@ -1,0 +1,434 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+.invoicesPageContainer {
+  --ink: #1a1d26;
+  --ink-muted: #5f6577;
+  --ink-faint: #9ba1b2;
+  --surface: #f4f5f8;
+  --surface-raised: #ffffff;
+  --border: #e2e5ec;
+  --accent: #0075c5;
+  --accent-light: #e6f2fb;
+  --overdue: #e05a33;
+  --overdue-light: #fef0ec;
+  --paid: #16a34a;
+  --paid-light: #ecfdf3;
+  --due-soon: #d97706;
+  --due-soon-light: #fefce8;
+
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 28px;
+}
+
+/* ── Page header ── */
+.invoicesPageContainer .pageHeader {
+  margin-bottom: 24px;
+}
+
+.invoicesPageContainer .pageHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 2px;
+}
+
+.invoicesPageContainer .pageHeader .subtitle {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+/* ── Controls bar ── */
+.invoicesPageContainer .controlsBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.invoicesPageContainer .monthPicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.invoicesPageContainer .monthPicker label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.invoicesPageContainer .monthPicker input[type="month"] {
+  padding: 7px 12px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--surface-raised);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.invoicesPageContainer .monthPicker input[type="month"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 117, 197, 0.12);
+}
+
+.invoicesPageContainer .monthPicker input[type="month"]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.invoicesPageContainer .allMonthsBtn {
+  padding: 7px 16px;
+  font-size: 0.84rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.invoicesPageContainer .allMonthsBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.invoicesPageContainer .allMonthsBtn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.invoicesPageContainer .statusToggle {
+  display: flex;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface-raised);
+}
+
+.invoicesPageContainer .statusToggle button {
+  padding: 7px 18px;
+  font-size: 0.84rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.invoicesPageContainer .statusToggle button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.invoicesPageContainer .searchField {
+  margin-left: auto;
+}
+
+/* ── Summary strip ── */
+.invoicesPageContainer .summaryStrip {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.invoicesPageContainer .summaryCard {
+  flex: 1;
+  max-width: 260px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.invoicesPageContainer .summaryCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.invoicesPageContainer .summaryCard.totalCard {
+  background: var(--accent-light);
+}
+.invoicesPageContainer .summaryCard.totalCard::before {
+  background: var(--accent);
+}
+
+.invoicesPageContainer .summaryCard.overdueCard {
+  background: var(--overdue-light);
+}
+.invoicesPageContainer .summaryCard.overdueCard::before {
+  background: var(--overdue);
+}
+
+.invoicesPageContainer .summaryCard.paidCard {
+  background: var(--paid-light);
+}
+.invoicesPageContainer .summaryCard.paidCard::before {
+  background: var(--paid);
+}
+
+.invoicesPageContainer .summaryCard .cardValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.invoicesPageContainer .summaryCard .cardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* ── Table wrapper ── */
+.invoicesPageContainer .tableWrapper {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.invoicesPageContainer .tableScroll {
+  max-height: 580px;
+  overflow-y: auto;
+}
+
+.invoicesPageContainer .tableScroll::-webkit-scrollbar {
+  width: 5px;
+}
+.invoicesPageContainer .tableScroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+}
+
+/* ── Table ── */
+.invoicesPageContainer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoicesPageContainer table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.invoicesPageContainer table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.invoicesPageContainer table th.sortable {
+  cursor: pointer;
+  transition: color 0.12s;
+}
+
+.invoicesPageContainer table th.sortable:hover {
+  color: var(--accent);
+}
+
+.invoicesPageContainer table th .sortIcon {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  margin-left: 4px;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.invoicesPageContainer table th.sortable:hover .sortIcon,
+.invoicesPageContainer table th.sortActive .sortIcon {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.invoicesPageContainer table td {
+  padding: 11px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink);
+  border-bottom: 1px solid #f0f1f5;
+  transition: background 0.1s;
+}
+
+.invoicesPageContainer table tbody tr {
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.invoicesPageContainer table tbody tr:hover {
+  background: #f0f5fa;
+}
+
+.invoicesPageContainer table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Column widths ── */
+.invoicesPageContainer table th:nth-child(1),
+.invoicesPageContainer table td:nth-child(1) { width: 10%; }  /* Invoice # */
+.invoicesPageContainer table th:nth-child(2),
+.invoicesPageContainer table td:nth-child(2) { width: 16%; }  /* Customer */
+.invoicesPageContainer table th:nth-child(3),
+.invoicesPageContainer table td:nth-child(3) { width: 13%; }  /* Invoice Month */
+.invoicesPageContainer table th:nth-child(4),
+.invoicesPageContainer table td:nth-child(4) { width: 12%; }  /* Due Date */
+.invoicesPageContainer table th:nth-child(5),
+.invoicesPageContainer table td:nth-child(5) { width: 12%; }  /* Amount Due */
+.invoicesPageContainer table th:nth-child(6),
+.invoicesPageContainer table td:nth-child(6) { width: 12%; }  /* Amount Paid */
+.invoicesPageContainer table th:nth-child(7),
+.invoicesPageContainer table td:nth-child(7) { width: 10%; }  /* Balance */
+.invoicesPageContainer table th:nth-child(8),
+.invoicesPageContainer table td:nth-child(8) { width: 15%; }  /* Status */
+
+/* ── Cell styles ── */
+.invoicesPageContainer .invoiceNum {
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.invoicesPageContainer .customerCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.invoicesPageContainer .customerName {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.invoicesPageContainer .amountCell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.invoicesPageContainer .balanceCell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.invoicesPageContainer .balanceCell.hasBalance {
+  color: var(--overdue);
+}
+
+/* ── Status badges ── */
+.invoicesPageContainer .statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.invoicesPageContainer .statusBadge.paid {
+  background: var(--paid-light);
+  color: var(--paid);
+}
+
+.invoicesPageContainer .statusBadge.overdue {
+  background: var(--overdue-light);
+  color: var(--overdue);
+}
+
+.invoicesPageContainer .statusBadge.dueSoon {
+  background: var(--due-soon-light);
+  color: var(--due-soon);
+}
+
+.invoicesPageContainer .statusBadge.open {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* ── Empty state ── */
+.invoicesPageContainer .emptyState {
+  text-align: center;
+  padding: 72px 20px;
+}
+
+.invoicesPageContainer .emptyState .emptyIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoicesPageContainer .emptyState p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.invoicesPageContainer .emptyState .emptyHint {
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* ── Animations ── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.invoicesPageContainer .tableWrapper {
+  animation: fadeSlideIn 0.35s ease-out;
+}
+
+.invoicesPageContainer .summaryCard {
+  animation: fadeSlideIn 0.3s ease-out both;
+}
+
+.invoicesPageContainer .summaryCard:nth-child(1) { animation-delay: 0s; }
+.invoicesPageContainer .summaryCard:nth-child(2) { animation-delay: 0.06s; }
+.invoicesPageContainer .summaryCard:nth-child(3) { animation-delay: 0.12s; }

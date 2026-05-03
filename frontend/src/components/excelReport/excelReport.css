@@ -1,32 +1,124 @@
-.createBtn {
-  background-color: #2596be !important;
+.excelReport {
+  font-family: 'DM Sans', sans-serif;
 }
 
-.createBtn:hover {
-  background-color: rgba(37, 150, 190, 0.842) !important;
-}
-
-.buttonContainer {
+/* Date pickers row */
+.excelReport .reportDatePickers {
   display: flex;
   gap: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
-.reportDisplaySection {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 2px solid #962626;
+.excelReport .reportDateField {
+  flex: 1;
+  max-width: 240px;
 }
 
-.reportSection {
-  margin-bottom: 40px;
+.excelReport .reportDateLabel {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-muted, #5f6577) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 
-.reportSectionTitle {
-  color: #962626;
-  font-size: 20px;
+.excelReport .MuiOutlinedInput-root {
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  background: white;
+}
+
+.excelReport .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent, #0075c5);
+}
+
+.excelReport .MuiInputLabel-root {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Error message */
+.excelReport .reportError {
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #fef0ec;
+  color: #e05a33;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Action buttons */
+.excelReport .reportActions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.excelReport .reportActions .btnPrimary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent, #0075c5);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.excelReport .reportActions .btnPrimary:hover {
+  background: #0063a7;
+}
+
+.excelReport .reportActions .btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.excelReport .reportActions .btnSecondary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface-raised, #ffffff);
+  color: var(--ink-muted, #5f6577);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.excelReport .reportActions .btnSecondary:hover {
+  border-color: var(--accent, #0075c5);
+  color: var(--accent, #0075c5);
+}
+
+.excelReport .reportActions .btnSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Report results area */
+.excelReport .reportResults {
+  margin-top: 8px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border, #e2e5ec);
+}
+
+.excelReport .reportSection {
+  margin-bottom: 36px;
+}
+
+.excelReport .reportSectionTitle {
+  font-size: 0.78rem;
   font-weight: 700;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #962626;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent, #0075c5);
+  margin-bottom: 16px;
 }

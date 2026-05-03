@@ -8,7 +8,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -431,11 +430,11 @@ const PaymentForm = ({
 
   return (
     <>
-      <div className="paymentForm form">
-        <h3>Customer Information</h3>
-        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12}>
-            <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
+      <div className="paymentForm">
+        <div className="formSection">Customer Information</div>
+        <Grid container spacing={3} sx={{ marginBottom: 3 }} alignItems="center">
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ minWidth: 200 }}>
               <InputLabel id="demo-simple-select-label">Family</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -455,15 +454,17 @@ const PaymentForm = ({
                 })}
               </Select>
             </FormControl>
-            <div style={{ float: "right", textAlign: "right" }}>
-              <h4>AMOUNT RECEIVED</h4>
-              <h2> £{Number(amountReceived).toFixed(2)}</h2>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <div className="amountReceivedCard">
+              <div className="amountLabel">Amount Received</div>
+              <div className="amountValue">£{Number(amountReceived).toFixed(2)}</div>
             </div>
           </Grid>
         </Grid>
-        <h3>Key Dates</h3>
-        <Grid container sx={{ marginBottom: 3 }}>
-          <Grid item xs={12}>
+        <div className="formSection">Key Dates</div>
+        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+          <Grid item xs={12} sm={4}>
             <TextField
               error={!!formErrors.paymentDate}
               helperText={formErrors.paymentDate}
@@ -474,23 +475,22 @@ const PaymentForm = ({
               name="newPaymentDate"
               value={dataToSubmit.newPaymentDate}
               onChange={addData}
-              sx={{ backgroundColor: "white" }}
               InputLabelProps={{
                 shrink: true,
               }}
               disabled={!editMode}
+              fullWidth
             />
           </Grid>
         </Grid>
-        <h3>Key Dates</h3>
+        <div className="formSection">Payment Details</div>
         <Grid
           container
           spacing={3}
           sx={{ marginBottom: 3 }}
-          justifyContent="space-between"
         >
-          <Grid item xs={4}>
-            <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
+          <Grid item xs={12} sm={4}>
+            <FormControl sx={{ minWidth: 200 }} fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Payment Type
               </InputLabel>
@@ -513,7 +513,7 @@ const PaymentForm = ({
               </Select>
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item xs={12} sm={4}>
             <TextField
               error={!!formErrors.amountReceived}
               helperText={formErrors.amountReceived}
@@ -523,21 +523,13 @@ const PaymentForm = ({
               name="amountReceived"
               value={amountReceived}
               onChange={(e) => setAmountReceived(e.target.value)}
-              sx={{ backgroundColor: "white" }}
               disabled={!editMode}
+              fullWidth
             />
           </Grid>
         </Grid>
-        <h3>Outstanding Transactions</h3>
-        <Table
-          sx={{
-            backgroundColor: "white",
-            outline: "solid 1px #962626",
-            "& .MuiTableCell-head": {
-              fontWeight: "800",
-            },
-          }}
-        >
+        <div className="formSection">Outstanding Transactions</div>
+        <Table className="formTable">
           <TableHead>
             <TableRow>
               <TableCell>DESCRIPTION</TableCell>
@@ -573,7 +565,6 @@ const PaymentForm = ({
                         type="number"
                         value={invoice.payment || ""}
                         onChange={(e) => updateInvoicePayment(invoice.id, e)}
-                        sx={{ backgroundColor: "white" }}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -587,85 +578,73 @@ const PaymentForm = ({
           </TableBody>
         </Table>
         {dataToSubmit.familyID && (
-          <>
-            <div className="summary">
-              <div className="summaryItem">
-                <div className="summaryText">Amount to Apply</div>
-                <div className="summaryValue">
-                  £{Number(amountReceived).toFixed(2)}
-                </div>
-              </div>
-              <div className="summaryItem">
-                <div className="summaryText">Amount to Credit</div>
-                <div className="summaryValue">
-                  £{Number(dataToSubmit.credit).toFixed(2)}
-                </div>
+          <div className="formSummary">
+            <div className="summaryRow">
+              <div className="summaryLabel">Amount to Apply</div>
+              <div className="summaryAmount">
+                £{Number(amountReceived).toFixed(2)}
               </div>
             </div>
-          </>
+            <div className="summaryRow summaryTotal">
+              <div className="summaryLabel">Amount to Credit</div>
+              <div className="summaryAmount">
+                £{Number(dataToSubmit.credit).toFixed(2)}
+              </div>
+            </div>
+          </div>
         )}
-        {errorMessage && <h3 className="error">{errorMessage}</h3>}
-        <div className="formEnd">
+        {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+        <div className="formActions">
           {paymentInfo ? (
             <>
               {editMode ? (
                 <>
-                  <Button
+                  <button
                     onClick={() => cancelChanges()}
-                    variant="outlined"
-                    color="warning"
-                    className="cancelBtn"
+                    className="btnWarning"
                   >
                     Cancel
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     onClick={handleSubmit}
                     disabled={loadingSave}
-                    variant="contained"
-                    className="submitBtn"
+                    className="btnPrimary"
                   >
                     Save
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    className="editBtn"
+                  <button
                     onClick={handlePrint}
+                    className="btnSecondary"
                   >
-                    PRINT
-                  </Button>
-                  <Button
+                    Print
+                  </button>
+                  <button
                     onClick={() => setEditMode(true)}
-                    variant="contained"
-                    color="secondary"
-                    className="editBtn"
+                    className="btnPrimary"
                   >
                     Edit
-                  </Button>
+                  </button>
                 </>
               )}
             </>
           ) : (
             <>
-              <Button
+              <button
                 onClick={() => navigate(-1)}
-                variant="outlined"
-                color="warning"
-                className="cancelBtn"
+                className="btnWarning"
               >
                 Cancel
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={handleSubmit}
                 disabled={loadingSave}
-                variant="contained"
-                className="submitBtn"
+                className="btnPrimary"
               >
                 Save
-              </Button>
+              </button>
             </>
           )}
         </div>

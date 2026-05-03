@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./excelReport.css";
-import { Button, InputLabel, TextField } from "@mui/material";
+import { InputLabel, TextField } from "@mui/material";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { getData } from "../../helpers/apiFunctions";
@@ -226,10 +226,10 @@ const ExcelReport = () => {
   }
 
   return (
-    <>
-      <div style={{ display: "flex", gap: "20px" }}>
-        <div>
-          <InputLabel>Select a start date:</InputLabel>
+    <div className="excelReport">
+      <div className="reportDatePickers">
+        <div className="reportDateField">
+          <InputLabel className="reportDateLabel">Start Date</InputLabel>
           <TextField
             required
             error={startDateError.length !== 0}
@@ -245,14 +245,14 @@ const ExcelReport = () => {
               setShowReport(false);
               setReportData(null);
             }}
-            sx={{ width: 220, marginTop: "20px", marginBottom: "20px" }}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
           />
         </div>
-        <div>
-          <InputLabel>Select an end date:</InputLabel>
+        <div className="reportDateField">
+          <InputLabel className="reportDateLabel">End Date</InputLabel>
           <TextField
             required
             error={endDateError.length !== 0}
@@ -268,37 +268,35 @@ const ExcelReport = () => {
               setShowReport(false);
               setReportData(null);
             }}
-            sx={{ width: 220, marginTop: "20px", marginBottom: "20px" }}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
           />
         </div>
       </div>
-      {error && <p style={{ marginBottom: "20px", color: "red" }}>{error}</p>}
-      <div className="buttonContainer">
-        <Button
+      {error && <div className="reportError">{error}</div>}
+      <div className="reportActions">
+        <button
           onClick={handleViewReport}
-          variant="contained"
-          className="createBtn"
+          className="btnPrimary"
           disabled={loading}
         >
           View Report
-        </Button>
-        <Button
+        </button>
+        <button
           onClick={handleDownload}
-          variant="contained"
-          className="createBtn"
+          className="btnSecondary"
           disabled={loading}
         >
           Download Report
-        </Button>
+        </button>
       </div>
 
       {showReport && reportData && (
-        <div className="reportDisplaySection">
+        <div className="reportResults">
           <div className="reportSection">
-            <h3 className="reportSectionTitle">Invoices Report</h3>
+            <div className="reportSectionTitle">Invoices Report</div>
             <ReportTable
               data={reportData.invoices}
               type="invoice"
@@ -310,7 +308,7 @@ const ExcelReport = () => {
           </div>
 
           <div className="reportSection">
-            <h3 className="reportSectionTitle">Payments Report</h3>
+            <div className="reportSectionTitle">Payments Report</div>
             <ReportTable
               data={reportData.payments}
               type="payment"
@@ -322,7 +320,7 @@ const ExcelReport = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

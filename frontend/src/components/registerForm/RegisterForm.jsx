@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { getData, saveData } from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { useNavigate } from "react-router-dom";
+import "./registerForm.css";
 
 const RegisterForm = () => {
   const [registerDate, setRegisterDate] = useState("");
@@ -22,7 +22,7 @@ const RegisterForm = () => {
     try {
       async function fetchSessionDates() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/sessionDate`
+          `${process.env.REACT_APP_API_URL}/api/sessionDate`,
         );
         if (serverResponse.message === "OK") {
           setSessionDate(serverResponse.results.data);
@@ -45,7 +45,7 @@ const RegisterForm = () => {
       async function createRegisterBlank() {
         const serverResponse = await saveData(
           `${process.env.REACT_APP_API_URL}/api/sessionDate`,
-          registerDate
+          registerDate,
         );
         if (serverResponse.message === "OK") {
           const { newSessionDateID } = serverResponse.results.data;
@@ -73,7 +73,7 @@ const RegisterForm = () => {
       async function createRegisterTemplate() {
         const serverResponse = await saveData(
           `${process.env.REACT_APP_API_URL}/api/register`,
-          { registerDate, templateID: sessionDateID }
+          { registerDate, templateID: sessionDateID },
         );
         if (serverResponse.message === "OK") {
           const { newSessionDateID } = serverResponse.results.data;
@@ -89,91 +89,105 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className="registerForm form">
-      <h3>Register Form</h3>
-      <Grid container>
-        <Grid item xs={12}>
-          <InputLabel>Select a date to create a register for:</InputLabel>
-          <TextField
-            required
-            error={registerError.length !== 0}
-            helperText={registerError}
-            id="date"
-            label="Register Date"
-            type="date"
-            name="date"
-            value={registerDate}
-            onChange={(e) => {
-              setRegisterDate(e.target.value);
-              setRegisterError("");
-              console.log(e.target.value);
-            }}
-            sx={{ width: 220, marginTop: "20px", marginBottom: "20px" }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <InputLabel>Create register from scratch:</InputLabel>
-          <Button
-            sx={{ marginTop: "20px", marginBottom: "20px" }}
-            variant="contained"
-            color="secondary"
-            onClick={() => handleBlankCanvas()}
-          >
-            Blank Canvas
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <InputLabel>
-            Create a register using an existing one as a template:
-          </InputLabel>
-          <FormControl
-            sx={{ width: 220, marginTop: "20px", marginBottom: "20px" }}
-          >
-            <InputLabel id="demo-simple-select-label">Template Date</InputLabel>
-            <Select
-              error={templateError.length !== 0}
-              labelId="demo-simple-select-label"
-              id="relation"
-              multiline
-              MenuProps={{
-                PaperProps: {
-                  style: {
-                    maxHeight: 300,
-                  },
-                },
-              }}
-              value={sessionDateID}
-              onChange={(e) => {
-                setSessionDateID(e.target.value);
-                setTemplateError("");
-                console.log(e.target.value);
+    <div className="registerFormContainer">
+      <div className="datePickerSection">
+        <label className="sectionLabel">Register Date</label>
+        <TextField
+          required
+          error={registerError.length !== 0}
+          helperText={registerError}
+          id="date"
+          type="date"
+          name="date"
+          value={registerDate}
+          onChange={(e) => {
+            setRegisterDate(e.target.value);
+            setRegisterError("");
+          }}
+          size="small"
+          sx={{
+            width: 220,
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "8px",
+              fontFamily: "'DM Sans', sans-serif",
+            },
+          }}
+          InputLabelProps={{ shrink: true }}
+        />
+      </div>
+
+      <div className="optionCards">
+        <div className="optionCard">
+          <div className="cardAccent blankAccent" />
+          <div className="cardContent">
+            <h3>Blank Canvas</h3>
+            <p>Start from scratch with an empty register for the selected date.</p>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleBlankCanvas()}
+              sx={{
+                marginTop: "auto",
+                textTransform: "none",
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 600,
+                borderRadius: "8px",
               }}
             >
-              {sessionDate.map((item) => {
-                return (
+              Create Blank
+            </Button>
+          </div>
+        </div>
+
+        <div className="optionCard">
+          <div className="cardAccent templateAccent" />
+          <div className="cardContent">
+            <h3>From Template</h3>
+            <p>Copy an existing register as a starting point.</p>
+            <FormControl fullWidth size="small" sx={{ marginBottom: "16px" }}>
+              <InputLabel id="template-select-label">Template Date</InputLabel>
+              <Select
+                error={templateError.length !== 0}
+                labelId="template-select-label"
+                label="Template Date"
+                MenuProps={{
+                  PaperProps: { style: { maxHeight: 300 } },
+                }}
+                value={sessionDateID}
+                onChange={(e) => {
+                  setSessionDateID(e.target.value);
+                  setTemplateError("");
+                }}
+                sx={{
+                  borderRadius: "8px",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                {sessionDate.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.sessionDate}
                   </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={(e) => {
-              handleGenerateTemplate();
-            }}
-          >
-            Generate Template
-          </Button>
-        </Grid>
-      </Grid>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() => handleGenerateTemplate()}
+              sx={{
+                textTransform: "none",
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 600,
+                borderRadius: "8px",
+                boxShadow: "none",
+                "&:hover": { boxShadow: "none" },
+              }}
+            >
+              Generate Template
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

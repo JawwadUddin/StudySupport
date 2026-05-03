@@ -162,6 +162,21 @@ class Invoice {
     });
   }
 
+  static bulkCreate(startDate) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const result = await pool
+          .request()
+          .input("StartDate", sql.Date, startDate)
+          .execute("BulkInsertInvoices");
+        resolve(result.recordset);
+      } catch (err) {
+        reject(err.message);
+      }
+    });
+  }
+
   static delete(id) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -171,6 +186,22 @@ class Invoice {
           .input("InvoiceID", sql.Int, id)
           .execute("DeleteInvoiceByID");
         resolve("Invoice successfully deleted");
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  static allDetailed(month) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pool = await dbConnect();
+        const request = pool.request();
+        if (month) {
+          request.input("Month", sql.Date, month);
+        }
+        const invoiceData = await request.execute("SelectAllInvoicesDetailed");
+        resolve(invoiceData.recordset);
       } catch (err) {
         reject(err);
       }

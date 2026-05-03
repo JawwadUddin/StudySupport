@@ -1,20 +1,320 @@
-.invoiceForm {
-  margin-bottom: 50px;
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap");
+/* ── Page-level container (used by SingleInvoicePage / NewInvoicePage) ── */
+.invoiceFormPage {
+  --ink: #1a1d26;
+  --ink-muted: #5f6577;
+  --ink-faint: #9ba1b2;
+  --surface: #f4f5f8;
+  --surface-raised: #ffffff;
+  --border: #e2e5ec;
+  --accent: #0075c5;
+  --accent-light: #e6f2fb;
+  --paid: #16a34a;
+  --paid-light: #ecfdf3;
+  --overdue: #e05a33;
+  --overdue-light: #fef0ec;
+  font-family: "DM Sans", sans-serif;
+  padding: 20px 28px;
 }
-.invoiceForm .paymentStatus {
+.invoiceFormPage .pageHeader {
+  margin-bottom: 24px;
+}
+.invoiceFormPage .pageHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 2px;
+}
+.invoiceFormPage .pageHeader .subtitle {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+.invoiceFormPage .formCard {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+.invoiceFormPage .loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+/* ── Invoice Form Component ── */
+.invoiceForm {
+  position: relative;
+  font-family: "DM Sans", sans-serif;
+  /* Section headings */
+}
+.invoiceForm .formSection {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent, #0075c5);
+  margin-bottom: 18px;
+  margin-top: 28px;
+}
+.invoiceForm .formSection:first-child {
+  margin-top: 0;
+}
+.invoiceForm {
+  /* Paid badge */
+}
+.invoiceForm .paidBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: var(--paid-light, #ecfdf3);
+  color: var(--paid, #16a34a);
+  border: 1.5px solid var(--paid, #16a34a);
   position: absolute;
   right: 0;
   top: 0;
 }
-.invoiceForm h3 {
-  color: #962626;
+.invoiceForm {
+  /* Contact info grid */
 }
-
-.horizontal {
-  border: solid 5px white;
+.invoiceForm .contactGrid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+.invoiceForm .contactCard {
+  flex: 1;
+  min-width: 180px;
+}
+.invoiceForm .contactCard .contactLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted, #5f6577);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.invoiceForm .contactCard .contactValue {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink, #1a1d26);
+  padding: 10px 14px;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface, #f4f5f8);
+  line-height: 1.5;
+}
+.invoiceForm {
+  /* MUI overrides for text fields */
+}
+.invoiceForm .MuiTextField-root .MuiOutlinedInput-root,
+.invoiceForm .MuiFormControl-root .MuiOutlinedInput-root {
+  border-radius: 8px;
+  font-family: "DM Sans", sans-serif;
+  background: white;
+}
+.invoiceForm .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.invoiceForm .MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent, #0075c5);
+}
+.invoiceForm .MuiTextField-root .MuiInputLabel-root,
+.invoiceForm .MuiFormControl-root .MuiInputLabel-root {
+  font-family: "DM Sans", sans-serif;
+}
+.invoiceForm {
+  /* Form table */
+}
+.invoiceForm .formTable {
   width: 100%;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.invoiceForm .formTable .MuiTableCell-head {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--ink, #1a1d26);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--surface, #f4f5f8);
+  border-bottom: 2px solid var(--border, #e2e5ec);
+  padding: 12px 16px;
+  font-family: "DM Sans", sans-serif;
+}
+.invoiceForm .formTable .MuiTableCell-body {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink, #1a1d26);
+  border-bottom: 1px solid var(--border, #e2e5ec);
+  padding: 13px 16px;
+  font-family: "DM Sans", sans-serif;
+}
+.invoiceForm .formTable .MuiTableRow-root:last-child .MuiTableCell-body {
+  border-bottom: none;
+}
+.invoiceForm .formTable .MuiTableRow-root:nth-of-type(even) {
+  background: #fafbfc;
+}
+.invoiceForm .formTable .MuiTableRow-root:hover {
+  background: var(--accent-light, #e6f2fb);
+}
+.invoiceForm {
+  /* Add item button */
+}
+.invoiceForm .btnAddItem {
+  padding: 5px 16px;
+  font-size: 0.82rem;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  border: 1.5px dashed var(--accent, #0075c5);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent, #0075c5);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.invoiceForm .btnAddItem:hover {
+  background: var(--accent-light, #e6f2fb);
+}
+.invoiceForm {
+  /* Summary section */
+}
+.invoiceForm .formSummary {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.invoiceForm .formSummary .summaryRow {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  min-width: 320px;
+}
+.invoiceForm .formSummary .summaryRow .summaryLabel {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-muted, #5f6577);
+  flex: 1;
+  text-align: right;
+  padding-right: 24px;
+}
+.invoiceForm .formSummary .summaryRow .summaryAmount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink, #1a1d26);
+  min-width: 120px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.invoiceForm .formSummary .summaryRow.summaryTotal {
+  border-top: 2px solid var(--border, #e2e5ec);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.invoiceForm .formSummary .summaryRow.summaryTotal .summaryAmount {
+  font-size: 1.25rem;
+  color: var(--accent, #0075c5);
+}
+.invoiceForm {
+  /* Error message */
+}
+.invoiceForm .errorMessage {
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--overdue-light, #fef0ec);
+  color: var(--overdue, #e05a33);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.invoiceForm {
+  /* Form actions */
+}
+.invoiceForm .formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border, #e2e5ec);
+}
+.invoiceForm .formActions .btnPrimary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent, #0075c5);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.invoiceForm .formActions .btnPrimary:hover {
+  background: #0063a7;
+}
+.invoiceForm .formActions .btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.invoiceForm .formActions .btnSecondary {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface-raised, #ffffff);
+  color: var(--ink-muted, #5f6577);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.invoiceForm .formActions .btnSecondary:hover {
+  border-color: var(--accent, #0075c5);
+  color: var(--accent, #0075c5);
+}
+.invoiceForm .formActions .btnWarning {
+  padding: 9px 28px;
+  font-size: 0.88rem;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border, #e2e5ec);
+  border-radius: 8px;
+  background: var(--surface-raised, #ffffff);
+  color: var(--ink-muted, #5f6577);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.invoiceForm .formActions .btnWarning:hover {
+  border-color: var(--overdue, #e05a33);
+  color: var(--overdue, #e05a33);
+}
+.invoiceForm {
+  /* No sessions message */
+}
+.invoiceForm .noSessions {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-muted, #5f6577);
+  font-style: italic;
+  margin: 0;
 }
 
+/* ── PDF Print View (unchanged) ── */
 .pdfView {
   margin-top: 40px;
   display: none;
@@ -38,7 +338,6 @@
 }
 
 .watermark {
-  /* Used to position the watermark */
   position: absolute;
   left: 50%;
   top: 50%;
@@ -46,29 +345,28 @@
 }
 
 .watermark__inner {
-  /* Center the content */
   align-items: center;
   display: flex;
   justify-content: center;
-  /* Absolute position */
   left: 50%;
   position: absolute;
   top: 0px;
-  /* Take full size */
   height: 100%;
   width: 100%;
 }
 
 .watermark__body {
-  /* Text styles */
   font-size: 5rem;
   font-weight: bold;
-  /* Rotate the text */
   transform: rotate(-45deg);
-  /* Disable the selection */
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
   color: rgb(255, 255, 255);
   text-shadow: -1px -1px 0 #3ace3a, 1px -1px 0 #3ace3a, -1px 1px 0 #3ace3a, 1px 1px 0 #3ace3a;
+}
+
+.horizontal {
+  border: solid 5px white;
+  width: 100%;
 }/*# sourceMappingURL=invoiceForm.css.map */

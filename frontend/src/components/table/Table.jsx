@@ -227,14 +227,14 @@ const Table = ({ data, type, setDeleteID, openModal }) => {
         sx={{
           boxShadow: 2,
           border: 2,
-          borderColor: "#962626",
+          borderColor: "#1a2332",
           "& .MuiDataGrid-cell": {
-            borderColor: "#962626",
+            borderColor: "#1a2332",
             color: "black",
             fontWeight: "600",
           },
           "& .MuiDataGrid-columnHeaders": {
-            borderColor: "#962626",
+            borderColor: "#1a2332",
           },
         }}
       />

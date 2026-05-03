@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+.paymentsPageContainer {
+  --ink: #1a1d26;
+  --ink-muted: #5f6577;
+  --ink-faint: #9ba1b2;
+  --surface: #f4f5f8;
+  --surface-raised: #ffffff;
+  --border: #e2e5ec;
+  --accent: #0075c5;
+  --accent-light: #e6f2fb;
+  --paid: #16a34a;
+  --paid-light: #ecfdf3;
+  --info: #7c3aed;
+  --info-light: #f3f0ff;
+
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+  padding: 20px 28px;
+}
+
+/* ── Page header ── */
+.paymentsPageContainer .pageHeader {
+  margin-bottom: 24px;
+}
+
+.paymentsPageContainer .pageHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 2px;
+}
+
+.paymentsPageContainer .pageHeader .subtitle {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+/* ── Controls bar ── */
+.paymentsPageContainer .controlsBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.paymentsPageContainer .monthPicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paymentsPageContainer .monthPicker label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.paymentsPageContainer .monthPicker input[type="month"] {
+  padding: 7px 12px;
+  font-size: 0.88rem;
+  font-family: 'DM Sans', sans-serif;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--surface-raised);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.paymentsPageContainer .monthPicker input[type="month"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 117, 197, 0.12);
+}
+
+.paymentsPageContainer .monthPicker input[type="month"]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.paymentsPageContainer .allMonthsBtn {
+  padding: 7px 16px;
+  font-size: 0.84rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.paymentsPageContainer .allMonthsBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.paymentsPageContainer .allMonthsBtn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.paymentsPageContainer .searchField {
+  margin-left: auto;
+}
+
+/* ── Summary strip ── */
+.paymentsPageContainer .summaryStrip {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.paymentsPageContainer .summaryCard {
+  flex: 1;
+  max-width: 260px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.paymentsPageContainer .summaryCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.paymentsPageContainer .summaryCard.totalCard {
+  background: var(--paid-light);
+}
+.paymentsPageContainer .summaryCard.totalCard::before {
+  background: var(--paid);
+}
+
+.paymentsPageContainer .summaryCard.countCard {
+  background: var(--accent-light);
+}
+.paymentsPageContainer .summaryCard.countCard::before {
+  background: var(--accent);
+}
+
+.paymentsPageContainer .summaryCard.invoicesCard {
+  background: var(--info-light);
+}
+.paymentsPageContainer .summaryCard.invoicesCard::before {
+  background: var(--info);
+}
+
+.paymentsPageContainer .summaryCard .cardValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.paymentsPageContainer .summaryCard .cardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* ── Table wrapper ── */
+.paymentsPageContainer .tableWrapper {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.paymentsPageContainer .tableScroll {
+  max-height: 580px;
+  overflow-y: auto;
+}
+
+.paymentsPageContainer .tableScroll::-webkit-scrollbar {
+  width: 5px;
+}
+.paymentsPageContainer .tableScroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+}
+
+/* ── Table ── */
+.paymentsPageContainer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.paymentsPageContainer table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.paymentsPageContainer table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.paymentsPageContainer table th.sortable {
+  cursor: pointer;
+  transition: color 0.12s;
+}
+
+.paymentsPageContainer table th.sortable:hover {
+  color: var(--accent);
+}
+
+.paymentsPageContainer table th .sortIcon {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  margin-left: 4px;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.paymentsPageContainer table th.sortable:hover .sortIcon,
+.paymentsPageContainer table th.sortActive .sortIcon {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.paymentsPageContainer table td {
+  padding: 11px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink);
+  border-bottom: 1px solid #f0f1f5;
+  transition: background 0.1s;
+}
+
+.paymentsPageContainer table tbody tr {
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.paymentsPageContainer table tbody tr:hover {
+  background: #f0f5fa;
+}
+
+.paymentsPageContainer table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Column widths ── */
+.paymentsPageContainer table th:nth-child(1),
+.paymentsPageContainer table td:nth-child(1) { width: 25%; }  /* Payment Date */
+.paymentsPageContainer table th:nth-child(2),
+.paymentsPageContainer table td:nth-child(2) { width: 35%; }  /* Customer */
+.paymentsPageContainer table th:nth-child(3),
+.paymentsPageContainer table td:nth-child(3) { width: 15%; }  /* # Invoices */
+.paymentsPageContainer table th:nth-child(4),
+.paymentsPageContainer table td:nth-child(4) { width: 25%; }  /* Amount */
+
+/* ── Cell styles ── */
+.paymentsPageContainer .dateCell {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.paymentsPageContainer .customerName {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.paymentsPageContainer .invoiceCountCell {
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.paymentsPageContainer .amountCell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--paid);
+}
+
+/* ── Empty state ── */
+.paymentsPageContainer .emptyState {
+  text-align: center;
+  padding: 72px 20px;
+}
+
+.paymentsPageContainer .emptyState .emptyIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paymentsPageContainer .emptyState p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.paymentsPageContainer .emptyState .emptyHint {
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* ── Animations ── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.paymentsPageContainer .tableWrapper {
+  animation: fadeSlideIn 0.35s ease-out;
+}
+
+.paymentsPageContainer .summaryCard {
+  animation: fadeSlideIn 0.3s ease-out both;
+}
+
+.paymentsPageContainer .summaryCard:nth-child(1) { animation-delay: 0s; }
+.paymentsPageContainer .summaryCard:nth-child(2) { animation-delay: 0.06s; }
+.paymentsPageContainer .summaryCard:nth-child(3) { animation-delay: 0.12s; }

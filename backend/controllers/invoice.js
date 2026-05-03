@@ -72,6 +72,16 @@ async function findOutstandingTransactions(req, res) {
   }
 }
 
+async function bulkCreate(req, res) {
+  const { startDate } = req.body.data;
+  try {
+    const invoices = await Invoice.bulkCreate(startDate);
+    res.status(201).json(success("OK", { data: invoices }, res.statusCode));
+  } catch (err) {
+    res.status(500).json(error(err, res.statusCode));
+  }
+}
+
 async function remove(req, res) {
   const invoiceID = req.params.id;
   try {
@@ -79,6 +89,17 @@ async function remove(req, res) {
     res.status(204).json(success("OK", { data: invoice }, res.statusCode));
   } catch (err) {
     res.status(404).json(error(err, res.statusCode));
+  }
+}
+
+async function showAllDetailed(req, res) {
+  try {
+    const month = req.query.month || null;
+    const invoices = await Invoice.allDetailed(month);
+    res.status(200).json(success("OK", { data: invoices }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(error(err, res.statusCode));
   }
 }
 
@@ -96,8 +117,10 @@ module.exports = {
   show,
   create,
   update,
+  bulkCreate,
   findSessions,
   showOutstandingInvoices,
+  showAllDetailed,
   findOutstandingTransactions,
   remove,
   balanceSummary,

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { getData, updateData } from "../../helpers/apiFunctions";
-import { Button } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import RegisterTable from "../../components/registerTable/RegisterTable";
 import { useNavigate, useLocation } from "react-router-dom";
+import "./registerPage.css";
 
 const RegisterPage = () => {
   const [sessionDate, setSessionDate] = useState([]);
@@ -31,7 +31,7 @@ const RegisterPage = () => {
     try {
       async function fetchSessionDates() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/sessionDate`
+          `${process.env.REACT_APP_API_URL}/api/sessionDate`,
         );
         if (serverResponse.message === "OK") {
           setSessionDate(serverResponse.results.data);
@@ -81,7 +81,7 @@ const RegisterPage = () => {
     try {
       async function fetchRegister() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/register/${sessionDateID}`
+          `${process.env.REACT_APP_API_URL}/api/register/${sessionDateID}`,
         );
         if (serverResponse.message === "OK") {
           console.log(serverResponse);
@@ -103,7 +103,7 @@ const RegisterPage = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const serverResponse = await updateData(
           `${process.env.REACT_APP_API_URL}/api/register/`,
-          changes
+          changes,
         );
         if (serverResponse.message === "OK") {
           setLoading(false);
@@ -121,40 +121,34 @@ const RegisterPage = () => {
 
   function updateRegisterState(input) {
     setUpdatedSessions((prevState) => {
-      // find the index of the sessionTime that needs to be updated
       const sessionIndex = prevState.findIndex(
-        (session) => session.session_time === input.sessionTime
+        (session) => session.session_time === input.sessionTime,
       );
 
       if (sessionIndex === -1) {
-        // sessionTime not found, return the previous state
         console.log("session index not found");
         return prevState;
       }
 
-      // find the index of the sessionTable that needs to be updated
       const tableIndex = prevState[sessionIndex].tables.findIndex(
-        (table) => table.session_table === input.sessionTable
+        (table) => table.session_table === input.sessionTable,
       );
 
       if (tableIndex === -1) {
-        // sessionTable not found, return the previous state
         console.log("table index not found");
         return prevState;
       }
 
       const { student_session_id, student_id } = input.student;
 
-      // find the index of the student session that needs to be updated
       let studentSessionIndex;
       studentSessionIndex = prevState[sessionIndex].tables[
         tableIndex
       ].students.findIndex(
         (student) =>
           student.student_session_id === student_session_id &&
-          student.student_id === student_id
+          student.student_id === student_id,
       );
-      // }
 
       if (input.type === "update-attendance") {
         prevState[sessionIndex].tables[tableIndex].students[
@@ -169,7 +163,7 @@ const RegisterPage = () => {
             const existingObjectIndex = prevChanges.add.findIndex(
               (student) =>
                 student.student_session_id === student_session_id &&
-                student.student_id === student_id
+                student.student_id === student_id,
             );
             const updatedObject = {
               ...prevChanges.add[existingObjectIndex],
@@ -182,7 +176,7 @@ const RegisterPage = () => {
             const existingObjectIndex = prevChanges.update.findIndex(
               (student) =>
                 student.student_session_id === student_session_id &&
-                student.student_id === student_id
+                student.student_id === student_id,
             );
 
             if (existingObjectIndex !== -1) {
@@ -207,7 +201,7 @@ const RegisterPage = () => {
       if (input.type === "remove-session") {
         prevState[sessionIndex].tables[tableIndex].students.splice(
           studentSessionIndex,
-          1
+          1,
         );
 
         if (student_session_id === "new") {
@@ -215,7 +209,7 @@ const RegisterPage = () => {
             const existingObjectIndex = prevChanges.add.findIndex(
               (student) =>
                 student.student_session_id === student_session_id &&
-                student.student_id === student_id
+                student.student_id === student_id,
             );
             const newAddArray = [...prevChanges.add];
             newAddArray.splice(existingObjectIndex, 1);
@@ -229,7 +223,7 @@ const RegisterPage = () => {
             const existingObjectIndex = prevChanges.update.findIndex(
               (student) =>
                 student.student_session_id === student_session_id &&
-                student.student_id === student_id
+                student.student_id === student_id,
             );
             let newUpdateArray = [...prevChanges.update];
             if (existingObjectIndex !== -1) {
@@ -262,31 +256,27 @@ const RegisterPage = () => {
         });
       }
 
-      // return the updated state
       return [...prevState];
     });
   }
 
   return (
     <div className="registerPageContainer">
-      <h2 className="title">Register</h2>
-      <div className="listContainer">
-        <div className="listHeader">
-          <div className="listTitle">Register</div>
-          <Button
-            onClick={() => navigate("new")}
-            variant="contained"
-            className="createBtn"
-          >
-            Create New Register
-          </Button>
+      <div className="pageHeader">
+        <div className="headerLeft">
+          <h2>Register</h2>
+          <div className="subtitle">Manage attendance records</div>
         </div>
-        <Grid item xs={4}>
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-label">Select Date</InputLabel>
+        <button className="btnNewRegister" onClick={() => navigate("new")}>
+          + New Register
+        </button>
+      </div>
+      <div className="registerCard">
+        <div className="dateSelector">
+          <FormControl fullWidth sx={{ maxWidth: 280 }}>
+            <InputLabel>Select Date</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="relation"
+              label="Select Date"
               MenuProps={{
                 PaperProps: {
                   style: {
@@ -294,7 +284,6 @@ const RegisterPage = () => {
                   },
                 },
               }}
-              multiline
               value={sessionDateID}
               onChange={(e) => setSessionDateID(e.target.value)}
             >
@@ -307,7 +296,7 @@ const RegisterPage = () => {
               })}
             </Select>
           </FormControl>
-        </Grid>
+        </div>
         {sessions.length !== 0 ? (
           <RegisterTable
             updatedSessions={updatedSessions}
@@ -324,9 +313,13 @@ const RegisterPage = () => {
             loading={loading}
           />
         ) : (
-          <h3 style={{ marginTop: "20px", fontSize: "16px", color: "red" }}>
-            Please select a date to show register
-          </h3>
+          <div className="emptyState">
+            <div className="emptyIcon">
+              <EventNoteIcon sx={{ fontSize: 28, color: "var(--accent)" }} />
+            </div>
+            <p>No register found</p>
+            <p className="emptyHint">Select a date above to view the register</p>
+          </div>
         )}
       </div>
     </div>

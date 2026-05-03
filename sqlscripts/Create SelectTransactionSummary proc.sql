@@ -18,9 +18,10 @@ BEGIN
     ORDER BY start_date;
 
     -- Select payments within the date range
-    SELECT 
+    SELECT
         FORMAT(payment_date, 'yyyy-MM-dd') AS payment_date,
         invoice_id,
+        p.family_id,
         first_name + ' ' + last_name AS full_name,
         amount,
         payment_type

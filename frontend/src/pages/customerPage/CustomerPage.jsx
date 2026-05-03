@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./customerPage.css";
-import { getData } from "../../helpers/apiFunctions";
+import { getData, saveData } from "../../helpers/apiFunctions";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import ErrorIcon from "@mui/icons-material/Error";
+import BulkCreateModal from "./BulkCreateModal";
+import BulkResultsModal from "./BulkResultsModal";
 
 const CustomerPage = () => {
   const navigate = useNavigate();
@@ -14,6 +17,17 @@ const CustomerPage = () => {
   const [sortDirection, setSortDirection] = useState("asc"); // Possible values: 'asc', 'desc', 'none'
   const [filterOverdue, setFilterOverdue] = useState(false);
   const [balanceSummary, setBalanceSummary] = useState();
+
+  // Bulk create state
+  const [bulkModalOpen, setBulkModalOpen] = useState(false);
+  const [bulkMonth, setBulkMonth] = useState(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  });
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkError, setBulkError] = useState("");
+  const [bulkResults, setBulkResults] = useState(null);
+  const [resultsModalOpen, setResultsModalOpen] = useState(false);
 
   const handleSortClick = (column) => {
     let newSortDirection;
@@ -61,7 +75,7 @@ const CustomerPage = () => {
     let filteredData = [...customers];
     if (filterOverdue) {
       setSortedData(
-        filteredData.filter((item) => Number(item.overdueBalance) > 0)
+        filteredData.filter((item) => Number(item.overdueBalance) > 0),
       );
       return;
     }
@@ -73,8 +87,8 @@ const CustomerPage = () => {
       return sortDirection === "asc"
         ? "▲"
         : sortDirection === "desc"
-        ? "▼"
-        : "•";
+          ? "▼"
+          : "•";
     }
     return "•";
   };
@@ -83,7 +97,7 @@ const CustomerPage = () => {
     try {
       async function fetchData() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/invoice/outstanding`
+          `${process.env.REACT_APP_API_URL}/api/invoice/outstanding`,
         );
         if (serverResponse.message === "OK") {
           setCustomers(serverResponse.results.data);
@@ -94,7 +108,7 @@ const CustomerPage = () => {
       }
       async function fetchBalanceSummary() {
         const serverResponse = await getData(
-          `${process.env.REACT_APP_API_URL}/api/invoice/balanceSummary`
+          `${process.env.REACT_APP_API_URL}/api/invoice/balanceSummary`,
         );
         if (serverResponse.message === "OK") {
           setBalanceSummary(serverResponse.results.data);
@@ -109,13 +123,64 @@ const CustomerPage = () => {
     }
   }, []);
 
+  const handleBulkCreate = async () => {
+    if (!bulkMonth) return;
+    setBulkLoading(true);
+    setBulkError("");
+    try {
+      // bulkMonth is "YYYY-MM", convert to first day of month
+      const startDate = `${bulkMonth}-01`;
+      const serverResponse = await saveData(
+        `${process.env.REACT_APP_API_URL}/api/invoice/bulk`,
+        { startDate },
+      );
+      if (serverResponse.message === "OK") {
+        setBulkResults(serverResponse.results.data);
+        setBulkModalOpen(false);
+        setResultsModalOpen(true);
+      } else {
+        setBulkError(serverResponse.message);
+      }
+    } catch (error) {
+      setBulkError(error.message || "An error occurred");
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleCloseBulkModal = () => {
+    setBulkModalOpen(false);
+    setBulkError("");
+  };
+
+  const handleCloseResultsModal = () => {
+    setResultsModalOpen(false);
+    setBulkResults(null);
+  };
+
   return (
     <div className="customerPageContainer">
-      <h2 className="title">Customers</h2>
-      <div className="listContainer">
-        <div className="listHeader">
-          <div className="listTitle">All Customers</div>
+      <div className="pageHeader">
+        <div className="headerLeft">
+          <h2>Customers</h2>
+          <div className="subtitle">Manage all customer accounts</div>
         </div>
+        <Button
+          variant="contained"
+          onClick={() => setBulkModalOpen(true)}
+          sx={{
+            textTransform: "none",
+            fontFamily: "'DM Sans', sans-serif",
+            fontWeight: 600,
+            borderRadius: "8px",
+            boxShadow: "none",
+            "&:hover": { boxShadow: "none" },
+          }}
+        >
+          Bulk Create Invoices
+        </Button>
+      </div>
+      <div className="listContainer margin-0">
         <div className="search">
           <TextField
             className="text"
@@ -138,7 +203,7 @@ const CustomerPage = () => {
               <div className="amount">
                 £
                 {Number(
-                  balanceSummary ? balanceSummary.overdueBalance : 0
+                  balanceSummary ? balanceSummary.overdueBalance : 0,
                 ).toFixed(2)}
               </div>
               <div className="text">
@@ -154,7 +219,7 @@ const CustomerPage = () => {
               <div className="amount">
                 £
                 {Number(
-                  balanceSummary ? balanceSummary.openBalance : 0
+                  balanceSummary ? balanceSummary.openBalance : 0,
                 ).toFixed(2)}
               </div>
               <div className="text">
@@ -172,7 +237,7 @@ const CustomerPage = () => {
                 {Number(
                   balanceSummary
                     ? balanceSummary.openBalance - balanceSummary.overdueBalance
-                    : 0
+                    : 0,
                 ).toFixed(2)}
               </div>
               <div className="text">NOT DUE YET</div>
@@ -215,7 +280,7 @@ const CustomerPage = () => {
                       )
                         .toString()
                         .toLowerCase()
-                        .includes(query)
+                        .includes(query),
                     )
                   : sortedData
                 ).map((customer, index) => {
@@ -259,6 +324,24 @@ const CustomerPage = () => {
           </table>
         </div>
       </div>
+
+      {bulkModalOpen && (
+        <BulkCreateModal
+          bulkMonth={bulkMonth}
+          onMonthChange={setBulkMonth}
+          onClose={handleCloseBulkModal}
+          onSubmit={handleBulkCreate}
+          bulkLoading={bulkLoading}
+          bulkError={bulkError}
+        />
+      )}
+
+      {resultsModalOpen && (
+        <BulkResultsModal
+          bulkResults={bulkResults}
+          onClose={handleCloseResultsModal}
+        />
+      )}
     </div>
   );
 };

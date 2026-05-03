@@ -7,7 +7,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -552,36 +551,15 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
 
   return (
     <>
-      <div className="invoiceForm form" style={{ position: "relative" }}>
-        <h3>Customer Information</h3>
+      <div className="invoiceForm">
+        <div className="formSection">Customer Information</div>
         {dataToSubmit.amountDue !== 0 &&
         dataToSubmit.amountDue - dataToSubmit.amountPaid === 0 ? (
-          <div className="paymentStatus">
-            <div
-              style={{
-                fontWeight: 600,
-                color: "#6b6c72",
-                fontSize: "1.2rem",
-                textAlign: "center",
-              }}
-            >
-              PAYMENT STATUS
-            </div>
-            <div
-              style={{
-                fontWeight: 600,
-                color: "#6b6c72",
-                fontSize: "4.8rem",
-                textAlign: "center",
-              }}
-            >
-              PAID
-            </div>
-          </div>
+          <div className="paidBadge">PAID</div>
         ) : null}
         <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12}>
-            <FormControl sx={{ minWidth: 200, backgroundColor: "white" }}>
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Family</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -602,34 +580,28 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               </Select>
             </FormControl>
           </Grid>
-          <div
-            style={{
-              marginLeft: "24px",
-              marginTop: "24px",
-              display: "flex",
-              gap: "20px",
-            }}
-          >
-            <div>
-              <h4>Billing Address</h4>
-              <div className="contactInfo">
-                {dataToSubmit.address} <br /> {dataToSubmit.postCode} <br />
-              </div>
-            </div>
-            <div>
-              <h4>Contact Number</h4>
-              <div className="contactInfo">{dataToSubmit.mobile}</div>
-            </div>
-
-            <div>
-              <h4>Customer Email</h4>
-              <div className="contactInfo">{dataToSubmit.email}</div>
+        </Grid>
+        <div className="contactGrid">
+          <div className="contactCard">
+            <div className="contactLabel">Billing Address</div>
+            <div className="contactValue">
+              {dataToSubmit.address || dataToSubmit.postCode
+                ? [dataToSubmit.address, dataToSubmit.postCode].filter(Boolean).join(", ")
+                : "-"}
             </div>
           </div>
-        </Grid>
-        <h3>Key Dates</h3>
+          <div className="contactCard">
+            <div className="contactLabel">Contact Number</div>
+            <div className="contactValue">{dataToSubmit.mobile || "-"}</div>
+          </div>
+          <div className="contactCard">
+            <div className="contactLabel">Customer Email</div>
+            <div className="contactValue">{dataToSubmit.email || "-"}</div>
+          </div>
+        </div>
+        <div className="formSection">Key Dates</div>
         <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={4}>
             <TextField
               error={!!formErrors.invoiceDate}
               helperText={formErrors.invoiceDate}
@@ -640,14 +612,14 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               name="invoiceDate"
               value={dataToSubmit.invoiceDate}
               onChange={addData}
-              sx={{ backgroundColor: "white" }}
               InputLabelProps={{
                 shrink: true,
               }}
               disabled={!editMode}
+              fullWidth
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={4}>
             <TextField
               error={!!formErrors.startDate}
               helperText={formErrors.startDate}
@@ -658,14 +630,14 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               name="startDate"
               value={dataToSubmit.startDate}
               onChange={addData}
-              sx={{ backgroundColor: "white" }}
               InputLabelProps={{
                 shrink: true,
               }}
               disabled={!editMode || invoiceInfo ? true : false}
+              fullWidth
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={4}>
             <TextField
               error={!!formErrors.dueDate}
               helperText={formErrors.dueDate}
@@ -676,24 +648,16 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
               name="dueDate"
               value={dataToSubmit.dueDate}
               onChange={addData}
-              sx={{ backgroundColor: "white" }}
               InputLabelProps={{
                 shrink: true,
               }}
               disabled={!editMode}
+              fullWidth
             />
           </Grid>
         </Grid>
-        <h3>Product Information</h3>
-        <Table
-          sx={{
-            backgroundColor: "white",
-            outline: "solid 1px #962626",
-            "& .MuiTableCell-head": {
-              fontWeight: "800",
-            },
-          }}
-        >
+        <div className="formSection">Product Information</div>
+        <Table className="formTable">
           <TableHead>
             <TableRow>
               <TableCell>STUDENT NAME</TableCell>
@@ -738,9 +702,9 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                             );
                           })
                         ) : (
-                          <h3 style={{ margin: 0, color: "#962626" }}>
+                          <p className="noSessions">
                             The student has not booked any sessions this month
-                          </h3>
+                          </p>
                         )}
                       </TableCell>
                       <TableCell>{QTY}</TableCell>
@@ -757,7 +721,6 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
                           onChange={(e) =>
                             updateStudentRate(student.student_id, e)
                           }
-                          sx={{ backgroundColor: "white" }}
                           InputLabelProps={{
                             shrink: true,
                           }}
@@ -855,7 +818,7 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             {!currentlyEditing && editMode && (
               <TableRow>
                 <TableCell>
-                  <Button onClick={handleAddMisc}>+</Button>
+                  <button className="btnAddItem" onClick={handleAddMisc}>+ Add</button>
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -884,24 +847,24 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             )}
           </TableBody>
         </Table>
-        <div className="summary">
-          <div className="summaryItem">
-            <div className="summaryText">Total</div>
-            <div className="summaryValue">
+        <div className="formSummary">
+          <div className="summaryRow">
+            <div className="summaryLabel">Total</div>
+            <div className="summaryAmount">
               £{Number(dataToSubmit.amountDue).toFixed(2)}
             </div>
           </div>
           {invoiceInfo && (
             <>
-              <div className="summaryItem">
-                <div className="summaryText">Amount Received</div>
-                <div className="summaryValue">
+              <div className="summaryRow">
+                <div className="summaryLabel">Amount Received</div>
+                <div className="summaryAmount">
                   £{Number(dataToSubmit.amountPaid).toFixed(2)}
                 </div>
               </div>
-              <div className="summaryItem">
-                <div className="summaryText">Balance Due</div>
-                <div className="summaryValue">
+              <div className="summaryRow summaryTotal">
+                <div className="summaryLabel">Balance Due</div>
+                <div className="summaryAmount">
                   £
                   {Number(
                     dataToSubmit.amountDue - dataToSubmit.amountPaid
@@ -911,69 +874,58 @@ const InvoiceForm = ({ invoiceInfo, familyID }) => {
             </>
           )}
         </div>
-        {errorMessage && <h3 className="error">{errorMessage}</h3>}
-        <div className="formEnd">
+        {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+        <div className="formActions">
           {invoiceInfo ? (
             <>
               {editMode ? (
                 <>
-                  <Button
+                  <button
                     onClick={() => cancelChanges()}
-                    variant="outlined"
-                    color="warning"
-                    className="cancelBtn"
+                    className="btnWarning"
                   >
                     Cancel
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    variant="contained"
-                    className="submitBtn"
+                    className="btnPrimary"
                   >
                     Save
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    className="editBtn"
+                  <button
                     onClick={handlePrint}
+                    className="btnSecondary"
                   >
-                    PRINT
-                  </Button>
-
-                  <Button
+                    Print
+                  </button>
+                  <button
                     onClick={() => setEditMode(true)}
-                    variant="contained"
-                    color="secondary"
-                    className="editBtn"
+                    className="btnPrimary"
                   >
                     Edit
-                  </Button>
+                  </button>
                 </>
               )}
             </>
           ) : (
             <>
-              <Button
+              <button
                 onClick={() => navigate(-1)}
-                variant="outlined"
-                color="warning"
-                className="cancelBtn"
+                className="btnWarning"
               >
                 Cancel
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={handleSubmit}
                 disabled={loading}
-                variant="contained"
-                className="submitBtn"
+                className="btnPrimary"
               >
                 Save
-              </Button>
+              </button>
             </>
           )}
         </div>

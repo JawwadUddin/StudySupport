@@ -9,14 +9,17 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ReportTable = ({ data, type, total }) => {
+  const navigate = useNavigate();
+
   // Handle empty data
   if (!data || data.length === 0) {
     return (
       <div className="emptyState">
-        No {type === "invoice" ? "invoices" : "payments"} found for the
-        selected date range.
+        No {type === "invoice" ? "invoices" : "payments"} found for the selected
+        date range.
       </div>
     );
   }
@@ -41,6 +44,19 @@ const ReportTable = ({ data, type, total }) => {
 
   const columns = type === "invoice" ? invoiceColumns : paymentColumns;
 
+  const handleRowClick = (row) => {
+    if (type === "invoice") {
+      navigate(`/invoices/${row.invoiceID}`);
+    } else if (row.familyID && row.paymentDate) {
+      const parts = row.paymentDate.split("-");
+      const dateForRoute = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      const [firstName, ...rest] = row.fullName.split(" ");
+      navigate(`/payments/${row.familyID}/${dateForRoute}`, {
+        state: { firstName, lastName: rest.join(" ") },
+      });
+    }
+  };
+
   return (
     <TableContainer component={Paper} className="reportTableContainer">
       <Table className="reportTable">
@@ -55,7 +71,11 @@ const ReportTable = ({ data, type, total }) => {
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
-            <TableRow key={index} className="reportTableRow">
+            <TableRow
+              key={index}
+              className="reportTableRow"
+              onClick={() => handleRowClick(row)}
+            >
               {columns.map((column) => {
                 let cellValue = row[column.key];
 
