@@ -2,9 +2,8 @@ import PaymentForm from "../../components/paymentForm/PaymentForm";
 import { useLocation } from "react-router-dom";
 
 const NewPaymentPage = () => {
-  const {
-    state: { familyID },
-  } = useLocation();
+  const location = useLocation();
+  const familyID = location.state ? location.state.familyID : null;
   return (
     <div className="paymentFormPage">
       <div className="pageHeader">
