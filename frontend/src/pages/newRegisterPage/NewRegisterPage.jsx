@@ -10,7 +10,7 @@ const NewRegisterPage = () => {
           <div className="subtitle">Create a new attendance register</div>
         </div>
       </div>
-      <div className="formContainer margin-0">
+      <div className="registerCard">
         <RegisterForm />
       </div>
     </div>
