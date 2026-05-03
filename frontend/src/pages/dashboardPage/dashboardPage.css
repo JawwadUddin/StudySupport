@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap");
 .dashboardPage {
   --ink: #1a1d26;
@@ -8,6 +9,12 @@
   --border: #e2e5ec;
   --accent: #0075c5;
   --accent-light: #e6f2fb;
+  --overdue: #e05a33;
+  --overdue-light: #fef0ec;
+  --paid: #16a34a;
+  --paid-light: #ecfdf3;
+  --sessions: #7c3aed;
+  --sessions-light: #f3f0ff;
   font-family: "DM Sans", sans-serif;
   padding: 20px 28px;
 }
@@ -26,11 +33,190 @@
   color: var(--ink-muted);
   font-weight: 400;
 }
+.dashboardPage {
+  /* ── Summary Strip ── */
+}
+.dashboardPage .summaryStrip {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.dashboardPage .summaryCard {
+  flex: 1;
+  padding: 14px 18px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeSlideIn 0.3s ease-out both;
+}
+.dashboardPage .summaryCard::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+.dashboardPage .summaryCard .cardIcon {
+  margin-bottom: 6px;
+}
+.dashboardPage .summaryCard .cardValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.dashboardPage .summaryCard .cardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+.dashboardPage .summaryCard.revenueCard {
+  background: var(--paid-light);
+}
+.dashboardPage .summaryCard.revenueCard::before {
+  background: var(--paid);
+}
+.dashboardPage .summaryCard.revenueCard .cardIcon {
+  color: var(--paid);
+}
+.dashboardPage .summaryCard.balanceCard {
+  background: var(--accent-light);
+}
+.dashboardPage .summaryCard.balanceCard::before {
+  background: var(--accent);
+}
+.dashboardPage .summaryCard.balanceCard .cardIcon {
+  color: var(--accent);
+}
+.dashboardPage .summaryCard.overdueCard {
+  background: var(--overdue-light);
+}
+.dashboardPage .summaryCard.overdueCard::before {
+  background: var(--overdue);
+}
+.dashboardPage .summaryCard.overdueCard .cardIcon {
+  color: var(--overdue);
+}
+.dashboardPage .summaryCard.sessionsCard {
+  background: var(--sessions-light);
+}
+.dashboardPage .summaryCard.sessionsCard::before {
+  background: var(--sessions);
+}
+.dashboardPage .summaryCard.sessionsCard .cardIcon {
+  color: var(--sessions);
+}
+.dashboardPage .summaryCard:nth-child(1) {
+  animation-delay: 0s;
+}
+.dashboardPage .summaryCard:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.dashboardPage .summaryCard:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.dashboardPage .summaryCard:nth-child(4) {
+  animation-delay: 0.18s;
+}
+.dashboardPage {
+  /* ── Dashboard Grid ── */
+}
+.dashboardPage .dashboardGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
 .dashboardPage .dashboardCard {
   background: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 32px;
+  padding: 24px;
+  animation: fadeSlideIn 0.35s ease-out;
+}
+.dashboardPage .dashboardCard .cardTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 2px;
+}
+.dashboardPage .dashboardCard .cardSubtitle {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.dashboardPage {
+  /* ── Chart Card ── */
+}
+.dashboardPage .chartCard .emptyChart {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 0.88rem;
+  color: var(--ink-faint);
+}
+.dashboardPage {
+  /* ── Quick Actions Card ── */
+}
+.dashboardPage .quickActionsCard .quickActionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dashboardPage .quickActionsCard .quickActionRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.dashboardPage .quickActionsCard .quickActionRow:hover {
+  background: var(--surface);
+}
+.dashboardPage .quickActionsCard .quickActionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.dashboardPage .quickActionsCard .quickActionLabel {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.dashboardPage {
+  /* ── Reports Card ── */
+}
+.dashboardPage .reportsCard {
+  margin-top: 0;
+}
+.dashboardPage {
+  /* ── Loading ── */
+}
+.dashboardPage .loadingState {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
 }
 
-/*# sourceMappingURL=dashboardPage.css.map */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}/*# sourceMappingURL=dashboardPage.css.map */

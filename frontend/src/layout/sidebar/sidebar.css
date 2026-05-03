@@ -26,7 +26,8 @@
 .sidebarLogo {
   height: 36px;
   width: auto;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   filter: brightness(1.1);
 }
 
@@ -100,4 +101,4 @@
   color: #8b949e;
   transition: color 0.2s;
   white-space: nowrap;
-}
+}/*# sourceMappingURL=sidebar.css.map */

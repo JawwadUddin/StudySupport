@@ -49,15 +49,6 @@
   position: relative;
   font-family: "DM Sans", sans-serif;
   /* Section headings */
-  /* Paid badge */
-  /* Contact info grid */
-  /* MUI overrides for text fields */
-  /* Form table */
-  /* Add item button */
-  /* Summary section */
-  /* Error message */
-  /* Form actions */
-  /* No sessions message */
 }
 .invoiceForm .formSection {
   font-size: 0.78rem;
@@ -72,6 +63,9 @@
 }
 .invoiceForm .formSection:first-child {
   margin-top: 0;
+}
+.invoiceForm {
+  /* Paid badge */
 }
 .invoiceForm .paidBadge {
   display: inline-flex;
@@ -88,6 +82,9 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+.invoiceForm {
+  /* Contact info grid */
 }
 .invoiceForm .contactGrid {
   display: flex;
@@ -118,6 +115,9 @@
   background: var(--surface, #f4f5f8);
   line-height: 1.5;
 }
+.invoiceForm {
+  /* MUI overrides for text fields */
+}
 .invoiceForm .MuiTextField-root .MuiOutlinedInput-root,
 .invoiceForm .MuiFormControl-root .MuiOutlinedInput-root {
   border-radius: 8px;
@@ -131,6 +131,9 @@
 .invoiceForm .MuiTextField-root .MuiInputLabel-root,
 .invoiceForm .MuiFormControl-root .MuiInputLabel-root {
   font-family: "DM Sans", sans-serif;
+}
+.invoiceForm {
+  /* Form table */
 }
 .invoiceForm .formTable {
   width: 100%;
@@ -168,6 +171,9 @@
 .invoiceForm .formTable .MuiTableRow-root:hover {
   background: var(--accent-light, #e6f2fb);
 }
+.invoiceForm {
+  /* Add item button */
+}
 .invoiceForm .btnAddItem {
   padding: 5px 16px;
   font-size: 0.82rem;
@@ -182,6 +188,9 @@
 }
 .invoiceForm .btnAddItem:hover {
   background: var(--accent-light, #e6f2fb);
+}
+.invoiceForm {
+  /* Summary section */
 }
 .invoiceForm .formSummary {
   margin-top: 24px;
@@ -220,6 +229,9 @@
   font-size: 1.25rem;
   color: var(--accent, #0075c5);
 }
+.invoiceForm {
+  /* Error message */
+}
 .invoiceForm .errorMessage {
   margin-top: 16px;
   padding: 10px 16px;
@@ -228,6 +240,9 @@
   color: var(--overdue, #e05a33);
   font-size: 0.88rem;
   font-weight: 600;
+}
+.invoiceForm {
+  /* Form actions */
 }
 .invoiceForm .formActions {
   display: flex;
@@ -288,6 +303,9 @@
   border-color: var(--overdue, #e05a33);
   color: var(--overdue, #e05a33);
 }
+.invoiceForm {
+  /* No sessions message */
+}
 .invoiceForm .noSessions {
   font-size: 0.85rem;
   font-weight: 500;
@@ -341,7 +359,9 @@
   font-size: 5rem;
   font-weight: bold;
   transform: rotate(-45deg);
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   color: rgb(255, 255, 255);
   text-shadow: -1px -1px 0 #3ace3a, 1px -1px 0 #3ace3a, -1px 1px 0 #3ace3a, 1px 1px 0 #3ace3a;
 }
@@ -349,6 +369,4 @@
 .horizontal {
   border: solid 5px white;
   width: 100%;
-}
-
-/*# sourceMappingURL=invoiceForm.css.map */
+}/*# sourceMappingURL=invoiceForm.css.map */

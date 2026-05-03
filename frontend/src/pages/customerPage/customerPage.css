@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&display=swap");
 .customerPageContainer {
   position: relative;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   padding: 20px 28px;
 }
 .customerPageContainer .pageHeader {
@@ -23,7 +22,6 @@
   color: #5f6577;
   font-weight: 400;
 }
-
 .customerPageContainer .balanceSummary {
   display: flex;
   margin-bottom: 20px;
@@ -33,7 +31,7 @@
   padding: 10px;
   color: white;
   font-weight: 600;
-  margin-right: 10px;
+  margin-left: 10px;
 }
 .customerPageContainer .balanceSummary .item .amount {
   font-size: 30px;

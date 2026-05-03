@@ -9,6 +9,12 @@
   --border: #e2e5ec;
   --accent: #0075c5;
   --accent-light: #e6f2fb;
+  --overdue: #e05a33;
+  --overdue-light: #fef0ec;
+  --paid: #16a34a;
+  --paid-light: #ecfdf3;
+  --sessions: #7c3aed;
+  --sessions-light: #f3f0ff;
 
   font-family: 'DM Sans', sans-serif;
   padding: 20px 28px;
@@ -31,10 +37,181 @@
     }
   }
 
+  /* ── Summary Strip ── */
+  .summaryStrip {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .summaryCard {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeSlideIn 0.3s ease-out both;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+    }
+
+    .cardIcon {
+      margin-bottom: 6px;
+    }
+
+    .cardValue {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cardLabel {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    &.revenueCard {
+      background: var(--paid-light);
+      &::before { background: var(--paid); }
+      .cardIcon { color: var(--paid); }
+    }
+
+    &.balanceCard {
+      background: var(--accent-light);
+      &::before { background: var(--accent); }
+      .cardIcon { color: var(--accent); }
+    }
+
+    &.overdueCard {
+      background: var(--overdue-light);
+      &::before { background: var(--overdue); }
+      .cardIcon { color: var(--overdue); }
+    }
+
+    &.sessionsCard {
+      background: var(--sessions-light);
+      &::before { background: var(--sessions); }
+      .cardIcon { color: var(--sessions); }
+    }
+
+    &:nth-child(1) { animation-delay: 0s; }
+    &:nth-child(2) { animation-delay: 0.06s; }
+    &:nth-child(3) { animation-delay: 0.12s; }
+    &:nth-child(4) { animation-delay: 0.18s; }
+  }
+
+  /* ── Dashboard Grid ── */
+  .dashboardGrid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
   .dashboardCard {
     background: var(--surface-raised);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 32px;
+    padding: 24px;
+    animation: fadeSlideIn 0.35s ease-out;
+
+    .cardTitle {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 2px;
+    }
+
+    .cardSubtitle {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+  }
+
+  /* ── Chart Card ── */
+  .chartCard {
+    .emptyChart {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 0.88rem;
+      color: var(--ink-faint);
+    }
+  }
+
+  /* ── Quick Actions Card ── */
+  .quickActionsCard {
+    .quickActionsList {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .quickActionRow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.12s;
+
+      &:hover {
+        background: var(--surface);
+      }
+    }
+
+    .quickActionIcon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .quickActionLabel {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+  }
+
+  /* ── Reports Card ── */
+  .reportsCard {
+    margin-top: 0;
+  }
+
+  /* ── Loading ── */
+  .loadingState {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
